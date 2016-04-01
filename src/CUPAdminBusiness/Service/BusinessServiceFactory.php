@@ -11,13 +11,18 @@ class BusinessServiceFactory implements FactoryInterface
     {
         $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
         $url = $serviceLocator->get('Configuration')['website']['uri'];
+        $businessRepository = $entityManager->getRepository('CUPAdminBusiness\Entity\Business');
+        $datatableService = $serviceLocator->get('CUPAdminBusiness\Service\Datatable');
+
 
         $languageService = $serviceLocator->get('LanguageService');
         $translator = $languageService->getTranslator();
 
         return new BusinessService(
-            $translator,
-            $url
+            $entityManager,
+            $businessRepository,
+            $datatableService,
+            $translator
         );
     }
 }

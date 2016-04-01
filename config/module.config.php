@@ -1,6 +1,6 @@
 <?php
 
-namespace CupAdminBusiness;
+namespace CUPAdminBusiness;
 
 return [
     'router' => [
@@ -12,20 +12,89 @@ return [
                     'defaults' => [
                         '__NAMESPACE__' => 'CUPAdminBusiness\Controller',
                         'controller' => 'Business',
+                        'action' => 'index',
                     ]
                 ],
-                'may_terminate' => false,
+                'may_terminate' => true,
                 'child_routes' => [
-                    'list' => [
+                    'add' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route'    => '/add',
+                            'defaults' => [
+                                'action' => 'add',
+                            ],
+                        ],
+                    ],
+                    'edit' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => '/',
+                            'route' => '/edit/:code',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]*',
+                            ],
                             'defaults' => [
-                                'action' => 'list'
-                            ]
-                        ]
-                    ]
-                ]
+                                'action' => 'edit',
+                            ],
+                        ],
+                    ],
+                    'ajax-tab-edit' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/ajax-tab/edit/:code',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'edit-tab',
+                            ],
+                        ],
+                    ],
+                    'ajax-tab-info' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/ajax-tab/info/:code',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'info-tab',
+                            ],
+                        ],
+                    ],
+                    'ajax-tab-params' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/ajax-tab/params/:code',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'params-tab',
+                            ],
+                        ],
+                    ],
+                    'do-add' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/do-add',
+                            'defaults' => [
+                                'action' => 'do-add',
+                            ],
+                        ],
+                    ],
+                    'datatable' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/datatable',
+                            'defaults' => [
+                                '__NAMESPACE__' => 'CUPAdminBusiness\Controller',
+                                'controller'    => 'Business',
+                                'action'        => 'datatable',
+                            ],
+                        ],
+                    ],
+                ],
             ]
         ]
     ],
@@ -36,10 +105,12 @@ return [
     ],
     'service_manager' => [
         'factories' => [
-           'CUPAdminBusiness\Service\BusinessService' => 'CUPAdminBusiness\Service\BusinessServiceFactory',
+            'CUPAdminBusiness\Service\BusinessService' => 'CUPAdminBusiness\Service\BusinessServiceFactory',
+            'BusinessForm' => 'CUPAdminBusiness\Form\BusinessFormFactory',
+            'CUPAdminBusiness\Service\Datatable' => 'CUPAdminBusiness\Service\DatatableServiceFactory',
         ]
     ],
-    'doctrine'        => [
+    'doctrine' => [
         'driver' => [
             __NAMESPACE__ . '_driver' => [
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
@@ -54,13 +125,16 @@ return [
             ],
         ],
     ],
-
     'view_manager' => [
         'template_path_stack' => [
             __DIR__ . '/../view',
         ],
-        'strategies' => [
-            'ViewJsonStrategy'
-        ]
-    ]
+    ],
+    'bjyauthorize' => [
+        'guards' => [
+            'BjyAuthorize\Guard\Controller' => [
+                ['controller' => 'CUPAdminBusiness\Controller\Business', 'roles' => ['admin', 'callcenter']],
+            ],
+        ],
+    ],
 ];
