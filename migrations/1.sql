@@ -9,7 +9,7 @@ CREATE TABLE businesses.business
 (
   code text PRIMARY KEY,
   name text,
-  domains jsonb,
+  domains text[],
   address text,
   zip_code text,
   province text,
