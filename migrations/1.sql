@@ -18,7 +18,6 @@ CREATE TABLE businesses.business
   email text,
   phone text,
   fax text,
-  status trip_payment_status DEFAULT 'not_payed' NOT NULL,
   payment_frequence business_payment_frequence,
   payment_type business_payment_type,
   business_mail_control bool,
