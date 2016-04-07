@@ -2,7 +2,7 @@
 
 namespace CUPAdminBusiness\Form;
 
-use CUPAdminBusiness\Entity\Business;
+use BusinessCore\Entity\Business;
 use Zend\Form\Form;
 use Zend\Mvc\I18n\Translator;
 
@@ -172,7 +172,5 @@ class BusinessForm extends Form
                 'value' => 'Submit'
             ]
         ]);
-
-
     }
 }

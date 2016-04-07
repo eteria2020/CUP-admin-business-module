@@ -2,7 +2,7 @@
 
 namespace CUPAdminBusiness\Controller;
 
-use CUPAdminBusiness\Form\InputData\BusinessDataFactory;
+use BusinessCore\Form\InputData\BusinessDataFactory;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -10,13 +10,12 @@ class BusinessControllerFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $businessService = $serviceLocator->getServiceLocator()->get('CUPAdminBusiness\Service\BusinessService');
+        $businessService = $serviceLocator->getServiceLocator()->get('BusinessCore\Service\BusinessService');
 
-        $languageService = $serviceLocator->getServiceLocator()->get('LanguageService');
-        $translator = $languageService->getTranslator();
+        $translator = $serviceLocator->getServiceLocator()->get('translator');
 
         $addBusinessDataFactory = new BusinessDataFactory($businessService);
-        $businessForm = $serviceLocator->getServiceLocator()->get('businessForm');
+        $businessForm = $serviceLocator->getServiceLocator()->get('CUPAdminBusiness\Form\BusinessForm');
 
         return new BusinessController($translator, $businessService, $businessForm, $addBusinessDataFactory);
     }

@@ -2,6 +2,7 @@
 
 namespace CUPAdminBusiness;
 
+$translator = new \Zend\I18n\Translator\Translator;
 return [
     'router' => [
         'routes' => [
@@ -79,8 +80,6 @@ return [
                         'options' => [
                             'route'    => '/datatable',
                             'defaults' => [
-                                '__NAMESPACE__' => 'CUPAdminBusiness\Controller',
-                                'controller'    => 'Business',
                                 'action'        => 'datatable',
                             ],
                         ],
@@ -96,31 +95,37 @@ return [
     ],
     'service_manager' => [
         'factories' => [
-            'CUPAdminBusiness\Service\BusinessService' => 'CUPAdminBusiness\Service\BusinessServiceFactory',
-            'BusinessForm' => 'CUPAdminBusiness\Form\BusinessFormFactory',
-            'CUPAdminBusiness\Service\Datatable' => 'CUPAdminBusiness\Service\DatatableServiceFactory',
-        ]
+            'CUPAdminBusiness\Form\BusinessForm' => 'CUPAdminBusiness\Form\BusinessFormFactory',
+         ]
     ],
-    'doctrine' => [
-        'driver' => [
-            __NAMESPACE__ . '_driver' => [
-                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-                'cache' => 'array',
-                'paths' => [__DIR__ . '/../src/' . __NAMESPACE__ . '/Entity']
-            ],
-            'orm_default'             => [
-                'class'   => 'Doctrine\ORM\Mapping\Driver\DriverChain',
-                'drivers' => [
-                    __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
-                ]
-            ],
+    'view_manager' => [
+        'template_path_stack' => [
+            __DIR__ . '/../view',
         ],
     ],
     'bjyauthorize' => [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
-                ['controller' => 'CUPAdminBusiness\Controller\Business', 'roles' => ['admin', 'callcenter']],
+                ['controller' => 'CUPAdminBusiness\Controller\Business', 'roles' => ['admin']],
             ],
         ],
     ],
+    'navigation' => [
+        'default' => [
+            [
+                'label'     => $translator->translate('Aziende'),
+                'route'     => 'business',
+                'icon'      => 'fa fa-briefcase',
+                'resource'  => 'admin',
+                'isRouteJs' => true,
+                'pages'     => [
+                    [
+                        'label' => $translator->translate('Elenco'),
+                        'route' => 'business',
+                        'isVisible' => true
+                    ]
+                ],
+            ],
+        ]
+    ]
 ];

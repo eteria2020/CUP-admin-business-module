@@ -4,7 +4,6 @@ namespace CUPAdminBusiness\Form;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 class BusinessFormFactory implements FactoryInterface
 {
@@ -17,8 +16,7 @@ class BusinessFormFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $languageService = $serviceLocator->get('LanguageService');
-        $translator = $languageService->getTranslator();
+        $translator = $serviceLocator->get('translator');
 
         return new BusinessForm($translator);
     }

@@ -2,10 +2,11 @@
 
 namespace CUPAdminBusiness\Controller;
 
-use CUPAdminBusiness\Entity\Business;
+use BusinessCore\Entity\Business;
+use BusinessCore\Form\InputData\BusinessDataFactory;
+use BusinessCore\Service\BusinessService;
 use CUPAdminBusiness\Form\BusinessForm;
-use CUPAdminBusiness\Form\InputData\BusinessDataFactory;
-use CUPAdminBusiness\Service\BusinessService;
+
 use Doctrine\ORM\EntityNotFoundException;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
