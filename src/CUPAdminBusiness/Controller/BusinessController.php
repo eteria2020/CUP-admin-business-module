@@ -159,6 +159,41 @@ class BusinessController extends AbstractActionController
         return $view;
     }
 
+    public function employeesTabAction()
+    {
+        $business = $this->getBusiness();
+        $employees = $business->getEmployees();
+
+        $view = new ViewModel([
+            'business' => $business,
+            'employees' => $employees
+        ]);
+        $view->setTerminal(true);
+
+        return $view;
+    }
+
+    public function removeEmployeeAction()
+    {
+        $businessCode = $this->params()->fromRoute('code', 0);
+        $employeeId = $this->params()->fromRoute('id', 0);
+
+        try {
+            $this->businessService->removeEmployee($businessCode, $employeeId);
+
+            $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente eliminato con successo'));
+
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
+
+        return $this->redirect()->toRoute(
+            'business/edit',
+            ['code' => $businessCode],
+            ['query' => ['tab' => 'employees']]
+        );
+    }
+
     public function datatableAction()
     {
         $filters = $this->params()->fromPost();

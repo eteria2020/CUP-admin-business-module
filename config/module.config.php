@@ -39,6 +39,18 @@ return [
                             ],
                         ],
                     ],
+                    'remove-employee' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/remove-employee/:code/:id',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'remove-employee',
+                            ],
+                        ],
+                    ],
                     'ajax-tab-edit' => [
                         'type'    => 'Segment',
                         'options' => [
@@ -60,6 +72,18 @@ return [
                             ],
                             'defaults' => [
                                 'action' => 'info-tab',
+                            ],
+                        ],
+                    ],
+                    'ajax-tab-employees' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/ajax-tab/employees/:code',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'employees-tab',
                             ],
                         ],
                     ],
