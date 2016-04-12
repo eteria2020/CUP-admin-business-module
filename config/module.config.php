@@ -39,6 +39,30 @@ return [
                             ],
                         ],
                     ],
+                    'do-edit-data' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/edit-data/:code',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'do-edit-data',
+                            ],
+                        ],
+                    ],
+                    'do-edit-params' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/edit-params/:code',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'do-edit-params',
+                            ],
+                        ],
+                    ],
                     'ajax-tab-edit' => [
                         'type'    => 'Segment',
                         'options' => [
@@ -47,7 +71,7 @@ return [
                                 'code' => '[a-zA-Z0-9]*',
                             ],
                             'defaults' => [
-                                'action' => 'edit-tab',
+                                'action' => 'edit-data-tab',
                             ],
                         ],
                     ],
@@ -71,7 +95,7 @@ return [
                                 'code' => '[a-zA-Z0-9]*',
                             ],
                             'defaults' => [
-                                'action' => 'params-tab',
+                                'action' => 'edit-params-tab',
                             ],
                         ],
                     ],

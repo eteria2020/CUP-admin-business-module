@@ -1,6 +1,6 @@
 <?php
+$this->form->setAttribute('action', $this->url('business/do-edit-params', array('code' => $this->business->getCode())));
 $form = $this->form->prepare();
-$business = $this->business;
 ?>
 <div class="row">
     <div class="col-lg-12">
@@ -62,7 +62,6 @@ $business = $this->business;
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <input type="hidden" name="tabType" value="params">
                 <button type="submit" class="btn btn-success"><?= $this->translate("Modifica parametri aziendali"); ?></button>
             </div>
         </div>

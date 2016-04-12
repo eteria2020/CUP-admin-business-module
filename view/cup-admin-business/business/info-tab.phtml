@@ -64,7 +64,6 @@
         <div class="row">
             <div class="col-lg-4">
                 <div class="form-group">
-                    <input type="hidden" name="tabType" value="info">
                     <label for="domains"><?= $this->translate("Domini associati"); ?></label>
                     <textarea disabled name="domains" rows="4" cols="40"><?= implode("\n", $this->business->getDomains()) ?></textarea>
                 </div>

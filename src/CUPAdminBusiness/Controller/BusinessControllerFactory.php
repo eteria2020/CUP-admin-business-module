@@ -14,9 +14,8 @@ class BusinessControllerFactory implements FactoryInterface
 
         $translator = $serviceLocator->getServiceLocator()->get('translator');
 
-        $addBusinessDataFactory = new BusinessDataFactory($businessService);
         $businessForm = $serviceLocator->getServiceLocator()->get('CUPAdminBusiness\Form\BusinessForm');
 
-        return new BusinessController($translator, $businessService, $businessForm, $addBusinessDataFactory);
+        return new BusinessController($translator, $businessService, $businessForm);
     }
 }
