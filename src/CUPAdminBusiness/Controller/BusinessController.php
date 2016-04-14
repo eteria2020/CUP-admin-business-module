@@ -3,8 +3,10 @@
 namespace CUPAdminBusiness\Controller;
 
 use BusinessCore\Entity\Business;
+use BusinessCore\Exception\InvalidBusinessFormException;
 use BusinessCore\Form\InputData\BusinessDataFactory;
 use BusinessCore\Service\BusinessService;
+use BusinessCore\Service\DatatableService;
 use CUPAdminBusiness\Form\BusinessForm;
 
 use Doctrine\ORM\EntityNotFoundException;
@@ -22,36 +24,38 @@ class BusinessController extends AbstractActionController
     private $businessService;
 
     /**
-     * @var BusinessDataFactory
-     */
-    private $businessDataFactory;
-    /**
      * @var BusinessForm
      */
+
     private $businessForm;
+
     /**
      * @var Translator
      */
     private $translator;
 
+    /**
+     * @var DatatableService
+     */
+    private $datatableService;
 
     /**
      * BusinessController constructor.
      * @param Translator $translator
+     * @param DatatableService $datatableService
      * @param BusinessService $businessService
      * @param BusinessForm $businessForm
-     * @param BusinessDataFactory $businessDataFactory
      */
     public function __construct(
         Translator $translator,
+        DatatableService $datatableService,
         BusinessService $businessService,
-        BusinessForm $businessForm,
-        BusinessDataFactory $businessDataFactory
+        BusinessForm $businessForm
     ) {
         $this->businessService = $businessService;
         $this->businessForm = $businessForm;
-        $this->businessDataFactory = $businessDataFactory;
         $this->translator = $translator;
+        $this->datatableService = $datatableService;
     }
 
     public function indexAction()
@@ -67,16 +71,19 @@ class BusinessController extends AbstractActionController
             $data = $this->getRequest()->getPost()->toArray();
 
             try {
-                $inputData = $this->businessDataFactory->fromArray($data);
+                $inputData = BusinessDataFactory::businessDatafromArray($data);
+                $inputParams = BusinessDataFactory::businessParamsfromArray($data);
 
-                $this->businessService->addBusiness($inputData);
+                $this->businessService->addBusiness($inputData, $inputParams);
 
                 $this->flashMessenger()->addSuccessMessage($this->translator->translate('Azienda aggiunta con successo'));
 
                 return $this->redirect()->toRoute('business');
-            } catch (\Exception $e) {
+            } catch (InvalidBusinessFormException $e) {
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
-
+                return $this->redirect()->toRoute('business/add');
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage($this->translator->translate("Si è verificato un errore durante l'inserimento, per favore riprova"));
                 return $this->redirect()->toRoute('business/add');
             }
         }
@@ -91,29 +98,50 @@ class BusinessController extends AbstractActionController
         $business = $this->businessService->getBusinessByCode($code);
         $tab = $this->params()->fromQuery('tab', 'info');
 
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost()->toArray();
-            $tab = $data['tabType'];
-            try {
-                $this->businessService->updateBusiness($business, $data);
-
-                $this->flashMessenger()->addSuccessMessage($this->translator->translate('Azienda modificata con successo'));
-
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($e->getMessage());
-
-            }
-            return $this->redirect()->toRoute(
-                'business/edit',
-                ['code' => $business->getCode()],
-                ['query' => ['tab' => $tab]]
-            );
-        }
-
         return new ViewModel([
             'business' => $business,
             'tab' => $tab
         ]);
+    }
+
+    public function doEditDetailsAction()
+    {
+        $business = $this->getBusiness();
+        $data = $this->getRequest()->getPost()->toArray();
+        try {
+            $inputData = BusinessDataFactory::businessDatafromArray($data);
+            $this->businessService->updateBusiness($business, $inputData);
+            $this->flashMessenger()->addSuccessMessage($this->translator->translate('Azienda modificata con successo'));
+        } catch (InvalidBusinessFormException $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translator->translate('Si è verificato un errore durante la modifica'));
+        }
+        return $this->redirect()->toRoute(
+            'business/edit',
+            ['code' => $business->getCode()],
+            ['query' => ['tab' => 'edit']]
+        );
+    }
+
+    public function doEditParamsAction()
+    {
+        $business = $this->getBusiness();
+        $data = $this->getRequest()->getPost()->toArray();
+        try {
+            $inputData = BusinessDataFactory::businessParamsfromArray($data);
+            $this->businessService->updateBusiness($business, $inputData);
+            $this->flashMessenger()->addSuccessMessage($this->translator->translate('Parametri aziendali modificati con successo'));
+        } catch (InvalidBusinessFormException $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translator->translate('Si è verificato un errore durante la modifica'));
+        }
+        return $this->redirect()->toRoute(
+            'business/edit',
+            ['code' => $business->getCode()],
+            ['query' => ['tab' => 'params']]
+        );
     }
 
     public function infoTabAction()
@@ -129,22 +157,17 @@ class BusinessController extends AbstractActionController
         return $view;
     }
 
-    public function editTabAction()
+    public function editDetailsTabAction()
     {
-        /** @var Business $business */
-        $business = $this->getBusiness();
-        $form = $this->businessForm;
-
-        $view = new ViewModel([
-            'business' => $business,
-            'form' => $form
-        ]);
-        $view->setTerminal(true);
-
-        return $view;
+        return $this->editView();
     }
 
-    public function paramsTabAction()
+    public function editParamsTabAction()
+    {
+        return $this->editView();
+    }
+
+    private function editView()
     {
         /** @var Business $business */
         $business = $this->getBusiness();
@@ -237,15 +260,15 @@ class BusinessController extends AbstractActionController
     public function datatableAction()
     {
         $filters = $this->params()->fromPost();
-        $filters['withLimit'] = true;
-        $dataDataTable = $this->businessService->getDataDataTable($filters);
+        $searchCriteria = $this->datatableService->getSearchCriteria($filters);
+        $businesses = $this->businessService->searchBusinesses($searchCriteria);
+        $dataDataTable = $this->mapBusinessesToDatatable($businesses);
         $totalBusinesses = $this->businessService->getTotalBusinesses();
-        $recordsFiltered = $this->getRecordsFiltered($filters, $totalBusinesses);
 
         return new JsonModel([
             'draw'            => $this->params()->fromQuery('sEcho', 0),
             'recordsTotal'    => $totalBusinesses,
-            'recordsFiltered' => $recordsFiltered,
+            'recordsFiltered' => count($dataDataTable),
             'data'            => $dataDataTable
         ]);
     }
@@ -253,25 +276,30 @@ class BusinessController extends AbstractActionController
     protected function getBusiness()
     {
         $code = $this->params()->fromRoute('code', 0);
-
         $business = $this->businessService->getBusinessByCode($code);
 
         if (is_null($business)) {
             $this->getResponse()->setStatusCode(Response::STATUS_CODE_404);
-
             throw new EntityNotFoundException();
         }
-
         return $business;
     }
 
-    protected function getRecordsFiltered($filters, $totalBusinesses)
+    private function mapBusinessesToDatatable(array $businesses)
     {
-        if (empty($filters['searchValue']) && !isset($filters['columnValueWithoutLike'])) {
-            return $totalBusinesses;
-        } else {
-            $as_filters['withLimit'] = false;
-            return $this->businessService->getDataDataTable($filters, true);
-        }
+        return array_map(function (Business $business) {
+            return [
+                'e' => [
+                    'name' => $business->getName(),
+                    'code' => $business->getCode(),
+                    'vatNumber' => $business->getVatNumber(),
+                    'domains' => $business->getDomains(),
+                    'city' => $business->getCity(),
+                    'phone' => $business->getPhone(),
+                    'insertedTs' => $business->getInsertedTs()->format('d-m-Y H:i:s'),
+                ],
+                'button' => $business->getCode()
+            ];
+        }, $businesses);
     }
 }

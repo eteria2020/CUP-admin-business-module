@@ -1,6 +1,7 @@
 <?php
 $this->headLink();
-$this->headScript()->prependFile($this->basePath() .'/js/spin.min.js');
+$this->headScript()->prependFile($this->basePath() .'/js/spin.min.js')
+    ->appendFile($this->basePath() .'/js/business-edit.js');
 ?>
 <div class="page-content-wrapper">
     <div class="page-content">
@@ -21,24 +22,24 @@ $this->headScript()->prependFile($this->basePath() .'/js/spin.min.js');
             <div class="col-md-12">
                 <?php echo $this->partial('partials/flash-messages.phtml', []); ?>
                 <ul class="nav nav-tabs" id="js-tabs" role="tablist">
-                    <li role="presentation" id="menu-info">
+                    <li role="presentation" id="menu-info" <?= $this->tab == 'info' ? 'class="active"' : '' ?>>
                         <a href="<?= $this->url('business/ajax-tab-info', ['code' => $this->business->getCode()]); ?>" data-target="#tab-info" role="tab" data-toggle="tab">
                             <?= $this->translate("Informazioni"); ?>
                         </a>
                     </li>
-                    <li role="presentation" id="menu-employee">
+                    <li role="presentation" id="menu-employee" <?= $this->tab == 'employees' ? 'class="active"' : '' ?>>
                         <a href="<?= $this->url('business/ajax-tab-employees', ['code' => $this->business->getCode()]); ?>" data-target="#tab-employees" role="tab" data-toggle="tab">
                             <?= $this->translate("Dipendenti"); ?>
                         </a>
                     </li>
-                    <li role="presentation" id="menu-edit">
+                    <li role="presentation" id="menu-edit" <?= $this->tab == 'edit' ? 'class="active"' : '' ?>>
                         <a href="<?= $this->url('business/ajax-tab-edit', ['code' => $this->business->getCode()]); ?>" data-target="#tab-edit" role="tab" data-toggle="tab">
-                            <?= $this->translate("Modifica"); ?>
+                            <?= $this->translate("Modifica dettagli"); ?>
                         </a>
                     </li>
-                    <li role="presentation" id="menu-params">
+                    <li role="presentation" id="menu-params" <?= $this->tab == 'params' ? 'class="active"' : '' ?>>
                         <a href="<?= $this->url('business/ajax-tab-params', ['code' => $this->business->getCode()]); ?>" data-target="#tab-params" role="tab" data-toggle="tab">
-                            <?= $this->translate("Parametri"); ?>
+                            <?= $this->translate("Modifica parametri"); ?>
                         </a>
                     </li>
                 </ul>

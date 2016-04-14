@@ -39,6 +39,78 @@ return [
                             ],
                         ],
                     ],
+                    'do-edit-details' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/edit-details/:code',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'do-edit-details',
+                            ],
+                        ],
+                    ],
+                    'do-edit-params' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/edit-params/:code',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'do-edit-params',
+                            ],
+                        ],
+                    ],
+                    'ajax-tab-edit' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/ajax-tab/edit/:code',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'edit-details-tab',
+                            ],
+                        ],
+                    ],
+                    'ajax-tab-info' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/ajax-tab/info/:code',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'info-tab',
+                            ],
+                        ],
+                    ],
+                    'ajax-tab-employees' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/ajax-tab/employees/:code',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'employees-tab',
+                            ],
+                        ],
+                    ],
+                    'ajax-tab-params' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/ajax-tab/params/:code',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'edit-params-tab',
+                            ],
+                        ],
+                    ],
                     'remove-employee' => [
                         'type' => 'Segment',
                         'options' => [
@@ -75,54 +147,6 @@ return [
                             ],
                         ],
                     ],
-                    'ajax-tab-edit' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/ajax-tab/edit/:code',
-                            'constraints' => [
-                                'code' => '[a-zA-Z0-9]*',
-                            ],
-                            'defaults' => [
-                                'action' => 'edit-tab',
-                            ],
-                        ],
-                    ],
-                    'ajax-tab-info' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/ajax-tab/info/:code',
-                            'constraints' => [
-                                'code' => '[a-zA-Z0-9]*',
-                            ],
-                            'defaults' => [
-                                'action' => 'info-tab',
-                            ],
-                        ],
-                    ],
-                    'ajax-tab-employees' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/ajax-tab/employees/:code',
-                            'constraints' => [
-                                'code' => '[a-zA-Z0-9]*',
-                            ],
-                            'defaults' => [
-                                'action' => 'employees-tab',
-                            ],
-                        ],
-                    ],
-                    'ajax-tab-params' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/ajax-tab/params/:code',
-                            'constraints' => [
-                                'code' => '[a-zA-Z0-9]*',
-                            ],
-                            'defaults' => [
-                                'action' => 'params-tab',
-                            ],
-                        ],
-                    ],
                     'datatable' => [
                         'type'    => 'Literal',
                         'options' => [
@@ -145,6 +169,14 @@ return [
         'factories' => [
             'CUPAdminBusiness\Form\BusinessForm' => 'CUPAdminBusiness\Form\BusinessFormFactory',
          ]
+    ],
+    'asset_manager' => [
+        'resolver_configs' => [
+            'map' => [
+                'js/business.js' => __DIR__.'/../public/assets-modules/cup-admin-business/js/business.js',
+                'js/business-edit.js' => __DIR__.'/../public/assets-modules/cup-admin-business/js/business-edit.js',
+            ],
+        ],
     ],
     'view_manager' => [
         'template_path_stack' => [

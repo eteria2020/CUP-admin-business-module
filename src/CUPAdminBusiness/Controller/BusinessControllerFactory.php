@@ -11,12 +11,12 @@ class BusinessControllerFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $businessService = $serviceLocator->getServiceLocator()->get('BusinessCore\Service\BusinessService');
+        $datatableService = $serviceLocator->getServiceLocator()->get('BusinessCore\Service\DatatableService');
 
         $translator = $serviceLocator->getServiceLocator()->get('translator');
 
-        $addBusinessDataFactory = new BusinessDataFactory($businessService);
         $businessForm = $serviceLocator->getServiceLocator()->get('CUPAdminBusiness\Form\BusinessForm');
 
-        return new BusinessController($translator, $businessService, $businessForm, $addBusinessDataFactory);
+        return new BusinessController($translator, $datatableService, $businessService, $businessForm);
     }
 }
