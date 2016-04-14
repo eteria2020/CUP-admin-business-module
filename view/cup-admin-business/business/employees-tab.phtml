@@ -16,21 +16,35 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <?php /** @var \BusinessCore\Entity\Employee $employee */
-                    foreach ($this->employees as $employee): ?>
+                    <?php /** @var \BusinessCore\Entity\BusinessEmployee $be */
+                    foreach ($this->business->getBusinessEmployeesAssociations() as $be):
+                        $employee = $be->getEmployee(); ?>
                         <tr>
                             <td><?= $employee->getName() . " " . $employee->getSurname(); ?></td>
                             <td><?= $employee->getEmail(); ?></td>
                             <td>
-                                <a href="<?= $this->url('business/remove-employee', ['id' => $employee->getId(), 'code' => $this->business->getCode()]); ?>" onclick="return confirm('Sei sicuro?')" class="validation-btn btn btn-danger btn-xs">
+                                <a href="<?= $this->url('business/remove-employee', ['id' => $employee->getId(), 'code' => $this->business->getCode()]); ?>"
+                                   onclick="return confirm('Sei sicuro di voler eliminare questo utente?')"
+                                   class="validation-btn btn btn-danger btn-xs">
                                     <?= $this->translate("Elimina"); ?>
                                 </a>
-                                <a href="block" onclick="return confirm('yolo?')" class="validation-btn btn btn-warning btn-xs">
-                                    <?= $this->translate("Blocca"); ?>
-                                </a>
+                                <?php
+                                if ($be->isBlocked()) { ?>
+                                    <a href="<?= $this->url('business/unblock-employee', ['id' => $employee->getId(), 'code' => $this->business->getCode()]); ?>"
+                                       onclick="return confirm('Sbloccare?')" class="validation-btn btn btn-primary btn-xs">
+                                        <?= $this->translate("Sblocca"); ?>
+                                    </a>
+                                <?php
+                                } else { ?>
+                                    <a href="<?= $this->url('business/block-employee', ['id' => $employee->getId(), 'code' => $this->business->getCode()]); ?>"
+                                       onclick="return confirm('Bloccare')" class="validation-btn btn btn-warning btn-xs">
+                                        <?= $this->translate("Blocca"); ?>
+                                    </a>
+                                <?php
+                                } ?>
                             </td>
                         </tr>
-                    <?php
+                        <?php
                     endforeach; ?>
                     </tbody>
                 </table>

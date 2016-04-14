@@ -51,6 +51,30 @@ return [
                             ],
                         ],
                     ],
+                    'block-employee' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/block-employee/:code/:id',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'block-employee',
+                            ],
+                        ],
+                    ],
+                    'unblock-employee' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/unblock-employee/:code/:id',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'unblock-employee',
+                            ],
+                        ],
+                    ],
                     'ajax-tab-edit' => [
                         'type'    => 'Segment',
                         'options' => [

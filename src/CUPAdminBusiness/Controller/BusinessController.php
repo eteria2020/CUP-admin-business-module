@@ -162,11 +162,9 @@ class BusinessController extends AbstractActionController
     public function employeesTabAction()
     {
         $business = $this->getBusiness();
-        $employees = $business->getEmployees();
 
         $view = new ViewModel([
-            'business' => $business,
-            'employees' => $employees
+            'business' => $business
         ]);
         $view->setTerminal(true);
 
@@ -182,6 +180,48 @@ class BusinessController extends AbstractActionController
             $this->businessService->removeEmployee($businessCode, $employeeId);
 
             $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente eliminato con successo'));
+
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
+
+        return $this->redirect()->toRoute(
+            'business/edit',
+            ['code' => $businessCode],
+            ['query' => ['tab' => 'employees']]
+        );
+    }
+
+    public function blockEmployeeAction()
+    {
+        $businessCode = $this->params()->fromRoute('code', 0);
+        $employeeId = $this->params()->fromRoute('id', 0);
+
+        try {
+            $this->businessService->blockEmployee($businessCode, $employeeId);
+
+            $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente bloccato con successo'));
+
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($e->getMessage());
+        }
+
+        return $this->redirect()->toRoute(
+            'business/edit',
+            ['code' => $businessCode],
+            ['query' => ['tab' => 'employees']]
+        );
+    }
+
+    public function unblockEmployeeAction()
+    {
+        $businessCode = $this->params()->fromRoute('code', 0);
+        $employeeId = $this->params()->fromRoute('id', 0);
+
+        try {
+            $this->businessService->unblockEmployee($businessCode, $employeeId);
+
+            $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente sbloccato con successo'));
 
         } catch (\Exception $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
