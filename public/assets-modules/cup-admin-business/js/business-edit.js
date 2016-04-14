@@ -1,7 +1,7 @@
 /* global $ document Spinner */
 $(function() {
     'use strict';
-    var target = document.getElementById('spinner-loader');
+    var target = $('#spinner-loader')[0];
     var spinner = new Spinner().spin(target);
 
     var href = $(document).find('#js-tabs .active a').attr("href");
