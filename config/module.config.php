@@ -39,15 +39,15 @@ return [
                             ],
                         ],
                     ],
-                    'do-edit-data' => [
+                    'do-edit-details' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => '/edit-data/:code',
+                            'route' => '/edit-details/:code',
                             'constraints' => [
                                 'code' => '[a-zA-Z0-9]*',
                             ],
                             'defaults' => [
-                                'action' => 'do-edit-data',
+                                'action' => 'do-edit-details',
                             ],
                         ],
                     ],
@@ -71,7 +71,7 @@ return [
                                 'code' => '[a-zA-Z0-9]*',
                             ],
                             'defaults' => [
-                                'action' => 'edit-data-tab',
+                                'action' => 'edit-details-tab',
                             ],
                         ],
                     ],
@@ -121,6 +121,14 @@ return [
         'factories' => [
             'CUPAdminBusiness\Form\BusinessForm' => 'CUPAdminBusiness\Form\BusinessFormFactory',
          ]
+    ],
+    'asset_manager' => [
+        'resolver_configs' => [
+            'map' => [
+                'js/business.js' => __DIR__.'/../public/assets-modules/cup-admin-business/js/business.js',
+                'js/business-edit.js' => __DIR__.'/../public/assets-modules/cup-admin-business/js/business-edit.js',
+            ],
+        ],
     ],
     'view_manager' => [
         'template_path_stack' => [

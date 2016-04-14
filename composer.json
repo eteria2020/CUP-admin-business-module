@@ -17,6 +17,7 @@
         "php": ">=5.4",
         "zendframework/zendframework": "2.4.*",
         "doctrine/doctrine-orm-module": "0.*",
+        "rwoverdijk/assetmanager": "1.4.*",
         "doctrine/migrations": "dev-master"
     },
     "autoload": {

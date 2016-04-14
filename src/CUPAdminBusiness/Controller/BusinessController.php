@@ -6,9 +6,9 @@ use BusinessCore\Entity\Business;
 use BusinessCore\Exception\InvalidBusinessFormException;
 use BusinessCore\Form\InputData\BusinessDataFactory;
 use BusinessCore\Service\BusinessService;
+use BusinessCore\Service\DatatableService;
 use CUPAdminBusiness\Form\BusinessForm;
 
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityNotFoundException;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -28,25 +28,34 @@ class BusinessController extends AbstractActionController
      */
 
     private $businessForm;
+
     /**
      * @var Translator
      */
     private $translator;
 
     /**
+     * @var DatatableService
+     */
+    private $datatableService;
+
+    /**
      * BusinessController constructor.
      * @param Translator $translator
+     * @param DatatableService $datatableService
      * @param BusinessService $businessService
      * @param BusinessForm $businessForm
      */
     public function __construct(
         Translator $translator,
+        DatatableService $datatableService,
         BusinessService $businessService,
         BusinessForm $businessForm
     ) {
         $this->businessService = $businessService;
         $this->businessForm = $businessForm;
         $this->translator = $translator;
+        $this->datatableService = $datatableService;
     }
 
     public function indexAction()
@@ -95,7 +104,7 @@ class BusinessController extends AbstractActionController
         ]);
     }
 
-    public function doEditDataAction()
+    public function doEditDetailsAction()
     {
         $business = $this->getBusiness();
         $data = $this->getRequest()->getPost()->toArray();
@@ -113,7 +122,6 @@ class BusinessController extends AbstractActionController
             ['code' => $business->getCode()],
             ['query' => ['tab' => 'edit']]
         );
-
     }
 
     public function doEditParamsAction()
@@ -149,7 +157,7 @@ class BusinessController extends AbstractActionController
         return $view;
     }
 
-    public function editDataTabAction()
+    public function editDetailsTabAction()
     {
         return $this->editView();
     }
@@ -177,15 +185,15 @@ class BusinessController extends AbstractActionController
     public function datatableAction()
     {
         $filters = $this->params()->fromPost();
-        $filters['withLimit'] = true;
-        $dataDataTable = $this->businessService->getDataDataTable($filters);
+        $searchCriteria = $this->datatableService->getSearchCriteria($filters);
+        $businesses = $this->businessService->searchBusinesses($searchCriteria);
+        $dataDataTable = $this->mapBusinessesToDatatable($businesses);
         $totalBusinesses = $this->businessService->getTotalBusinesses();
-        $recordsFiltered = $this->getRecordsFiltered($filters, $totalBusinesses);
 
         return new JsonModel([
             'draw'            => $this->params()->fromQuery('sEcho', 0),
             'recordsTotal'    => $totalBusinesses,
-            'recordsFiltered' => $recordsFiltered,
+            'recordsFiltered' => count($dataDataTable),
             'data'            => $dataDataTable
         ]);
     }
@@ -202,13 +210,21 @@ class BusinessController extends AbstractActionController
         return $business;
     }
 
-    protected function getRecordsFiltered($filters, $totalBusinesses)
+    private function mapBusinessesToDatatable(array $businesses)
     {
-        if (empty($filters['searchValue']) && !isset($filters['columnValueWithoutLike'])) {
-            return $totalBusinesses;
-        } else {
-            $as_filters['withLimit'] = false;
-            return $this->businessService->getDataDataTable($filters, true);
-        }
+        return array_map(function (Business $business) {
+            return [
+                'e' => [
+                    'name' => $business->getName(),
+                    'code' => $business->getCode(),
+                    'vatNumber' => $business->getVatNumber(),
+                    'domains' => $business->getDomains(),
+                    'city' => $business->getCity(),
+                    'phone' => $business->getPhone(),
+                    'insertedTs' => $business->getInsertedTs()->format('d-m-Y H:i:s'),
+                ],
+                'button' => $business->getCode()
+            ];
+        }, $businesses);
     }
 }
