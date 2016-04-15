@@ -1,4 +1,4 @@
-/* global $ confirm translate */ document.getElementById
+/* global $ confirm translate */
 
 $(function() {
     'use strict';

@@ -1,6 +1,11 @@
 <?php
-$this->headLink();
-$this->headScript()->prependFile($this->basePath() .'/js/spin.min.js')
+$this->headLink()
+    ->appendStylesheet('/js/datatables/plugins/bootstrap/dataTables.bootstrap.css')
+    ->appendStylesheet($this->basePath() .'/css/business-edit.css');
+$this->headScript()
+    ->prependFile($this->basePath() .'/js/spin.min.js')
+    ->appendFile('/js/datatables/media/js/jquery.dataTables.min.js')
+    ->appendFile('/js/datatables/plugins/bootstrap/dataTables.bootstrap.js')
     ->appendFile($this->basePath() .'/js/business-edit.js');
 ?>
 <div class="page-content-wrapper">
@@ -46,13 +51,12 @@ $this->headScript()->prependFile($this->basePath() .'/js/spin.min.js')
 
                 <div class="tab-content" style="position: relative; min-height: 200px">
                     <div id="spinner-loader"></div>
-                    <div role="tabpanel" class="tab-pane" id="tab-info"></div>
-                    <div role="tabpanel" class="tab-pane" id="tab-employees"></div>
-                    <div role="tabpanel" class="tab-pane" id="tab-edit"></div>
-                    <div role="tabpanel" class="tab-pane" id="tab-params"></div>
+                    <div role="tabpanel" class="tab-pane <?= $this->tab == 'info' ? 'active' : '' ?>" id="tab-info"></div>
+                    <div role="tabpanel" class="tab-pane <?= $this->tab == 'employees' ? 'active' : '' ?>" id="tab-employees"></div>
+                    <div role="tabpanel" class="tab-pane <?= $this->tab == 'edit' ? 'active' : '' ?>" id="tab-edit"></div>
+                    <div role="tabpanel" class="tab-pane <?= $this->tab == 'params' ? 'active' : '' ?>" id="tab-params"></div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>

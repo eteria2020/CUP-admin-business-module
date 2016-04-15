@@ -194,6 +194,25 @@ class BusinessController extends AbstractActionController
         return $view;
     }
 
+    public function approveEmployeeAction()
+    {
+        $businessCode = $this->params()->fromRoute('code', 0);
+        $employeeId = $this->params()->fromRoute('id', 0);
+
+        try {
+            $this->businessService->approveEmployee($businessCode, $employeeId);
+            $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente approvato'));
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage($this->translator->translate('Si è verificato un errore, per favore riprova'));
+        }
+
+        return $this->redirect()->toRoute(
+            'business/edit',
+            ['code' => $businessCode],
+            ['query' => ['tab' => 'employees']]
+        );
+    }
+
     public function removeEmployeeAction()
     {
         $businessCode = $this->params()->fromRoute('code', 0);
@@ -201,11 +220,9 @@ class BusinessController extends AbstractActionController
 
         try {
             $this->businessService->removeEmployee($businessCode, $employeeId);
-
             $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente eliminato con successo'));
-
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($e->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translator->translate('Si è verificato un errore, per favore riprova'));
         }
 
         return $this->redirect()->toRoute(
@@ -222,11 +239,9 @@ class BusinessController extends AbstractActionController
 
         try {
             $this->businessService->blockEmployee($businessCode, $employeeId);
-
             $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente bloccato con successo'));
-
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($e->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translator->translate('Si è verificato un errore, per favore riprova'));
         }
 
         return $this->redirect()->toRoute(
@@ -242,12 +257,10 @@ class BusinessController extends AbstractActionController
         $employeeId = $this->params()->fromRoute('id', 0);
 
         try {
-            $this->businessService->unblockEmployee($businessCode, $employeeId);
-
+            $this->businessService->approveEmployee($businessCode, $employeeId);
             $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente sbloccato con successo'));
-
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($e->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translator->translate('Si è verificato un errore, per favore riprova'));
         }
 
         return $this->redirect()->toRoute(

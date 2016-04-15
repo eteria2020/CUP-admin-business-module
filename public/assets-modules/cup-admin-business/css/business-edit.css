@@ -1,0 +1,15 @@
+.button-column {
+    width: 10%
+}
+.name-column {
+    width: 40%;
+}
+.email-column {
+    width: 30%
+}
+.status-columns {
+    width: 20%
+}
+.btn-margin {
+    margin-bottom: 3px;
+}

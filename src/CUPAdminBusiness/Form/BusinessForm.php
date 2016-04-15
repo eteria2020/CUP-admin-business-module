@@ -3,12 +3,13 @@
 namespace CUPAdminBusiness\Form;
 
 use BusinessCore\Entity\Business;
+use CUPAdminBusiness\Form\Helper\BusinessPaymentHelper;
 use Zend\Form\Form;
 use Zend\Mvc\I18n\Translator;
 
 class BusinessForm extends Form
 {
-    public function __construct(Translator $translator)
+    public function __construct(Translator $translator, BusinessPaymentHelper $businessPaymentHelper)
     {
         parent::__construct('business');
         $this->setAttribute('method', 'post');
@@ -127,8 +128,8 @@ class BusinessForm extends Form
             'options'    => [
                 'value_options' => [
                     null => '---',
-                    Business::TYPE_WIRE_TRANSFER => $translator->translate(Business::TYPE_WIRE_TRANSFER),
-                    Business::TYPE_CREDIT_CARD => $translator->translate(Business::TYPE_CREDIT_CARD)
+                    Business::TYPE_WIRE_TRANSFER => $businessPaymentHelper->format(Business::TYPE_WIRE_TRANSFER),
+                    Business::TYPE_CREDIT_CARD => $businessPaymentHelper->format(Business::TYPE_CREDIT_CARD),
                 ]
             ]
         ]);
@@ -143,9 +144,9 @@ class BusinessForm extends Form
             'options'    => [
             'value_options' => [
                 null => '---',
-                Business::FREQUENCE_WEEKLY => $translator->translate(Business::FREQUENCE_WEEKLY),
-                Business::FREQUENCE_FORTHNIGHTLY => $translator->translate(Business::FREQUENCE_FORTHNIGHTLY),
-                Business::FREQUENCE_MONTHLY => $translator->translate(Business::FREQUENCE_MONTHLY)
+                Business::FREQUENCE_WEEKLY => $businessPaymentHelper->format(Business::FREQUENCE_WEEKLY),
+                Business::FREQUENCE_FORTHNIGHTLY => $businessPaymentHelper->format(Business::FREQUENCE_FORTHNIGHTLY),
+                Business::FREQUENCE_MONTHLY => $businessPaymentHelper->format(Business::FREQUENCE_MONTHLY)
             ]
         ]
         ]);

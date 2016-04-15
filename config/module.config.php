@@ -111,6 +111,18 @@ return [
                             ],
                         ],
                     ],
+                    'approve-employee' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/approve-employee/:code/:id',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'approve-employee',
+                            ],
+                        ],
+                    ],
                     'remove-employee' => [
                         'type' => 'Segment',
                         'options' => [
@@ -152,7 +164,7 @@ return [
                         'options' => [
                             'route'    => '/datatable',
                             'defaults' => [
-                                'action'        => 'datatable',
+                                'action' => 'datatable',
                             ],
                         ],
                     ],
@@ -175,6 +187,7 @@ return [
             'map' => [
                 'js/business.js' => __DIR__.'/../public/assets-modules/cup-admin-business/js/business.js',
                 'js/business-edit.js' => __DIR__.'/../public/assets-modules/cup-admin-business/js/business-edit.js',
+                'css/business-edit.css' => __DIR__.'/../public/assets-modules/cup-admin-business/css/business-edit.css'
             ],
         ],
     ],
@@ -182,6 +195,11 @@ return [
         'template_path_stack' => [
             __DIR__ . '/../view',
         ],
+    ],
+    'view_helpers'    => [
+        'factories' => [
+            'BusinessEmployeeStatus' => 'CUPAdminBusiness\View\Helper\BusinessEmployeeStatusHelperFactory',
+        ]
     ],
     'bjyauthorize' => [
         'guards' => [
