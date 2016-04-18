@@ -145,7 +145,7 @@ class BusinessForm extends Form
             'value_options' => [
                 null => '---',
                 Business::FREQUENCE_WEEKLY => $businessPaymentHelper->format(Business::FREQUENCE_WEEKLY),
-                Business::FREQUENCE_FORTHNIGHTLY => $businessPaymentHelper->format(Business::FREQUENCE_FORTHNIGHTLY),
+                Business::FREQUENCE_FORTNIGHTLY => $businessPaymentHelper->format(Business::FREQUENCE_FORTNIGHTLY),
                 Business::FREQUENCE_MONTHLY => $businessPaymentHelper->format(Business::FREQUENCE_MONTHLY)
             ]
         ]

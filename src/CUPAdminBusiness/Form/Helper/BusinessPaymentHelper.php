@@ -26,7 +26,7 @@ class BusinessPaymentHelper
                 return $this->translator->translate("Carta di credito");
             case Business::FREQUENCE_WEEKLY:
                 return $this->translator->translate("Settimanale");
-            case Business::FREQUENCE_FORTHNIGHTLY:
+            case Business::FREQUENCE_FORTNIGHTLY:
                 return $this->translator->translate("Quindicinale");
             case Business::FREQUENCE_MONTHLY:
                 return $this->translator->translate("Mensile");
