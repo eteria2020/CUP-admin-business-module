@@ -3,6 +3,7 @@
 namespace CUPAdminBusiness\Controller;
 
 use BusinessCore\Entity\Business;
+use BusinessCore\Entity\BusinessEmployee;
 use BusinessCore\Exception\InvalidBusinessFormException;
 use BusinessCore\Form\InputData\BusinessDataFactory;
 use BusinessCore\Service\BusinessService;
@@ -71,7 +72,7 @@ class BusinessController extends AbstractActionController
             $data = $this->getRequest()->getPost()->toArray();
 
             try {
-                $inputData = BusinessDataFactory::businessDatafromArray($data);
+                $inputData = BusinessDataFactory::businessDetailsfromArray($data);
                 $inputParams = BusinessDataFactory::businessParamsfromArray($data);
 
                 $this->businessService->addBusiness($inputData, $inputParams);
@@ -81,9 +82,6 @@ class BusinessController extends AbstractActionController
                 return $this->redirect()->toRoute('business');
             } catch (InvalidBusinessFormException $e) {
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
-                return $this->redirect()->toRoute('business/add');
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage($this->translator->translate("Si è verificato un errore durante l'inserimento, per favore riprova"));
                 return $this->redirect()->toRoute('business/add');
             }
         }
@@ -109,13 +107,11 @@ class BusinessController extends AbstractActionController
         $business = $this->getBusiness();
         $data = $this->getRequest()->getPost()->toArray();
         try {
-            $inputData = BusinessDataFactory::businessDatafromArray($data);
-            $this->businessService->updateBusiness($business, $inputData);
+            $inputData = BusinessDataFactory::businessDetailsfromArray($data);
+            $this->businessService->updateBusinessDetails($business, $inputData);
             $this->flashMessenger()->addSuccessMessage($this->translator->translate('Azienda modificata con successo'));
         } catch (InvalidBusinessFormException $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($this->translator->translate('Si è verificato un errore durante la modifica'));
         }
         return $this->redirect()->toRoute(
             'business/edit',
@@ -130,12 +126,10 @@ class BusinessController extends AbstractActionController
         $data = $this->getRequest()->getPost()->toArray();
         try {
             $inputData = BusinessDataFactory::businessParamsfromArray($data);
-            $this->businessService->updateBusiness($business, $inputData);
+            $this->businessService->updateBusinessParams($business, $inputData);
             $this->flashMessenger()->addSuccessMessage($this->translator->translate('Parametri aziendali modificati con successo'));
         } catch (InvalidBusinessFormException $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($this->translator->translate('Si è verificato un errore durante la modifica'));
         }
         return $this->redirect()->toRoute(
             'business/edit',
@@ -199,12 +193,8 @@ class BusinessController extends AbstractActionController
         $businessCode = $this->params()->fromRoute('code', 0);
         $employeeId = $this->params()->fromRoute('id', 0);
 
-        try {
-            $this->businessService->approveEmployee($businessCode, $employeeId);
-            $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente approvato'));
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($this->translator->translate('Si è verificato un errore, per favore riprova'));
-        }
+        $this->businessService->setEmployeeStatus($businessCode, $employeeId, BusinessEmployee::STATUS_APPROVED);
+        $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente approvato'));
 
         return $this->redirect()->toRoute(
             'business/edit',
@@ -218,12 +208,8 @@ class BusinessController extends AbstractActionController
         $businessCode = $this->params()->fromRoute('code', 0);
         $employeeId = $this->params()->fromRoute('id', 0);
 
-        try {
-            $this->businessService->removeEmployee($businessCode, $employeeId);
-            $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente eliminato con successo'));
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($this->translator->translate('Si è verificato un errore, per favore riprova'));
-        }
+        $this->businessService->removeEmployee($businessCode, $employeeId);
+        $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente eliminato con successo'));
 
         return $this->redirect()->toRoute(
             'business/edit',
@@ -237,12 +223,8 @@ class BusinessController extends AbstractActionController
         $businessCode = $this->params()->fromRoute('code', 0);
         $employeeId = $this->params()->fromRoute('id', 0);
 
-        try {
-            $this->businessService->blockEmployee($businessCode, $employeeId);
-            $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente bloccato con successo'));
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($this->translator->translate('Si è verificato un errore, per favore riprova'));
-        }
+        $this->businessService->setEmployeeStatus($businessCode, $employeeId, BusinessEmployee::STATUS_BLOCKED);
+        $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente bloccato con successo'));
 
         return $this->redirect()->toRoute(
             'business/edit',
@@ -256,12 +238,8 @@ class BusinessController extends AbstractActionController
         $businessCode = $this->params()->fromRoute('code', 0);
         $employeeId = $this->params()->fromRoute('id', 0);
 
-        try {
-            $this->businessService->approveEmployee($businessCode, $employeeId);
-            $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente sbloccato con successo'));
-        } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage($this->translator->translate('Si è verificato un errore, per favore riprova'));
-        }
+        $this->businessService->setEmployeeStatus($businessCode, $employeeId, BusinessEmployee::STATUS_APPROVED);
+        $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente sbloccato con successo'));
 
         return $this->redirect()->toRoute(
             'business/edit',

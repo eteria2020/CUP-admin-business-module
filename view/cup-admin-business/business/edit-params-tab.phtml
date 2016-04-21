@@ -1,5 +1,5 @@
 <?php
-$this->form->setAttribute('action', $this->url('business/do-edit-params', array('code' => $this->business->getCode())));
+$this->form->setAttribute('action', $this->url('business/edit/do-edit-params', array('code' => $this->business->getCode())));
 $form = $this->form->prepare();
 ?>
 <div class="row">
@@ -22,42 +22,18 @@ $form = $this->form->prepare();
 
         <div class="row">
             <div class="col-lg-6">
-                <div class="form-group">
-                    <label for="payment-frequence"><?= $this->translate("Frequenza pagamento"); ?></label>
-                    <?php
-                    $field = $form->get('paymentFrequence');
-                    $field->setValue($this->business->getPaymentFrequence());
-                    echo $this->formElement($field);
-                    echo $this->formElementErrors($field, array('class' => 'text-danger list-unstyled'));
-                    ?>
-                </div>
+                <?= $this->BusinessForm($this->translate("Frequenza pagamento"), 'paymentFrequence', $form, $this->business->getPaymentFrequence()) ?>
             </div>
         </div>
 
         <div class="row">
             <div class="col-lg-6">
-                <div class="form-group">
-                    <label for="payment-type"><?= $this->translate("Tipo di pagamento"); ?></label>
-                    <?php
-                    $field = $form->get('paymentType');
-                    $field->setValue($this->business->getPaymentType());
-                    echo $this->formElement($field);
-                    echo $this->formElementErrors($field, array('class' => 'text-danger list-unstyled'));
-                    ?>
-                </div>
+                <?= $this->BusinessForm($this->translate("Tipo di pagamento"), 'paymentType', $form, $this->business->getPaymentType()) ?>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-6">
-                <div class="form-group">
-                    <label for="business-mail-control"><?= $this->translate("Controllo email aziendale"); ?></label>
-                    <?php
-                    $field = $form->get('businessMailControl');
-                    $field->setValue($this->business->isBusinessMailControl());
-                    echo $this->formElement($field);
-                    echo $this->formElementErrors($field, array('class' => 'text-danger list-unstyled'));
-                    ?>
-                </div>
+                <?= $this->BusinessForm($this->translate("Controllo email aziendale"), 'businessMailControl', $form, $this->business->isBusinessMailControlEnabled()) ?>
             </div>
         </div>
         <div class="row">

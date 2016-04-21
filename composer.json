@@ -1,31 +1,22 @@
 {
-    "name": "Cup-Admin-Business",
-    "description": "ZF2 Module for Business are in Admin",
-    "license": "MIT",
-    "keywords": [
-        "zf2",
-        "business"
-    ],
-    "authors": [
+    "name": "mvlabs/sharengo-admin-business-module",
+    "description": "ZF2 Module for Business area in Admin",
+    "repositories": [
         {
-            "name": "Andrea Cadorin",
-            "email": "a.cadorin@mvlabs.it"
+            "url": "ssh://git@gitlab.bulweria.com:cup-web/core-business.git",
+            "type": "git"
         }
     ],
-    "homepage": "",
     "require": {
         "php": ">=5.4",
         "zendframework/zendframework": "2.4.*",
-        "doctrine/doctrine-orm-module": "0.*",
         "rwoverdijk/assetmanager": "1.4.*",
-        "doctrine/migrations": "dev-master"
+        "mvlabs/sharengo-core-business-module": "dev-master"
     },
     "autoload": {
-        "psr-4": {
-            "CupAdminBusiness\\": "src/"
-        },
         "classmap": [
             "./Module.php"
         ]
     }
 }
+

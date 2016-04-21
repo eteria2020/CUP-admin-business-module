@@ -59,7 +59,7 @@ $(function() {
                 searchable: false,
                 sortable: false,
                 render: function (data) {
-                    return '<a href="/business/edit/' + data + '" class="btn btn-default btn-xs">' + translate("modify") + '</a>';
+                    return '<a href="/business/' + data + '" class="btn btn-default btn-xs">' + translate("modify") + '</a>';
                 }
             }
         ],

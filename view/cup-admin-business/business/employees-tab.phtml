@@ -6,17 +6,17 @@
         <?php echo $this->partial('partials/flash-messages.phtml', []); ?>
 
         <?php echo $this->partial('partials/business-employees-table.phtml', [
-            'title' => $this->translate("Elenco dipendenti"),
-            'tableId' => 'js-business-employees-table',
-            'business' => $this->business,
-            'list' => $this->business->getApprovedBusinessEmployees()
-        ]); ?>
-
-        <?php echo $this->partial('partials/business-employees-table.phtml', [
             'title' => $this->translate("In attesa di approvazione"),
             'tableId' => 'js-pending-business-employees-table',
             'business' => $this->business,
             'list' => $this->business->getPendingBusinessEmployees()
+        ]); ?>
+
+        <?php echo $this->partial('partials/business-employees-table.phtml', [
+            'title' => $this->translate("Elenco dipendenti"),
+            'tableId' => 'js-business-employees-table',
+            'business' => $this->business,
+            'list' => $this->business->getApprovedBusinessEmployees()
         ]); ?>
 
     </div>

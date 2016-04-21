@@ -128,8 +128,8 @@ class BusinessForm extends Form
             'options'    => [
                 'value_options' => [
                     null => '---',
-                    Business::TYPE_WIRE_TRANSFER => $businessPaymentHelper->format(Business::TYPE_WIRE_TRANSFER),
-                    Business::TYPE_CREDIT_CARD => $businessPaymentHelper->format(Business::TYPE_CREDIT_CARD),
+                    Business::TYPE_WIRE_TRANSFER => $businessPaymentHelper->getPrintableVersion(Business::TYPE_WIRE_TRANSFER),
+                    Business::TYPE_CREDIT_CARD => $businessPaymentHelper->getPrintableVersion(Business::TYPE_CREDIT_CARD),
                 ]
             ]
         ]);
@@ -144,9 +144,9 @@ class BusinessForm extends Form
             'options'    => [
             'value_options' => [
                 null => '---',
-                Business::FREQUENCE_WEEKLY => $businessPaymentHelper->format(Business::FREQUENCE_WEEKLY),
-                Business::FREQUENCE_FORTNIGHTLY => $businessPaymentHelper->format(Business::FREQUENCE_FORTNIGHTLY),
-                Business::FREQUENCE_MONTHLY => $businessPaymentHelper->format(Business::FREQUENCE_MONTHLY)
+                Business::FREQUENCE_WEEKLY => $businessPaymentHelper->getPrintableVersion(Business::FREQUENCE_WEEKLY),
+                Business::FREQUENCE_FORTNIGHTLY => $businessPaymentHelper->getPrintableVersion(Business::FREQUENCE_FORTNIGHTLY),
+                Business::FREQUENCE_MONTHLY => $businessPaymentHelper->getPrintableVersion(Business::FREQUENCE_MONTHLY)
             ]
         ]
         ]);

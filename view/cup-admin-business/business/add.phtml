@@ -22,141 +22,49 @@ $form = $this->form->prepare();
                 <?= $this->form()->openTag($form); ?>
                     <div class="row">
                         <div class="col-lg-3">
-                            <div class="form-group">
-                                <label for="name"><?= $this->translate("Ragione Sociale"); ?></label>
-                                <?php
-                                $field = $form->get('name');
-                                echo $this->formElement($field);
-                                echo $this->formElementErrors($field, array('class' => 'text-danger list-unstyled'));
-                                ?>
-                            </div>
+                            <?= $this->BusinessForm($this->translate("Ragione Sociale"), 'name', $form) ?>
                         </div>
                         <div class="col-lg-3">
-                            <div class="form-group">
-                                <label for="domains"><?= $this->translate("Domini"); ?></label>
-                                <small><?= $this->translate("separati da uno spazio"); ?></small>
-                                <?php
-                                $field = $form->get('domains');
-                                echo $this->formElement($field);
-                                echo $this->formElementErrors($field, array('class' => 'text-danger list-unstyled'));
-                                ?>
-                            </div>
+                            <?= $this->BusinessForm($this->translate("Domini"), 'domains', $form) ?>
                         </div>
                         <div class="col-lg-3">
-                            <div class="form-group">
-                                <label for="email"><?= $this->translate("Email"); ?></label>
-                                <?php
-                                $field = $form->get('email');
-                                echo $this->formElement($field);
-                                echo $this->formElementErrors($field, array('class' => 'text-danger list-unstyled'));
-                                ?>
-                            </div>
+                            <?= $this->BusinessForm($this->translate("Email"), 'email', $form) ?>
                         </div>
                         <div class="col-lg-3">
-                            <div class="form-group">
-                                <label for="phone"><?= $this->translate("Telefono"); ?></label>
-                                <?php
-                                $field = $form->get('phone');
-                                echo $this->formElement($field);
-                                echo $this->formElementErrors($field, array('class' => 'text-danger list-unstyled'));
-                                ?>
-                            </div>
+                            <?= $this->BusinessForm($this->translate("Telefono"), 'phone', $form) ?>
                         </div>
 
                     </div>
 
                     <div class="row">
                         <div class="col-lg-3">
-                            <div class="form-group">
-                                <label for="address"><?= $this->translate("Indirizzo"); ?></label>
-                                <?php
-                                $field = $form->get('address');
-                                echo $this->formElement($field);
-                                echo $this->formElementErrors($field, array('class' => 'text-danger list-unstyled'));
-                                ?>
-                            </div>
+                            <?= $this->BusinessForm($this->translate("Indirizzo"), 'address', $form) ?>
                         </div>
                         <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="zip-code"><?= $this->translate("CAP"); ?></label>
-                                <?php
-                                $field = $form->get('zipCode');
-                                echo $this->formElement($field);
-                                echo $this->formElementErrors($field, array('class' => 'text-danger list-unstyled'));
-                                ?>
-                            </div>
+                            <?= $this->BusinessForm($this->translate("CAP"), 'zipCode', $form) ?>
                         </div>
                         <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="province"><?= $this->translate("Provincia"); ?></label>
-                                <?php
-                                $field = $form->get('province');
-                                echo $this->formElement($field);
-                                echo $this->formElementErrors($field, array('class' => 'text-danger list-unstyled'));
-                                ?>
-                            </div>
+                            <?= $this->BusinessForm($this->translate("Provincia"), 'province', $form) ?>
                         </div>
                         <div class="col-lg-2">
-                            <div class="form-group">
-                                <label for="city"><?= $this->translate("Città"); ?></label>
-                                <?php
-                                $field = $form->get('city');
-                                echo $this->formElement($field);
-                                echo $this->formElementErrors($field, array('class' => 'text-danger list-unstyled'));
-                                ?>
-                            </div>
+                            <?= $this->BusinessForm($this->translate("Città"), 'city', $form) ?>
                         </div>
                         <div class="col-lg-3">
-                            <div class="form-group">
-                                <label for="fax"><?= $this->translate("Fax"); ?></label>
-                                <?php
-                                $field = $form->get('fax');
-                                echo $this->formElement($field);
-                                echo $this->formElementErrors($field, array('class' => 'text-danger list-unstyled'));
-                                ?>
-                            </div>
+                            <?= $this->BusinessForm($this->translate("Fax"), 'fax', $form) ?>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-3">
-                            <div class="form-group">
-                                <label for="vat-number"><?= $this->translate("Partita IVA"); ?></label>
-                                <?php
-                                $field = $form->get('vatNumber');
-                                echo $this->formElement($field);
-                                echo $this->formElementErrors($field, array('class' => 'text-danger list-unstyled'));
-                                ?>
-                            </div>
+                            <?= $this->BusinessForm($this->translate("Partita IVA"), 'vatNumber', $form) ?>
                         </div>
                         <div class="col-lg-3">
-                            <div class="form-group">
-                                <label for="payment-type"><?= $this->translate("Tipo di pagamento"); ?></label>
-                                <?php
-                                $field = $form->get('paymentType');
-                                echo $this->formElement($field);
-                                echo $this->formElementErrors($field, array('class' => 'text-danger list-unstyled'));
-                                ?>
-                            </div>
+                            <?= $this->BusinessForm($this->translate("Tipo di pagamento"), 'paymentType', $form) ?>
                         </div>
                         <div class="col-lg-3">
-                            <div class="form-group">
-                                <label for="payment-frequence"><?= $this->translate("Frequenza pagamento"); ?></label>
-                                <?php
-                                $field = $form->get('paymentFrequence');
-                                echo $this->formElement($field);
-                                echo $this->formElementErrors($field, array('class' => 'text-danger list-unstyled'));
-                                ?>
-                            </div>
+                            <?= $this->BusinessForm($this->translate("Frequenza pagamento"), 'paymentFrequence', $form) ?>
                         </div>
                         <div class="col-lg-3">
-                            <div class="form-group">
-                                <label for="business-mail-control"><?= $this->translate("Controllo email aziendale"); ?></label>
-                                <?php
-                                $field = $form->get('businessMailControl');
-                                echo $this->formElement($field);
-                                echo $this->formElementErrors($field, array('class' => 'text-danger list-unstyled'));
-                                ?>
-                            </div>
+                            <?= $this->BusinessForm($this->translate("Controllo email aziendale"), 'businessMailControl', $form) ?>
                         </div>
                     </div>
                     <div class="row">

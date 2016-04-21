@@ -30,134 +30,107 @@ return [
                     'edit' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => '/edit/:code',
+                            'route' => '/:code',
                             'constraints' => [
-                                'code' => '[a-zA-Z0-9]*',
+                                'code' => '[a-zA-Z0-9]{6}',
                             ],
                             'defaults' => [
                                 'action' => 'edit',
                             ],
                         ],
-                    ],
-                    'do-edit-details' => [
-                        'type' => 'Segment',
-                        'options' => [
-                            'route' => '/edit-details/:code',
-                            'constraints' => [
-                                'code' => '[a-zA-Z0-9]*',
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'do-edit-details' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/edit-details',
+                                    'defaults' => [
+                                        'action' => 'do-edit-details',
+                                    ],
+                                ],
                             ],
-                            'defaults' => [
-                                'action' => 'do-edit-details',
+                            'do-edit-params' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/edit-params',
+                                    'defaults' => [
+                                        'action' => 'do-edit-params',
+                                    ],
+                                ],
                             ],
-                        ],
-                    ],
-                    'do-edit-params' => [
-                        'type' => 'Segment',
-                        'options' => [
-                            'route' => '/edit-params/:code',
-                            'constraints' => [
-                                'code' => '[a-zA-Z0-9]*',
+                            'ajax-tab-edit' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/ajax-tab/edit',
+                                    'defaults' => [
+                                        'action' => 'edit-details-tab',
+                                    ],
+                                ],
                             ],
-                            'defaults' => [
-                                'action' => 'do-edit-params',
+                            'ajax-tab-info' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/ajax-tab/info',
+                                    'defaults' => [
+                                        'action' => 'info-tab',
+                                    ],
+                                ],
                             ],
-                        ],
-                    ],
-                    'ajax-tab-edit' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/ajax-tab/edit/:code',
-                            'constraints' => [
-                                'code' => '[a-zA-Z0-9]*',
+                            'ajax-tab-employees' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/ajax-tab/employees',
+                                    'defaults' => [
+                                        'action' => 'employees-tab',
+                                    ],
+                                ],
                             ],
-                            'defaults' => [
-                                'action' => 'edit-details-tab',
+                            'ajax-tab-params' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/ajax-tab/params',
+                                    'defaults' => [
+                                        'action' => 'edit-params-tab',
+                                    ],
+                                ],
                             ],
-                        ],
-                    ],
-                    'ajax-tab-info' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/ajax-tab/info/:code',
-                            'constraints' => [
-                                'code' => '[a-zA-Z0-9]*',
+                            'approve-employee' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/approve-employee/:id',
+                                    'defaults' => [
+                                        'action' => 'approve-employee',
+                                    ],
+                                ],
                             ],
-                            'defaults' => [
-                                'action' => 'info-tab',
+                            'remove-employee' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/remove-employee/:id',
+                                    'defaults' => [
+                                        'action' => 'remove-employee',
+                                    ],
+                                ],
                             ],
-                        ],
-                    ],
-                    'ajax-tab-employees' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/ajax-tab/employees/:code',
-                            'constraints' => [
-                                'code' => '[a-zA-Z0-9]*',
+                            'block-employee' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/block-employee/:id',
+                                    'defaults' => [
+                                        'action' => 'block-employee',
+                                    ],
+                                ],
                             ],
-                            'defaults' => [
-                                'action' => 'employees-tab',
+                            'unblock-employee' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/unblock-employee/:id',
+                                    'defaults' => [
+                                        'action' => 'unblock-employee',
+                                    ],
+                                ],
                             ],
-                        ],
-                    ],
-                    'ajax-tab-params' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/ajax-tab/params/:code',
-                            'constraints' => [
-                                'code' => '[a-zA-Z0-9]*',
-                            ],
-                            'defaults' => [
-                                'action' => 'edit-params-tab',
-                            ],
-                        ],
-                    ],
-                    'approve-employee' => [
-                        'type' => 'Segment',
-                        'options' => [
-                            'route' => '/approve-employee/:code/:id',
-                            'constraints' => [
-                                'code' => '[a-zA-Z0-9]*',
-                            ],
-                            'defaults' => [
-                                'action' => 'approve-employee',
-                            ],
-                        ],
-                    ],
-                    'remove-employee' => [
-                        'type' => 'Segment',
-                        'options' => [
-                            'route' => '/remove-employee/:code/:id',
-                            'constraints' => [
-                                'code' => '[a-zA-Z0-9]*',
-                            ],
-                            'defaults' => [
-                                'action' => 'remove-employee',
-                            ],
-                        ],
-                    ],
-                    'block-employee' => [
-                        'type' => 'Segment',
-                        'options' => [
-                            'route' => '/block-employee/:code/:id',
-                            'constraints' => [
-                                'code' => '[a-zA-Z0-9]*',
-                            ],
-                            'defaults' => [
-                                'action' => 'block-employee',
-                            ],
-                        ],
-                    ],
-                    'unblock-employee' => [
-                        'type' => 'Segment',
-                        'options' => [
-                            'route' => '/unblock-employee/:code/:id',
-                            'constraints' => [
-                                'code' => '[a-zA-Z0-9]*',
-                            ],
-                            'defaults' => [
-                                'action' => 'unblock-employee',
-                            ],
-                        ],
+                        ]
                     ],
                     'datatable' => [
                         'type'    => 'Literal',
@@ -197,8 +170,8 @@ return [
         ],
     ],
     'view_helpers'    => [
-        'factories' => [
-            'BusinessEmployeeStatus' => 'CUPAdminBusiness\View\Helper\BusinessEmployeeStatusHelperFactory',
+        'invokables' => [
+            'BusinessForm' => 'CUPAdminBusiness\View\Helper\BusinessFormHelper',
         ]
     ],
     'bjyauthorize' => [

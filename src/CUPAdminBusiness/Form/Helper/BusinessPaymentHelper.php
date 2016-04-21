@@ -17,9 +17,9 @@ class BusinessPaymentHelper
         $this->translator = $translator;
     }
 
-    public function format($payment)
+    public function getPrintableVersion($string)
     {
-        switch ($payment) {
+        switch ($string) {
             case Business::TYPE_WIRE_TRANSFER:
                 return $this->translator->translate("Bonifico Bancario");
             case Business::TYPE_CREDIT_CARD:
@@ -31,7 +31,7 @@ class BusinessPaymentHelper
             case Business::FREQUENCE_MONTHLY:
                 return $this->translator->translate("Mensile");
             default:
-                return $payment;
+                return $string;
         }
     }
 }
