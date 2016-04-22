@@ -1,0 +1,63 @@
+<?php
+$this->headLink()
+    ->appendStylesheet('/js/datatables/plugins/bootstrap/dataTables.bootstrap.css')
+    ->appendStylesheet($this->basePath() .'/css/business-edit.css');
+$this->headScript()
+    ->prependFile($this->basePath() .'/js/spin.min.js')
+    ->appendFile('/js/datatables/media/js/jquery.dataTables.min.js')
+    ->appendFile('/js/datatables/plugins/bootstrap/dataTables.bootstrap.js')
+    ->appendFile($this->basePath() .'/js/business-edit.js');
+?>
+<div class="page-content-wrapper">
+    <div class="page-content">
+
+        <div class="row">
+            <div class="col-lg-6">
+                <h3 class="page-title"><?= $this->translate("MODIFICA AZIENDA") . ' "'. $this->business->getName() . '"'; ?><small> <?= $this->translate("Codice ") . '(' . $this->business->getCode() . ')'; ?></small></h3>
+
+            </div>
+            <div class="col-lg-6">
+                <a href="<?php echo $this->url('business'); ?>" class="btn btn-success pull-right"><i class="fa fa-arrow-left"></i> <?= $this->translate("Torna alla lista"); ?></a>
+            </div>
+        </div>
+
+        <div class="page-bar">
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <?php echo $this->partial('partials/flash-messages.phtml', []); ?>
+                <ul class="nav nav-tabs" id="js-tabs" role="tablist">
+                    <li role="presentation" id="menu-info" <?= $this->tab == 'info' ? 'class="active"' : '' ?>>
+                        <a href="<?= $this->url('business/edit/ajax-tab-info', ['code' => $this->business->getCode()]); ?>" data-target="#tab-info" role="tab" data-toggle="tab">
+                            <?= $this->translate("Informazioni"); ?>
+                        </a>
+                    </li>
+                    <li role="presentation" id="menu-edit" <?= $this->tab == 'edit' ? 'class="active"' : '' ?>>
+                        <a href="<?= $this->url('business/edit/ajax-tab-edit', ['code' => $this->business->getCode()]); ?>" data-target="#tab-edit" role="tab" data-toggle="tab">
+                            <?= $this->translate("Modifica dettagli"); ?>
+                        </a>
+                    </li>
+                    <li role="presentation" id="menu-params" <?= $this->tab == 'params' ? 'class="active"' : '' ?>>
+                        <a href="<?= $this->url('business/edit/ajax-tab-params', ['code' => $this->business->getCode()]); ?>" data-target="#tab-params" role="tab" data-toggle="tab">
+                            <?= $this->translate("Modifica parametri"); ?>
+                        </a>
+                    </li>
+                    <li role="presentation" id="menu-employee" <?= $this->tab == 'employees' ? 'class="active"' : '' ?>>
+                        <a href="<?= $this->url('business/edit/ajax-tab-employees', ['code' => $this->business->getCode()]); ?>" data-target="#tab-employees" role="tab" data-toggle="tab">
+                            <?= $this->translate("Clienti associati"); ?>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content" style="position: relative; min-height: 200px">
+                    <div id="spinner-loader"></div>
+                    <div role="tabpanel" class="tab-pane <?= $this->tab == 'info' ? 'active' : '' ?>" id="tab-info"></div>
+                    <div role="tabpanel" class="tab-pane <?= $this->tab == 'edit' ? 'active' : '' ?>" id="tab-edit"></div>
+                    <div role="tabpanel" class="tab-pane <?= $this->tab == 'params' ? 'active' : '' ?>" id="tab-params"></div>
+                    <div role="tabpanel" class="tab-pane <?= $this->tab == 'employees' ? 'active' : '' ?>" id="tab-employees"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

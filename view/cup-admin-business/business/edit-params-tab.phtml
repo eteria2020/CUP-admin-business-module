@@ -1,0 +1,40 @@
+<?php
+$this->form->setAttribute('action', $this->url('business/edit/do-edit-params', array('code' => $this->business->getCode())));
+$form = $this->form->prepare();
+?>
+<div class="row">
+    <div class="col-lg-12">
+        <?= $this->form()->openTag($form); ?>
+        <div class="row">
+            <div class="col-lg-6">
+                <?php
+                $field = $form->get('paymentFrequence');
+                $field->setValue($this->business->getPaymentFrequence());
+                echo $this->businessFormElement($this->translate("Frequenza pagamento"), $field) ?>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <?php
+                $field = $form->get('paymentType');
+                $field->setValue($this->business->getPaymentType());
+                echo $this->businessFormElement($this->translate("Tipo di pagamento"), $field) ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <?php
+                $field = $form->get('businessMailControl');
+                $field->setValue($this->business->isBusinessMailControlEnabled());
+                echo $this->businessFormElement($this->translate("Controllo email aziendale"), $field) ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <button type="submit" class="btn btn-success"><?= $this->translate("Modifica parametri aziendali"); ?></button>
+            </div>
+        </div>
+        <?= $this->form()->closeTag(); ?>
+    </div>
+</div>

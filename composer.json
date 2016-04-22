@@ -1,0 +1,22 @@
+{
+    "name": "mvlabs/sharengo-admin-business-module",
+    "description": "ZF2 Module for Business area in Admin",
+    "repositories": [
+        {
+            "url": "ssh://git@gitlab.bulweria.com:cup-web/core-business.git",
+            "type": "git"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "zendframework/zendframework": "2.4.*",
+        "rwoverdijk/assetmanager": "1.4.*",
+        "mvlabs/sharengo-core-business-module": "dev-master"
+    },
+    "autoload": {
+        "classmap": [
+            "./Module.php"
+        ]
+    }
+}
+
