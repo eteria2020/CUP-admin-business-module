@@ -7,7 +7,7 @@ use CUPAdminBusiness\Form\Helper\BusinessPaymentHelper;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class BusinessFormFactory implements FactoryInterface
+class BusinessConfigParamsFormFactory implements FactoryInterface
 {
     /**
      * Create service
@@ -21,6 +21,6 @@ class BusinessFormFactory implements FactoryInterface
         $translator = $serviceLocator->get('translator');
         $paymentHelper = new BusinessPaymentHelper($translator);
 
-        return new BusinessForm($translator, $paymentHelper);
+        return new BusinessConfigParamsForm($translator, $paymentHelper);
     }
 }

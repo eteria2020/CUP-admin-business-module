@@ -27,28 +27,28 @@
                         if ($be->isBlocked()) { ?>
                             <a href="<?= $this->url('business/edit/unblock-employee', ['id' => $employee->getId(), 'code' => $this->business->getCode()]); ?>"
                                onclick="return confirm('<?= $this->translate("Sei sicuro di voler sbloccare questo utente?"); ?>')"
-                               class="btn-margin validation-btn btn btn-primary btn-xs">
+                               class="btn-margin btn btn-info btn-xs">
                                 <?= $this->translate("Sblocca"); ?>
                             </a>
                             <?php
                             } else if ($be->isApproved()) { ?>
                                 <a href="<?= $this->url('business/edit/block-employee', ['id' => $employee->getId(), 'code' => $this->business->getCode()]); ?>"
                                    onclick="return confirm('<?= $this->translate("Sei sicuro di voler bloccare questo utente?"); ?>')"
-                                   class="btn-margin validation-btn btn btn-warning btn-xs">
+                                   class="btn-margin btn btn-default btn-xs">
                                     <?= $this->translate("Blocca"); ?>
                                 </a>
                             <?php
                             } else { ?>
                                 <a href="<?= $this->url('business/edit/approve-employee', ['id' => $employee->getId(), 'code' => $this->business->getCode()]); ?>"
                                    onclick="return confirm('<?= $this->translate("Sei sicuro di voler approvare questo utente?"); ?>')"
-                                   class="btn-margin validation-btn btn btn-success btn-xs">
+                                   class="btn-margin btn btn-success btn-xs">
                                     <?= $this->translate("Approva"); ?>
                                 </a>
                             <?php
                             }?>
                         <a href="<?= $this->url('business/edit/remove-employee', ['id' => $employee->getId(), 'code' => $this->business->getCode()]); ?>"
                            onclick="return confirm('<?= $this->translate("Sei sicuro di voler eliminare questo utente?"); ?>')"
-                           class="validation-btn btn btn-danger btn-xs">
+                           class="btn btn-warning btn-xs">
                             <?= $this->translate("Elimina"); ?>
                         </a>
                     </td>

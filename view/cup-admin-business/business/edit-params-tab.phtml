@@ -6,34 +6,28 @@ $form = $this->form->prepare();
     <div class="col-lg-12">
         <?= $this->form()->openTag($form); ?>
         <div class="row">
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <label for="code"><?= $this->translate("Codice"); ?></label>
-                    <input type="text" name="code" id="code" class="form-control" disabled value="<?= $this->business->getCode(); ?>">
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <label for="name"><?= $this->translate("Ragione Sociale"); ?></label>
-                    <input type="text" name="name" id="name" class="form-control" disabled value="<?= $this->business->getName(); ?>">
-                </div>
+            <div class="col-lg-6">
+                <?php
+                $field = $form->get('paymentFrequence');
+                $field->setValue($this->business->getPaymentFrequence());
+                echo $this->businessFormElement($this->translate("Frequenza pagamento"), $field) ?>
             </div>
         </div>
 
         <div class="row">
             <div class="col-lg-6">
-                <?= $this->BusinessForm($this->translate("Frequenza pagamento"), 'paymentFrequence', $form, $this->business->getPaymentFrequence()) ?>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-6">
-                <?= $this->BusinessForm($this->translate("Tipo di pagamento"), 'paymentType', $form, $this->business->getPaymentType()) ?>
+                <?php
+                $field = $form->get('paymentType');
+                $field->setValue($this->business->getPaymentType());
+                echo $this->businessFormElement($this->translate("Tipo di pagamento"), $field) ?>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-6">
-                <?= $this->BusinessForm($this->translate("Controllo email aziendale"), 'businessMailControl', $form, $this->business->isBusinessMailControlEnabled()) ?>
+                <?php
+                $field = $form->get('businessMailControl');
+                $field->setValue($this->business->isBusinessMailControlEnabled());
+                echo $this->businessFormElement($this->translate("Controllo email aziendale"), $field) ?>
             </div>
         </div>
         <div class="row">

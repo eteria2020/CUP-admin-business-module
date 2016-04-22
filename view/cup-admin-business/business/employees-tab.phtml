@@ -13,7 +13,7 @@
         ]); ?>
 
         <?php echo $this->partial('partials/business-employees-table.phtml', [
-            'title' => $this->translate("Elenco dipendenti"),
+            'title' => $this->translate("Approvati"),
             'tableId' => 'js-business-employees-table',
             'business' => $this->business,
             'list' => $this->business->getApprovedBusinessEmployees()

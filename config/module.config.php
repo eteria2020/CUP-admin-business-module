@@ -152,8 +152,11 @@ return [
     ],
     'service_manager' => [
         'factories' => [
-            'CUPAdminBusiness\Form\BusinessForm' => 'CUPAdminBusiness\Form\BusinessFormFactory',
-         ]
+            'CUPAdminBusiness\Form\BusinessConfigParamsForm' => 'CUPAdminBusiness\Form\BusinessConfigParamsFormFactory',
+         ],
+        'invokables' => [
+            'CUPAdminBusiness\Form\BusinessDetailsForm' => 'CUPAdminBusiness\Form\BusinessDetailsForm',
+        ]
     ],
     'asset_manager' => [
         'resolver_configs' => [
@@ -171,7 +174,7 @@ return [
     ],
     'view_helpers'    => [
         'invokables' => [
-            'BusinessForm' => 'CUPAdminBusiness\View\Helper\BusinessFormHelper',
+            'businessFormElement' => 'CUPAdminBusiness\View\Helper\BusinessFormElementHelper',
         ]
     ],
     'bjyauthorize' => [

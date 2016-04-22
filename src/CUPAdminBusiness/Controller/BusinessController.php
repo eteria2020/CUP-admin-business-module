@@ -8,8 +8,8 @@ use BusinessCore\Exception\InvalidBusinessFormException;
 use BusinessCore\Form\InputData\BusinessDataFactory;
 use BusinessCore\Service\BusinessService;
 use BusinessCore\Service\DatatableService;
-use CUPAdminBusiness\Form\BusinessForm;
-
+use CUPAdminBusiness\Form\BusinessConfigParamsForm;
+use CUPAdminBusiness\Form\BusinessDetailsForm;
 use Doctrine\ORM\EntityNotFoundException;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -25,12 +25,6 @@ class BusinessController extends AbstractActionController
     private $businessService;
 
     /**
-     * @var BusinessForm
-     */
-
-    private $businessForm;
-
-    /**
      * @var Translator
      */
     private $translator;
@@ -39,24 +33,36 @@ class BusinessController extends AbstractActionController
      * @var DatatableService
      */
     private $datatableService;
+    /**
+     * @var BusinessDetailsForm
+     */
+    private $businessDetailsForm;
+    /**
+     * @var BusinessConfigParamsForm
+     */
+    private $businessConfigParamsForm;
 
     /**
      * BusinessController constructor.
      * @param Translator $translator
      * @param DatatableService $datatableService
      * @param BusinessService $businessService
-     * @param BusinessForm $businessForm
+     * @param BusinessDetailsForm $businessDetailsForm
+     * @param BusinessConfigParamsForm $businessConfigParamsForm
+     * @internal param BusinessForm $businessForm
      */
     public function __construct(
         Translator $translator,
         DatatableService $datatableService,
         BusinessService $businessService,
-        BusinessForm $businessForm
+        BusinessDetailsForm $businessDetailsForm,
+        BusinessConfigParamsForm $businessConfigParamsForm
     ) {
         $this->businessService = $businessService;
-        $this->businessForm = $businessForm;
         $this->translator = $translator;
         $this->datatableService = $datatableService;
+        $this->businessDetailsForm = $businessDetailsForm;
+        $this->businessConfigParamsForm = $businessConfigParamsForm;
     }
 
     public function indexAction()
@@ -66,14 +72,12 @@ class BusinessController extends AbstractActionController
 
     public function addAction()
     {
-        $form = $this->businessForm;
-
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
 
             try {
                 $inputData = BusinessDataFactory::businessDetailsfromArray($data);
-                $inputParams = BusinessDataFactory::businessParamsfromArray($data);
+                $inputParams = BusinessDataFactory::businessConfigParamsfromArray($data);
 
                 $this->businessService->addBusiness($inputData, $inputParams);
 
@@ -86,7 +90,8 @@ class BusinessController extends AbstractActionController
             }
         }
         return new ViewModel([
-            'form' => $form
+            'detailsForm' => $this->businessDetailsForm,
+            'paramsForm' => $this->businessConfigParamsForm
         ]);
     }
 
@@ -98,6 +103,8 @@ class BusinessController extends AbstractActionController
 
         return new ViewModel([
             'business' => $business,
+            'formDetails' => $this->businessDetailsForm,
+            'formParams' => $this->businessConfigParamsForm,
             'tab' => $tab
         ]);
     }
@@ -125,8 +132,8 @@ class BusinessController extends AbstractActionController
         $business = $this->getBusiness();
         $data = $this->getRequest()->getPost()->toArray();
         try {
-            $inputData = BusinessDataFactory::businessParamsfromArray($data);
-            $this->businessService->updateBusinessParams($business, $inputData);
+            $inputData = BusinessDataFactory::businessConfigParamsfromArray($data);
+            $this->businessService->updateBusinessConfigParams($business, $inputData);
             $this->flashMessenger()->addSuccessMessage($this->translator->translate('Parametri aziendali modificati con successo'));
         } catch (InvalidBusinessFormException $e) {
             $this->flashMessenger()->addErrorMessage($e->getMessage());
@@ -144,7 +151,8 @@ class BusinessController extends AbstractActionController
         $business = $this->getBusiness();
 
         $view = new ViewModel([
-            'business' => $business
+            'business' => $business,
+            'form' => $form = $this->businessDetailsForm
         ]);
         $view->setTerminal(true);
 
@@ -153,23 +161,26 @@ class BusinessController extends AbstractActionController
 
     public function editDetailsTabAction()
     {
-        return $this->editView();
+        /** @var Business $business */
+        $business = $this->getBusiness();
+
+        $view = new ViewModel([
+            'business' => $business,
+            'form' => $form = $this->businessDetailsForm
+        ]);
+        $view->setTerminal(true);
+
+        return $view;
     }
 
     public function editParamsTabAction()
     {
-        return $this->editView();
-    }
-
-    private function editView()
-    {
         /** @var Business $business */
         $business = $this->getBusiness();
-        $form = $this->businessForm;
 
         $view = new ViewModel([
             'business' => $business,
-            'form' => $form
+            'form' => $this->businessConfigParamsForm
         ]);
         $view->setTerminal(true);
 

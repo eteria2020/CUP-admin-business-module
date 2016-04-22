@@ -1,19 +1,15 @@
 <?php
 namespace CUPAdminBusiness\View\Helper;
 
-
-use Zend\Form\Form;
 use Zend\View\Helper\AbstractHelper;
 
-class BusinessFormHelper extends AbstractHelper
+class BusinessFormElementHelper extends AbstractHelper
 {
-    public function __invoke($label, $fieldName, Form $form, $fieldValue = null)
+    public function __invoke($label, $field, $disabled = false)
     {
-        $field = $form->get($fieldName);
-        if (!is_null($fieldValue)) {
-            $field->setValue($fieldValue);
+        if ($disabled) {
+            $field->setAttributes(['disabled' => 'disabled']);
         }
-
         $html = '';
         $html .= '<div class="form-group">';
         $html .= '<label>' . $label . '</label>';

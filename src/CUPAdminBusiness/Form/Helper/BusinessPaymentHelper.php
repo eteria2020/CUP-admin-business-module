@@ -2,7 +2,6 @@
 namespace CUPAdminBusiness\Form\Helper;
 
 use BusinessCore\Entity\Business;
-
 use Zend\Mvc\I18n\Translator;
 
 class BusinessPaymentHelper
