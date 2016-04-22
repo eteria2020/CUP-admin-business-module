@@ -13,6 +13,7 @@
         "rwoverdijk/assetmanager": "1.4.*",
         "mvlabs/sharengo-core-business-module": "dev-master"
     },
+    "minimum-stability": "dev",
     "autoload": {
         "classmap": [
             "./Module.php"
