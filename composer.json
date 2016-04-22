@@ -3,7 +3,7 @@
     "description": "ZF2 Module for Business area in Admin",
     "repositories": [
         {
-            "url": "ssh://git@gitlab.bulweria.com:cup-web/core-business.git",
+            "url": "ssh://git@gitlab.bulweria.com/cup-web/core-business.git",
             "type": "git"
         }
     ],
