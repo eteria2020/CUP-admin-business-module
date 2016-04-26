@@ -1,5 +1,5 @@
 <?php
-namespace CUPAdminBusiness\View\Helper;
+namespace BusinessAdminSection\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
 

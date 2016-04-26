@@ -1,6 +1,6 @@
 <?php
 
-namespace CUPAdminBusiness\Controller;
+namespace BusinessAdminSection\Controller;
 
 use BusinessCore\Entity\Business;
 use BusinessCore\Entity\BusinessEmployee;
@@ -8,8 +8,8 @@ use BusinessCore\Exception\InvalidBusinessFormException;
 use BusinessCore\Form\InputData\BusinessDataFactory;
 use BusinessCore\Service\BusinessService;
 use BusinessCore\Service\DatatableService;
-use CUPAdminBusiness\Form\BusinessConfigParamsForm;
-use CUPAdminBusiness\Form\BusinessDetailsForm;
+use BusinessAdminSection\Form\BusinessConfigParamsForm;
+use BusinessAdminSection\Form\BusinessDetailsForm;
 use Doctrine\ORM\EntityNotFoundException;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;

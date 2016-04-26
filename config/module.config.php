@@ -1,6 +1,6 @@
 <?php
 
-namespace CUPAdminBusiness;
+namespace BusinessAdminSection;
 
 $translator = new \Zend\I18n\Translator\Translator;
 return [
@@ -11,7 +11,7 @@ return [
                 'options' => [
                     'route' => '/business',
                     'defaults' => [
-                        '__NAMESPACE__' => 'CUPAdminBusiness\Controller',
+                        '__NAMESPACE__' => 'BusinessAdminSection\Controller',
                         'controller' => 'Business',
                         'action' => 'index',
                     ]
@@ -147,23 +147,23 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            'CUPAdminBusiness\Controller\Business' => 'CUPAdminBusiness\Controller\BusinessControllerFactory'
+            'BusinessAdminSection\Controller\Business' => 'BusinessAdminSection\Controller\BusinessControllerFactory'
         ]
     ],
     'service_manager' => [
         'factories' => [
-            'CUPAdminBusiness\Form\BusinessConfigParamsForm' => 'CUPAdminBusiness\Form\BusinessConfigParamsFormFactory',
+            'BusinessAdminSection\Form\BusinessConfigParamsForm' => 'BusinessAdminSection\Form\BusinessConfigParamsFormFactory',
          ],
         'invokables' => [
-            'CUPAdminBusiness\Form\BusinessDetailsForm' => 'CUPAdminBusiness\Form\BusinessDetailsForm',
+            'BusinessAdminSection\Form\BusinessDetailsForm' => 'BusinessAdminSection\Form\BusinessDetailsForm',
         ]
     ],
     'asset_manager' => [
         'resolver_configs' => [
             'map' => [
-                'js/business.js' => __DIR__.'/../public/assets-modules/cup-admin-business/js/business.js',
-                'js/business-edit.js' => __DIR__.'/../public/assets-modules/cup-admin-business/js/business-edit.js',
-                'css/business-edit.css' => __DIR__.'/../public/assets-modules/cup-admin-business/css/business-edit.css'
+                'js/business.js' => __DIR__.'/../public/assets-modules/business-admin-section/js/business.js',
+                'js/business-edit.js' => __DIR__.'/../public/assets-modules/business-admin-section/js/business-edit.js',
+                'css/business-edit.css' => __DIR__.'/../public/assets-modules/business-admin-section/css/business-edit.css'
             ],
         ],
     ],
@@ -174,13 +174,13 @@ return [
     ],
     'view_helpers'    => [
         'invokables' => [
-            'businessFormElement' => 'CUPAdminBusiness\View\Helper\BusinessFormElementHelper',
+            'businessFormElement' => 'BusinessAdminSection\View\Helper\BusinessFormElementHelper',
         ]
     ],
     'bjyauthorize' => [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
-                ['controller' => 'CUPAdminBusiness\Controller\Business', 'roles' => ['admin']],
+                ['controller' => 'BusinessAdminSection\Controller\Business', 'roles' => ['admin']],
             ],
         ],
     ],
