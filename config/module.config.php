@@ -161,9 +161,9 @@ return [
     'asset_manager' => [
         'resolver_configs' => [
             'map' => [
-                'js/business.js' => __DIR__.'/../public/assets-modules/business-admin-section/js/business.js',
-                'js/business-edit.js' => __DIR__.'/../public/assets-modules/business-admin-section/js/business-edit.js',
-                'css/business-edit.css' => __DIR__.'/../public/assets-modules/business-admin-section/css/business-edit.css'
+                'js/business.js' => __DIR__.'/../public/assets-modules/cup-admin-business-module/js/business.js',
+                'js/business-edit.js' => __DIR__.'/../public/assets-modules/cup-admin-business-module/js/business-edit.js',
+                'css/business-edit.css' => __DIR__.'/../public/assets-modules/cup-admin-business-module/css/business-edit.css'
             ],
         ],
     ],
