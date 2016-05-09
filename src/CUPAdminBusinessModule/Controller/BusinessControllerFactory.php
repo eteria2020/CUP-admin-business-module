@@ -1,6 +1,6 @@
 <?php
 
-namespace CUPAdminBusiness\Controller;
+namespace CUPAdminBusinessModule\Controller;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -14,8 +14,8 @@ class BusinessControllerFactory implements FactoryInterface
 
         $translator = $serviceLocator->getServiceLocator()->get('translator');
 
-        $businessDetailsForm = $serviceLocator->getServiceLocator()->get('CUPAdminBusiness\Form\BusinessDetailsForm');
-        $businessConfigParamsForm = $serviceLocator->getServiceLocator()->get('CUPAdminBusiness\Form\BusinessConfigParamsForm');
+        $businessDetailsForm = $serviceLocator->getServiceLocator()->get('CUPAdminBusinessModule\Form\BusinessDetailsForm');
+        $businessConfigParamsForm = $serviceLocator->getServiceLocator()->get('CUPAdminBusinessModule\Form\BusinessConfigParamsForm');
 
         return new BusinessController($translator, $datatableService, $businessService, $businessDetailsForm, $businessConfigParamsForm);
     }

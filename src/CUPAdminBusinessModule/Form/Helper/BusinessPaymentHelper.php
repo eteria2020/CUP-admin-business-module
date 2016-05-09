@@ -1,5 +1,5 @@
 <?php
-namespace CUPAdminBusiness\Form\Helper;
+namespace CUPAdminBusinessModule\Form\Helper;
 
 use BusinessCore\Entity\Business;
 use Zend\Mvc\I18n\Translator;

@@ -1,9 +1,9 @@
 <?php
 
-namespace CUPAdminBusiness\Form;
+namespace CUPAdminBusinessModule\Form;
 
 use BusinessCore\Entity\Business;
-use CUPAdminBusiness\Form\Helper\BusinessPaymentHelper;
+use CUPAdminBusinessModule\Form\Helper\BusinessPaymentHelper;
 use Zend\Form\Form;
 use Zend\Mvc\I18n\Translator;
 
