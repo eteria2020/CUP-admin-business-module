@@ -1,6 +1,6 @@
 <?php
 
-namespace BusinessAdminSection\Form;
+namespace CUPAdminBusinessModule\Form;
 
 use Zend\Form\Form;
 

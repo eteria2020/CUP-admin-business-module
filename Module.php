@@ -1,6 +1,6 @@
 <?php
 
-namespace BusinessAdminSection;
+namespace CUPAdminBusinessModule;
 
 class Module
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace BusinessAdminSection\Form;
+namespace CUPAdminBusinessModule\Form;
 
-use BusinessAdminSection\Form\Helper\BusinessPaymentHelper;
+use CUPAdminBusinessModule\Form\Helper\BusinessPaymentHelper;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 

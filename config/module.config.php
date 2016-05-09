@@ -1,6 +1,6 @@
 <?php
 
-namespace BusinessAdminSection;
+namespace CUPAdminBusinessModule;
 
 $translator = new \Zend\I18n\Translator\Translator;
 return [
@@ -11,7 +11,7 @@ return [
                 'options' => [
                     'route' => '/business',
                     'defaults' => [
-                        '__NAMESPACE__' => 'BusinessAdminSection\Controller',
+                        '__NAMESPACE__' => 'CUPAdminBusinessModule\Controller',
                         'controller' => 'Business',
                         'action' => 'index',
                     ]
@@ -147,15 +147,15 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            'BusinessAdminSection\Controller\Business' => 'BusinessAdminSection\Controller\BusinessControllerFactory'
+            'CUPAdminBusinessModule\Controller\Business' => 'CUPAdminBusinessModule\Controller\BusinessControllerFactory'
         ]
     ],
     'service_manager' => [
         'factories' => [
-            'BusinessAdminSection\Form\BusinessConfigParamsForm' => 'BusinessAdminSection\Form\BusinessConfigParamsFormFactory',
+            'CUPAdminBusinessModule\Form\BusinessConfigParamsForm' => 'CUPAdminBusinessModule\Form\BusinessConfigParamsFormFactory',
          ],
         'invokables' => [
-            'BusinessAdminSection\Form\BusinessDetailsForm' => 'BusinessAdminSection\Form\BusinessDetailsForm',
+            'CUPAdminBusinessModule\Form\BusinessDetailsForm' => 'CUPAdminBusinessModule\Form\BusinessDetailsForm',
         ]
     ],
     'asset_manager' => [
@@ -174,13 +174,13 @@ return [
     ],
     'view_helpers'    => [
         'invokables' => [
-            'businessFormElement' => 'BusinessAdminSection\View\Helper\BusinessFormElementHelper',
+            'businessFormElement' => 'CUPAdminBusinessModule\View\Helper\BusinessFormElementHelper',
         ]
     ],
     'bjyauthorize' => [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
-                ['controller' => 'BusinessAdminSection\Controller\Business', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\Business', 'roles' => ['admin']],
             ],
         ],
     ],
