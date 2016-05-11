@@ -16,7 +16,15 @@ class BusinessControllerFactory implements FactoryInterface
 
         $businessDetailsForm = $serviceLocator->getServiceLocator()->get('CUPAdminBusinessModule\Form\BusinessDetailsForm');
         $businessConfigParamsForm = $serviceLocator->getServiceLocator()->get('CUPAdminBusinessModule\Form\BusinessConfigParamsForm');
+        $businessFareForm = $serviceLocator->getServiceLocator()->get('CUPAdminBusinessModule\Form\BusinessFareForm');
 
-        return new BusinessController($translator, $datatableService, $businessService, $businessDetailsForm, $businessConfigParamsForm);
+        return new BusinessController(
+            $translator,
+            $datatableService,
+            $businessService,
+            $businessDetailsForm,
+            $businessConfigParamsForm,
+            $businessFareForm
+        );
     }
 }

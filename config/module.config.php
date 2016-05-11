@@ -58,6 +58,15 @@ return [
                                     ],
                                 ],
                             ],
+                            'do-edit-fare' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/edit-fare',
+                                    'defaults' => [
+                                        'action' => 'do-edit-fare',
+                                    ],
+                                ],
+                            ],
                             'ajax-tab-edit' => [
                                 'type'    => 'Segment',
                                 'options' => [
@@ -91,6 +100,15 @@ return [
                                     'route'    => '/ajax-tab/params',
                                     'defaults' => [
                                         'action' => 'edit-params-tab',
+                                    ],
+                                ],
+                            ],
+                            'ajax-tab-fare' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/ajax-tab/fare',
+                                    'defaults' => [
+                                        'action' => 'fare-tab',
                                     ],
                                 ],
                             ],
@@ -156,6 +174,7 @@ return [
          ],
         'invokables' => [
             'CUPAdminBusinessModule\Form\BusinessDetailsForm' => 'CUPAdminBusinessModule\Form\BusinessDetailsForm',
+            'CUPAdminBusinessModule\Form\BusinessFareForm' => 'CUPAdminBusinessModule\Form\BusinessFareForm',
         ]
     ],
     'asset_manager' => [
