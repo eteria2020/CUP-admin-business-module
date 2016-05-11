@@ -94,6 +94,15 @@ return [
                                     ],
                                 ],
                             ],
+                            'ajax-tab-payments' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/ajax-tab/params',
+                                    'defaults' => [
+                                        'action' => 'edit-params-tab',
+                                    ],
+                                ],
+                            ],
                             'approve-employee' => [
                                 'type' => 'Segment',
                                 'options' => [
@@ -127,6 +136,28 @@ return [
                                     'route' => '/unblock-employee/:id',
                                     'defaults' => [
                                         'action' => 'unblock-employee',
+                                    ],
+                                ],
+                            ],
+                            'payments' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/payments',
+                                    'defaults' => [
+                                        'controller' => 'BusinessPayments',
+                                        'action' => 'payments',
+                                    ],
+                                    'may_terminate' => true,
+                                    'child_routes' => [
+                                        'datatable' => [
+                                            'type'    => 'Literal',
+                                            'options' => [
+                                                'route'    => '/datatable',
+                                                'defaults' => [
+                                                    'action' => 'datatable',
+                                                ],
+                                            ],
+                                        ],
                                     ],
                                 ],
                             ],

@@ -198,6 +198,18 @@ class BusinessController extends AbstractActionController
         return $view;
     }
 
+    public function paymentsTabAction()
+    {
+        $business = $this->getBusiness();
+
+        $view = new ViewModel([
+            'business' => $business
+        ]);
+        $view->setTerminal(true);
+
+        return $view;
+    }
+
     public function approveEmployeeAction()
     {
         $businessCode = $this->params()->fromRoute('code', 0);
