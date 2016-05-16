@@ -27,6 +27,16 @@ return [
                             ],
                         ],
                     ],
+                    'penalty' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route'    => '/penality',
+                            'defaults' => [
+                                'controller' => 'Penalty',
+                                'action' => 'add',
+                            ],
+                        ],
+                    ],
                     'edit' => [
                         'type' => 'Segment',
                         'options' => [
@@ -196,6 +206,11 @@ return [
                     [
                         'label' => $translator->translate('Elenco'),
                         'route' => 'business',
+                        'isVisible' => true
+                    ],
+                    [
+                        'label' => $translator->translate('Addebito penale/extra'),
+                        'route' => 'business/penalty',
                         'isVisible' => true
                     ]
                 ],
