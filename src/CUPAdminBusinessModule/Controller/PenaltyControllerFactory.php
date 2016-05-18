@@ -9,6 +9,7 @@ class PenaltyControllerFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new PenaltyController();
+        $chargePenaltyOrExtraForm = $serviceLocator->getServiceLocator()->get('CUPAdminBusinessModule\Form\ChargePenaltyOrExtraForm');
+        return new PenaltyController($chargePenaltyOrExtraForm);
     }
 }

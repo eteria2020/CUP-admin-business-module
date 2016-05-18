@@ -33,7 +33,7 @@ return [
                             'route'    => '/penality',
                             'defaults' => [
                                 'controller' => 'Penalty',
-                                'action' => 'add',
+                                'action' => 'charge',
                             ],
                         ],
                     ],
@@ -151,18 +151,29 @@ return [
                             ],
                         ],
                     ],
+                    'typeahead-json' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/typeahead-json',
+                            'defaults' => [
+                                'action' => 'typeahead-json',
+                            ],
+                        ],
+                    ],
                 ],
             ]
         ]
     ],
     'controllers' => [
         'factories' => [
-            'CUPAdminBusinessModule\Controller\Business' => 'CUPAdminBusinessModule\Controller\BusinessControllerFactory'
+            'CUPAdminBusinessModule\Controller\Business' => 'CUPAdminBusinessModule\Controller\BusinessControllerFactory',
+            'CUPAdminBusinessModule\Controller\Penalty' => 'CUPAdminBusinessModule\Controller\PenaltyControllerFactory'
         ]
     ],
     'service_manager' => [
         'factories' => [
             'CUPAdminBusinessModule\Form\BusinessConfigParamsForm' => 'CUPAdminBusinessModule\Form\BusinessConfigParamsFormFactory',
+            'CUPAdminBusinessModule\Form\ChargePenaltyOrExtraForm' => 'CUPAdminBusinessModule\Form\ChargePenaltyOrExtraFormFactory',
          ],
         'invokables' => [
             'CUPAdminBusinessModule\Form\BusinessDetailsForm' => 'CUPAdminBusinessModule\Form\BusinessDetailsForm',
@@ -175,6 +186,9 @@ return [
                 'js/business-edit.js' => __DIR__.'/../public/assets-modules/cup-admin-business-module/js/business-edit.js',
                 'css/business-edit.css' => __DIR__.'/../public/assets-modules/cup-admin-business-module/css/business-edit.css'
             ],
+            'paths' => [
+                __DIR__.'/../public/assets-modules/cup-admin-business-module'
+            ]
         ],
     ],
     'view_manager' => [
@@ -191,6 +205,7 @@ return [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
                 ['controller' => 'CUPAdminBusinessModule\Controller\Business', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\Penalty', 'roles' => ['admin']],
             ],
         ],
     ],
