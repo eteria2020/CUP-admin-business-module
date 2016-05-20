@@ -2,6 +2,7 @@
 
 namespace CUPAdminBusinessModule\Form;
 
+use BusinessCore\Entity\BusinessPayment;
 use Zend\Form\Form;
 use Zend\Mvc\I18n\Translator;
 
@@ -27,7 +28,8 @@ class ChargePenaltyOrExtraForm extends Form
             'type'       => 'Zend\Form\Element\Number',
             'attributes' => [
                 'id'       => 'amount',
-                'min' => 0,
+                'min' => 0.00,
+                'step' => 0.01,
                 'class'    => 'form-control',
                 'required' => 'required',
                 'placeholder' => $translator->translate("Importo addebito in €")
@@ -43,8 +45,8 @@ class ChargePenaltyOrExtraForm extends Form
             ],
             'options'    => [
                 'value_options' => [
-                    'extra' => $translator->translate("Extra"), //TODO set values as in Payments::something
-                    'penalty' => $translator->translate("Penale")
+                    BusinessPayment::EXTRA_TYPE => $translator->translate("Extra"),
+                    BusinessPayment::PENALTY_TYPE => $translator->translate("Penale")
                 ]
             ]
         ]);

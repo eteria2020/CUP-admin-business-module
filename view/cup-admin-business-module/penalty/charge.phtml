@@ -12,7 +12,7 @@ $form = $this->form->prepare();
 ?>
 <div class="page-content-wrapper">
     <div class="page-content">
-
+        <?php echo $this->partial('partials/flash-messages.phtml', []); ?>
         <!-- BEGIN PAGE HEADER-->
         <h3 class="page-title">
             <?= $this->translate("ADDEBITO PENALE/EXTRA"); ?>
