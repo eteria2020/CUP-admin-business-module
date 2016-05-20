@@ -10,9 +10,8 @@ class BusinessPaymentsControllerFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $businessService = $serviceLocator->getServiceLocator()->get('BusinessCore\Service\BusinessService');
-        $businessPaymentsService = $serviceLocator->getServiceLocator()->get('BusinessCore\Service\BusinessPaymentsService');
+        $businessPaymentsService = $serviceLocator->getServiceLocator()->get('BusinessCore\Service\BusinessPaymentService');
         $datatableService = $serviceLocator->getServiceLocator()->get('BusinessCore\Service\DatatableService');
-        //@todo import businessPaymentService and pass to Controller
-        return new BusinessPaymentsController($businessService, $datatableService);
+        return new BusinessPaymentsController($businessService, $datatableService, $businessPaymentsService);
     }
 }

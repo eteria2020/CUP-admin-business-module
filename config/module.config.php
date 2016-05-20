@@ -97,9 +97,10 @@ return [
                             'ajax-tab-payments' => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'    => '/ajax-tab/params',
+                                    'route'    => '/ajax-tab/payments',
                                     'defaults' => [
-                                        'action' => 'edit-params-tab',
+                                        'controller' => 'BusinessPayments',
+                                        'action' => 'payments-tab',
                                     ],
                                 ],
                             ],
@@ -139,23 +140,23 @@ return [
                                     ],
                                 ],
                             ],
+
                             'payments' => [
-                                'type' => 'Segment',
+                                'type' => 'Literal',
                                 'options' => [
                                     'route' => '/payments',
                                     'defaults' => [
                                         'controller' => 'BusinessPayments',
-                                        'action' => 'payments',
                                     ],
-                                    'may_terminate' => true,
-                                    'child_routes' => [
-                                        'datatable' => [
-                                            'type'    => 'Literal',
-                                            'options' => [
-                                                'route'    => '/datatable',
-                                                'defaults' => [
-                                                    'action' => 'datatable',
-                                                ],
+                                ],
+                                'may_terminate' => false,
+                                'child_routes' => [
+                                    'datatable' => [
+                                        'type'    => 'Literal',
+                                        'options' => [
+                                            'route'    => '/datatable',
+                                            'defaults' => [
+                                                'action' => 'datatable',
                                             ],
                                         ],
                                     ],
@@ -178,7 +179,8 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            'CUPAdminBusinessModule\Controller\Business' => 'CUPAdminBusinessModule\Controller\BusinessControllerFactory'
+            'CUPAdminBusinessModule\Controller\Business' => 'CUPAdminBusinessModule\Controller\BusinessControllerFactory',
+            'CUPAdminBusinessModule\Controller\BusinessPayments' => 'CUPAdminBusinessModule\Controller\BusinessPaymentsControllerFactory'
         ]
     ],
     'service_manager' => [
@@ -212,6 +214,7 @@ return [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
                 ['controller' => 'CUPAdminBusinessModule\Controller\Business', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\BusinessPayments', 'roles' => ['admin']],
             ],
         ],
     ],
