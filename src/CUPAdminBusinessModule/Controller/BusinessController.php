@@ -5,6 +5,7 @@ namespace CUPAdminBusinessModule\Controller;
 use BusinessCore\Entity\Business;
 use BusinessCore\Entity\BusinessEmployee;
 use BusinessCore\Exception\InvalidBusinessFormException;
+use BusinessCore\Exception\InvalidFormDataException;
 use BusinessCore\Form\InputData\BusinessDataFactory;
 use BusinessCore\Service\BusinessService;
 use BusinessCore\Service\DatatableService;
@@ -155,8 +156,13 @@ class BusinessController extends AbstractActionController
     public function doEditFareAction()
     {
         $business = $this->getBusiness();
-        $data = $this->getRequest()->getPost()->toArray();
-//        @todo editFare $data['motion'] & $data['park']
+        $data = $this->getRequest()->getPost();
+        try {
+            $this->businessService->newBusinessFare($business, $data['motion'], $data['park']);
+            $this->flashMessenger()->addSuccessMessage($this->translator->translate('Tariffa aggiornata con successo'));
+        } catch (InvalidFormDataException $e) {
+            $this->flashMessenger()->addErrorMessage($this->translator->translate('Valori inseriti non corretti'));
+        }
 
         return $this->redirect()->toRoute(
             'business/edit',
@@ -223,9 +229,10 @@ class BusinessController extends AbstractActionController
     {
         /** @var Business $business */
         $business = $this->getBusiness();
-
+        $fare = $business->getActiveBusinessFare();
         $view = new ViewModel([
             'business' => $business,
+            'fare' => $fare,
             'form' => $this->businessFareForm
         ]);
         $view->setTerminal(true);

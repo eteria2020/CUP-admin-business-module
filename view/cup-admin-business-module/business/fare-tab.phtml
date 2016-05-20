@@ -11,7 +11,7 @@ $form = $this->form->prepare();
                     <label><?= $this->translate("Percentuale di sconto tariffa corsa"); ?></label>
                     <?php
                     $field = $form->get('motion');
-                    $field->setValue(50); //todo get actual value
+                    $field->setValue($this->fare->getMotionDiscount());
                     echo $this->formElement($field->setAttribute('class', 'form-control'));
                     echo $this->formElementErrors($field, ['class' => 'text-danger']);
                     ?>
@@ -24,7 +24,7 @@ $form = $this->form->prepare();
                     <label><?= $this->translate("Percentuale di sconto tariffa in sosta"); ?></label>
                     <?php
                     $field = $form->get('park');
-                    $field->setValue(50); //todo get actual value
+                    $field->setValue($this->fare->getParkDiscount());
                     echo $this->formElement($field->setAttribute('class', 'form-control'));
                     echo $this->formElementErrors($field, ['class' => 'text-danger']);
                     ?>
