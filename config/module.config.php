@@ -27,6 +27,29 @@ return [
                             ],
                         ],
                     ],
+                    'time-packages' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/time-packages',
+                            'defaults' => [
+                                '__NAMESPACE__' => 'CUPAdminBusinessModule\Controller',
+                                'controller' => 'TimePackages',
+                                'action' => 'index',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'add' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route'    => '/add',
+                                    'defaults' => [
+                                        'action' => 'add',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                     'edit' => [
                         'type' => 'Segment',
                         'options' => [
@@ -94,6 +117,24 @@ return [
                                     ],
                                 ],
                             ],
+                            'ajax-tab-time-packages' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/ajax-tab/packages',
+                                    'defaults' => [
+                                        'action' => 'time-packages-tab',
+                                    ],
+                                ],
+                            ],
+                            'set-packages-as-buyable' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/buyable-packages',
+                                    'defaults' => [
+                                        'action' => 'set-packages-as-buyable',
+                                    ],
+                                ],
+                            ],
                             'approve-employee' => [
                                 'type' => 'Segment',
                                 'options' => [
@@ -147,7 +188,8 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            'CUPAdminBusinessModule\Controller\Business' => 'CUPAdminBusinessModule\Controller\BusinessControllerFactory'
+            'CUPAdminBusinessModule\Controller\Business' => 'CUPAdminBusinessModule\Controller\BusinessControllerFactory',
+            'CUPAdminBusinessModule\Controller\TimePackages' => 'CUPAdminBusinessModule\Controller\TimePackagesControllerFactory',
         ]
     ],
     'service_manager' => [
@@ -156,14 +198,13 @@ return [
          ],
         'invokables' => [
             'CUPAdminBusinessModule\Form\BusinessDetailsForm' => 'CUPAdminBusinessModule\Form\BusinessDetailsForm',
+            'CUPAdminBusinessModule\Form\TimePackageForm' => 'CUPAdminBusinessModule\Form\TimePackageForm',
         ]
     ],
     'asset_manager' => [
         'resolver_configs' => [
-            'map' => [
-                'js/business.js' => __DIR__.'/../public/assets-modules/cup-admin-business-module/js/business.js',
-                'js/business-edit.js' => __DIR__.'/../public/assets-modules/cup-admin-business-module/js/business-edit.js',
-                'css/business-edit.css' => __DIR__.'/../public/assets-modules/cup-admin-business-module/css/business-edit.css'
+            'paths' => [
+                __DIR__.'/../public/assets-modules/cup-admin-business-module',
             ],
         ],
     ],
@@ -181,6 +222,7 @@ return [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
                 ['controller' => 'CUPAdminBusinessModule\Controller\Business', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\TimePackages', 'roles' => ['admin']],
             ],
         ],
     ],
@@ -197,6 +239,15 @@ return [
                         'label' => $translator->translate('Elenco'),
                         'route' => 'business',
                         'isVisible' => true
+                    ],
+                    [
+                        'label' => $translator->translate('Gestione pacchetti'),
+                        'route' => 'business/time-packages',
+                        'isVisible' => true
+                    ],
+                    [
+                        'route' => 'business/time-packages/add',
+                        'isVisible' => false
                     ]
                 ],
             ],

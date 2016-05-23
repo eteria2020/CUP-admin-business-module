@@ -48,6 +48,11 @@ $this->headScript()
                             <?= $this->translate("Clienti associati"); ?>
                         </a>
                     </li>
+                    <li role="presentation" id="menu-time-packages" <?= $this->tab == 'time-packages' ? 'class="active"' : '' ?>>
+                        <a href="<?= $this->url('business/edit/ajax-tab-time-packages', ['code' => $this->business->getCode()]); ?>" data-target="#tab-time-packages" role="tab" data-toggle="tab">
+                            <?= $this->translate("Pacchetti minuti"); ?>
+                        </a>
+                    </li>
                 </ul>
 
                 <div class="tab-content" style="position: relative; min-height: 200px">
@@ -56,6 +61,7 @@ $this->headScript()
                     <div role="tabpanel" class="tab-pane <?= $this->tab == 'edit' ? 'active' : '' ?>" id="tab-edit"></div>
                     <div role="tabpanel" class="tab-pane <?= $this->tab == 'params' ? 'active' : '' ?>" id="tab-params"></div>
                     <div role="tabpanel" class="tab-pane <?= $this->tab == 'employees' ? 'active' : '' ?>" id="tab-employees"></div>
+                    <div role="tabpanel" class="tab-pane <?= $this->tab == 'time-packages' ? 'active' : '' ?>" id="tab-time-packages"></div>
                 </div>
             </div>
         </div>
