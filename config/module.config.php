@@ -142,17 +142,37 @@ return [
                         ],
                     ],
                 ],
+            ],
+            /**
+             * Overwrite Application module routes to allow specific business filtering
+             */
+            'trips' => [
+                'child_routes' => [
+                    'datatable' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/datatable',
+                            'defaults' => [
+                                '__NAMESPACE__' => 'CUPAdminBusinessModule\Controller',
+                                'controller' => 'BusinessTrip',
+                                'action' => 'datatable',
+                            ],
+                        ],
+                    ],
+                ]
             ]
         ]
     ],
     'controllers' => [
         'factories' => [
-            'CUPAdminBusinessModule\Controller\Business' => 'CUPAdminBusinessModule\Controller\BusinessControllerFactory'
+            'CUPAdminBusinessModule\Controller\Business' => 'CUPAdminBusinessModule\Controller\BusinessControllerFactory',
+            'CUPAdminBusinessModule\Controller\BusinessTrip' => 'CUPAdminBusinessModule\Controller\BusinessTripControllerFactory'
         ]
     ],
     'service_manager' => [
         'factories' => [
             'CUPAdminBusinessModule\Form\BusinessConfigParamsForm' => 'CUPAdminBusinessModule\Form\BusinessConfigParamsFormFactory',
+            'CUPAdminBusinessModule\Service\BusinessAndPrivateTripService' => 'CUPAdminBusinessModule\Service\BusinessAndPrivateTripServiceFactory',
          ],
         'invokables' => [
             'CUPAdminBusinessModule\Form\BusinessDetailsForm' => 'CUPAdminBusinessModule\Form\BusinessDetailsForm',
@@ -161,6 +181,7 @@ return [
     'asset_manager' => [
         'resolver_configs' => [
             'map' => [
+                'js/trips.js' => __DIR__.'/../public/assets-modules/cup-admin-business-module/js/trips.js',
                 'js/business.js' => __DIR__.'/../public/assets-modules/cup-admin-business-module/js/business.js',
                 'js/business-edit.js' => __DIR__.'/../public/assets-modules/cup-admin-business-module/js/business-edit.js',
                 'css/business-edit.css' => __DIR__.'/../public/assets-modules/cup-admin-business-module/css/business-edit.css'
@@ -181,6 +202,7 @@ return [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
                 ['controller' => 'CUPAdminBusinessModule\Controller\Business', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\BusinessTrip', 'roles' => ['admin']],
             ],
         ],
     ],
@@ -201,5 +223,10 @@ return [
                 ],
             ],
         ]
-    ]
+    ],
+    'datatable-filters' => [
+        'trips-index' => [
+            'bt.business' => $translator->translate("Azienda")
+        ]
+    ],
 ];
