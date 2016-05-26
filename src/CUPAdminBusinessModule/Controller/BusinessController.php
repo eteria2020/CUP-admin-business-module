@@ -303,4 +303,20 @@ class BusinessController extends AbstractActionController
             ];
         }, $businesses);
     }
+
+    public function typeaheadJsonAction()
+    {
+        $searchValue = $this->params()->fromQuery()['query'];
+        $businesses = $this->businessService->findBySearchValue($searchValue);
+
+        $businesses = array_map(function (Business $business) {
+            return [
+                'name' => $business->getName(),
+                'code' => $business->getCode()
+            ];
+        }, $businesses);
+        return new JsonModel([
+            'businesses' => $businesses
+        ]);
+    }
 }

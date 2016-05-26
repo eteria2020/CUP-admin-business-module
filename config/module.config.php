@@ -27,6 +27,16 @@ return [
                             ],
                         ],
                     ],
+                    'penalty' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route'    => '/penality',
+                            'defaults' => [
+                                'controller' => 'Penalty',
+                                'action' => 'charge',
+                            ],
+                        ],
+                    ],
                     'edit' => [
                         'type' => 'Segment',
                         'options' => [
@@ -141,6 +151,15 @@ return [
                             ],
                         ],
                     ],
+                    'typeahead-json' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/typeahead-json',
+                            'defaults' => [
+                                'action' => 'typeahead-json',
+                            ],
+                        ],
+                    ],
                 ],
             ],
             /**
@@ -166,12 +185,14 @@ return [
     'controllers' => [
         'factories' => [
             'CUPAdminBusinessModule\Controller\Business' => 'CUPAdminBusinessModule\Controller\BusinessControllerFactory',
-            'CUPAdminBusinessModule\Controller\BusinessTrip' => 'CUPAdminBusinessModule\Controller\BusinessTripControllerFactory'
+            'CUPAdminBusinessModule\Controller\BusinessTrip' => 'CUPAdminBusinessModule\Controller\BusinessTripControllerFactory',
+            'CUPAdminBusinessModule\Controller\Penalty' => 'CUPAdminBusinessModule\Controller\PenaltyControllerFactory'
         ]
     ],
     'service_manager' => [
         'factories' => [
             'CUPAdminBusinessModule\Form\BusinessConfigParamsForm' => 'CUPAdminBusinessModule\Form\BusinessConfigParamsFormFactory',
+            'CUPAdminBusinessModule\Form\ChargePenaltyOrExtraForm' => 'CUPAdminBusinessModule\Form\ChargePenaltyOrExtraFormFactory',
             'CUPAdminBusinessModule\Service\BusinessAndPrivateTripService' => 'CUPAdminBusinessModule\Service\BusinessAndPrivateTripServiceFactory',
          ],
         'invokables' => [
@@ -186,6 +207,9 @@ return [
                 'js/business-edit.js' => __DIR__.'/../public/assets-modules/cup-admin-business-module/js/business-edit.js',
                 'css/business-edit.css' => __DIR__.'/../public/assets-modules/cup-admin-business-module/css/business-edit.css'
             ],
+            'paths' => [
+                __DIR__.'/../public/assets-modules/cup-admin-business-module'
+            ]
         ],
     ],
     'view_manager' => [
@@ -203,6 +227,7 @@ return [
             'BjyAuthorize\Guard\Controller' => [
                 ['controller' => 'CUPAdminBusinessModule\Controller\Business', 'roles' => ['admin']],
                 ['controller' => 'CUPAdminBusinessModule\Controller\BusinessTrip', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\Penalty', 'roles' => ['admin']],
             ],
         ],
     ],
@@ -218,6 +243,11 @@ return [
                     [
                         'label' => $translator->translate('Elenco'),
                         'route' => 'business',
+                        'isVisible' => true
+                    ],
+                    [
+                        'label' => $translator->translate('Addebito penale/extra'),
+                        'route' => 'business/penalty',
                         'isVisible' => true
                     ]
                 ],
