@@ -33,6 +33,7 @@ class BusinessAndPrivateTripRepository
         $dql = 'SELECT ' . $select . '
         FROM \SharengoCore\Entity\Trips e
         LEFT JOIN \BusinessCore\Entity\BusinessTrip bt WITH bt.trip = e.id
+        LEFT JOIN bt.business b
         LEFT JOIN e.customer cu
         LEFT JOIN cu.card cc
         LEFT JOIN e.fleet f

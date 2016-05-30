@@ -201,15 +201,18 @@ return [
     ],
     'asset_manager' => [
         'resolver_configs' => [
-            'map' => [
-                'js/trips.js' => __DIR__.'/../public/assets-modules/cup-admin-business-module/js/trips.js',
-                'js/business.js' => __DIR__.'/../public/assets-modules/cup-admin-business-module/js/business.js',
-                'js/business-edit.js' => __DIR__.'/../public/assets-modules/cup-admin-business-module/js/business-edit.js',
-                'css/business-edit.css' => __DIR__.'/../public/assets-modules/cup-admin-business-module/css/business-edit.css'
+            'collections' => [
+                'js/trips.js' => [
+                    'js/libs/jquery.autocomplete.min.js',
+                    'js/business-trips.js',
+                ],
+                'css/trips.css' => [
+                    'css/autocomplete.css',
+                ],
             ],
             'paths' => [
                 __DIR__.'/../public/assets-modules/cup-admin-business-module'
-            ]
+            ],
         ],
     ],
     'view_manager' => [
@@ -228,6 +231,7 @@ return [
                 ['controller' => 'CUPAdminBusinessModule\Controller\Business', 'roles' => ['admin']],
                 ['controller' => 'CUPAdminBusinessModule\Controller\BusinessTrip', 'roles' => ['admin']],
                 ['controller' => 'CUPAdminBusinessModule\Controller\Penalty', 'roles' => ['admin']],
+                ['controller' => 'AssetManager\Controller\Console', 'roles' => []],
             ],
         ],
     ],
@@ -256,7 +260,7 @@ return [
     ],
     'datatable-filters' => [
         'trips-index' => [
-            'bt.business' => $translator->translate("Azienda")
+            'b.name' => $translator->translate("Azienda")
         ]
     ],
 ];
