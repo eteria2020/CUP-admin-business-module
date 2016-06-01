@@ -1,0 +1,47 @@
+<?php
+$this->headLink()->appendStylesheet('/js/datatables/plugins/bootstrap/dataTables.bootstrap.css');
+$this->headScript()
+    ->appendFile($this->basePath() .'/js/libs/Chart.min.js')
+    ->appendFile($this->basePath() .'/js/statistics.js');
+?>
+<div class="page-content-wrapper">
+    <div class="page-content">
+
+        <!-- BEGIN PAGE HEADER-->
+        <h3 class="page-title">
+            <?= $this->translate("STATISTICHE AZIENDE"); ?>
+        </h3>
+
+        <div class="page-bar">
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <?php echo $this->partial('partials/flash-messages.phtml', []); ?>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-inline">
+
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-cogs"></i><?= $this->translate("Statistiche"); ?>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <canvas id="chart" height="120"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -27,6 +27,28 @@ return [
                             ],
                         ],
                     ],
+                    'stats' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route'    => '/stats',
+                            'defaults' => [
+                                'controller' => 'BusinessStatistics',
+                                'action' => 'index',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'data' => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'    => '/data',
+                                    'defaults' => [
+                                        'action' => 'data',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                     'edit' => [
                         'type' => 'Segment',
                         'options' => [
@@ -147,7 +169,8 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            'CUPAdminBusinessModule\Controller\Business' => 'CUPAdminBusinessModule\Controller\BusinessControllerFactory'
+            'CUPAdminBusinessModule\Controller\Business' => 'CUPAdminBusinessModule\Controller\BusinessControllerFactory',
+            'CUPAdminBusinessModule\Controller\BusinessStatistics' => 'CUPAdminBusinessModule\Controller\BusinessStatisticsControllerFactory'
         ]
     ],
     'service_manager' => [
@@ -160,10 +183,8 @@ return [
     ],
     'asset_manager' => [
         'resolver_configs' => [
-            'map' => [
-                'js/business.js' => __DIR__.'/../public/assets-modules/cup-admin-business-module/js/business.js',
-                'js/business-edit.js' => __DIR__.'/../public/assets-modules/cup-admin-business-module/js/business-edit.js',
-                'css/business-edit.css' => __DIR__.'/../public/assets-modules/cup-admin-business-module/css/business-edit.css'
+            'paths' => [
+                __DIR__.'/../public/assets-modules/cup-admin-business-module/'
             ],
         ],
     ],
@@ -181,6 +202,7 @@ return [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
                 ['controller' => 'CUPAdminBusinessModule\Controller\Business', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\BusinessStatistics', 'roles' => ['admin']],
             ],
         ],
     ],
@@ -196,6 +218,11 @@ return [
                     [
                         'label' => $translator->translate('Elenco'),
                         'route' => 'business',
+                        'isVisible' => true
+                    ],
+                    [
+                        'label' => $translator->translate('Statistiche'),
+                        'route' => 'business/stats',
                         'isVisible' => true
                     ]
                 ],
