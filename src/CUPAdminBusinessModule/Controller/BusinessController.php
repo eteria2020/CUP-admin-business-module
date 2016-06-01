@@ -203,7 +203,7 @@ class BusinessController extends AbstractActionController
         $businessCode = $this->params()->fromRoute('code', 0);
         $employeeId = $this->params()->fromRoute('id', 0);
 
-//        $this->businessService->setEmployeeStatus($businessCode, $employeeId, BusinessEmployee::STATUS_APPROVED);
+        $this->businessService->approveEmployee($businessCode, $employeeId);
         $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente approvato'));
 
         return $this->redirect()->toRoute(
@@ -233,7 +233,7 @@ class BusinessController extends AbstractActionController
         $businessCode = $this->params()->fromRoute('code', 0);
         $employeeId = $this->params()->fromRoute('id', 0);
 
-//        $this->businessService->setEmployeeStatus($businessCode, $employeeId, BusinessEmployee::STATUS_BLOCKED);
+        $this->businessService->blockEmployee($businessCode, $employeeId);
         $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente bloccato con successo'));
 
         return $this->redirect()->toRoute(
@@ -248,7 +248,8 @@ class BusinessController extends AbstractActionController
         $businessCode = $this->params()->fromRoute('code', 0);
         $employeeId = $this->params()->fromRoute('id', 0);
 
-//        $this->businessService->setEmployeeStatus($businessCode, $employeeId, BusinessEmployee::STATUS_APPROVED);
+        //@TODO change to unblockEmployee (to avoid sending email)
+        $this->businessService->approveEmployee($businessCode, $employeeId);
         $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente sbloccato con successo'));
 
         return $this->redirect()->toRoute(
@@ -302,5 +303,21 @@ class BusinessController extends AbstractActionController
                 'button' => $business->getCode()
             ];
         }, $businesses);
+    }
+
+    public function typeaheadJsonAction()
+    {
+        $searchValue = $this->params()->fromQuery()['query'];
+        $businesses = $this->businessService->findBySearchValue($searchValue);
+
+        $businesses = array_map(function (Business $business) {
+            return [
+                'name' => $business->getName(),
+                'code' => $business->getCode()
+            ];
+        }, $businesses);
+        return new JsonModel([
+            'businesses' => $businesses
+        ]);
     }
 }

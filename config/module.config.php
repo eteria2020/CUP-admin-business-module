@@ -27,6 +27,16 @@ return [
                             ],
                         ],
                     ],
+                    'penalty' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route'    => '/penality',
+                            'defaults' => [
+                                'controller' => 'Penalty',
+                                'action' => 'charge',
+                            ],
+                        ],
+                    ],
                     'stats' => [
                         'type' => 'Literal',
                         'options' => [
@@ -163,19 +173,50 @@ return [
                             ],
                         ],
                     ],
+                    'typeahead-json' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/typeahead-json',
+                            'defaults' => [
+                                'action' => 'typeahead-json',
+                            ],
+                        ],
+                    ],
                 ],
+            ],
+            /**
+             * Overwrite Application module routes to allow specific business filtering
+             */
+            'trips' => [
+                'child_routes' => [
+                    'datatable' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/datatable',
+                            'defaults' => [
+                                '__NAMESPACE__' => 'CUPAdminBusinessModule\Controller',
+                                'controller' => 'BusinessTrip',
+                                'action' => 'datatable',
+                            ],
+                        ],
+                    ],
+                ]
             ]
         ]
     ],
     'controllers' => [
         'factories' => [
             'CUPAdminBusinessModule\Controller\Business' => 'CUPAdminBusinessModule\Controller\BusinessControllerFactory',
-            'CUPAdminBusinessModule\Controller\BusinessStatistics' => 'CUPAdminBusinessModule\Controller\BusinessStatisticsControllerFactory'
+            'CUPAdminBusinessModule\Controller\BusinessStatistics' => 'CUPAdminBusinessModule\Controller\BusinessStatisticsControllerFactory',
+            'CUPAdminBusinessModule\Controller\BusinessTrip' => 'CUPAdminBusinessModule\Controller\BusinessTripControllerFactory',
+            'CUPAdminBusinessModule\Controller\Penalty' => 'CUPAdminBusinessModule\Controller\PenaltyControllerFactory'
         ]
     ],
     'service_manager' => [
         'factories' => [
             'CUPAdminBusinessModule\Form\BusinessConfigParamsForm' => 'CUPAdminBusinessModule\Form\BusinessConfigParamsFormFactory',
+            'CUPAdminBusinessModule\Form\ChargePenaltyOrExtraForm' => 'CUPAdminBusinessModule\Form\ChargePenaltyOrExtraFormFactory',
+            'CUPAdminBusinessModule\Service\BusinessAndPrivateTripService' => 'CUPAdminBusinessModule\Service\BusinessAndPrivateTripServiceFactory',
          ],
         'invokables' => [
             'CUPAdminBusinessModule\Form\BusinessDetailsForm' => 'CUPAdminBusinessModule\Form\BusinessDetailsForm',
@@ -183,8 +224,17 @@ return [
     ],
     'asset_manager' => [
         'resolver_configs' => [
+            'collections' => [
+                'js/trips.js' => [
+                    'js/libs/jquery.autocomplete.min.js',
+                    'js/business-trips.js',
+                ],
+                'css/trips.css' => [
+                    'css/autocomplete.css',
+                ],
+            ],
             'paths' => [
-                __DIR__.'/../public/assets-modules/cup-admin-business-module/'
+                __DIR__.'/../public/assets-modules/cup-admin-business-module'
             ],
         ],
     ],
@@ -202,6 +252,8 @@ return [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
                 ['controller' => 'CUPAdminBusinessModule\Controller\Business', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\BusinessTrip', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\Penalty', 'roles' => ['admin']],
                 ['controller' => 'CUPAdminBusinessModule\Controller\BusinessStatistics', 'roles' => ['admin']],
             ],
         ],
@@ -224,9 +276,19 @@ return [
                         'label' => $translator->translate('Statistiche'),
                         'route' => 'business/stats',
                         'isVisible' => true
+                    ],
+                    [
+                        'label' => $translator->translate('Addebito penale/extra'),
+                        'route' => 'business/penalty',
+                        'isVisible' => true
                     ]
                 ],
             ],
         ]
-    ]
+    ],
+    'datatable-filters' => [
+        'trips-index' => [
+            'b.name' => $translator->translate("Azienda")
+        ]
+    ],
 ];
