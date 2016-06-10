@@ -37,19 +37,9 @@ class BusinessStatisticsController extends AbstractActionController
 
     public function dataAction()
     {
-        $stats = $this->businessService->getBusinessStatsData();
+        $filters = $this->params()->fromPost();
+        $json = $this->businessService->getBusinessStatsData($filters);
 
-        $labels = [];
-        $data = [];
-
-        foreach ($stats as $row) {
-            $labels[] = $row['name'];
-            $data[] = $row['minutes'];
-        }
-
-        return new JsonModel([
-            "labels" => $labels,
-            "data" =>  $data
-        ]);
+        return new JsonModel($json);
     }
 }
