@@ -1,0 +1,48 @@
+<?php
+$form = $this->form->prepare();
+
+?>
+<div class="page-content-wrapper">
+    <div class="page-content">
+
+        <div class="row">
+            <div class="col-lg-6">
+                <h3 class="page-title"><?= $this->translate("CREA PACCHETTO MINUTI"); ?></h3>
+            </div>
+            <div class="col-lg-6">
+                <a href="<?php echo $this->url('business/time-packages'); ?>" class="btn btn-success pull-right"><i class="fa fa-arrow-left"></i> <?= $this->translate("Torna alla lista"); ?></a>
+            </div>
+        </div>
+
+        <div class="page-bar">
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <?php echo $this->partial('partials/flash-messages.phtml', []); ?>
+                <?= $this->form()->openTag($form); ?>
+                <div class="row">
+                    <div class="col-lg-5">
+                        <?php
+                        $field = $form->get('minutes');
+                        echo $this->businessFormElement($this->translate("Minuti"), $field) ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-5">
+                        <?php
+                        $field = $form->get('cost');
+                        echo $this->businessFormElement($this->translate("Costo (€)"), $field) ?>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-5">
+                        <button type="submit" class="btn btn-success"><?= $this->translate("Crea pacchetto"); ?></button>
+                    </div>
+                </div>
+                <?= $this->form()->closeTag(); ?>
+            </div>
+        </div>
+    </div>
+</div>

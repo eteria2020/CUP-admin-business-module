@@ -7,6 +7,7 @@ use BusinessCore\Exception\InvalidBusinessFormException;
 use BusinessCore\Exception\InvalidFormDataException;
 use BusinessCore\Form\InputData\BusinessDataFactory;
 use BusinessCore\Service\BusinessService;
+use BusinessCore\Service\BusinessTimePackageService;
 use BusinessCore\Service\DatatableService;
 use CUPAdminBusinessModule\Form\BusinessConfigParamsForm;
 use CUPAdminBusinessModule\Form\BusinessDetailsForm;
@@ -46,12 +47,17 @@ class BusinessController extends AbstractActionController
      * @var BusinessFareForm
      */
     private $businessFareForm;
+    /**
+     * @var BusinessTimePackageService
+     */
+    private $businessTimePackageService;
 
     /**
      * BusinessController constructor.
      * @param Translator $translator
      * @param DatatableService $datatableService
      * @param BusinessService $businessService
+     * @param BusinessTimePackageService $businessTimePackageService
      * @param BusinessDetailsForm $businessDetailsForm
      * @param BusinessConfigParamsForm $businessConfigParamsForm
      * @param BusinessFareForm $businessFareForm
@@ -60,6 +66,7 @@ class BusinessController extends AbstractActionController
         Translator $translator,
         DatatableService $datatableService,
         BusinessService $businessService,
+        BusinessTimePackageService $businessTimePackageService,
         BusinessDetailsForm $businessDetailsForm,
         BusinessConfigParamsForm $businessConfigParamsForm,
         BusinessFareForm $businessFareForm
@@ -70,6 +77,7 @@ class BusinessController extends AbstractActionController
         $this->businessDetailsForm = $businessDetailsForm;
         $this->businessConfigParamsForm = $businessConfigParamsForm;
         $this->businessFareForm = $businessFareForm;
+        $this->businessTimePackageService = $businessTimePackageService;
     }
 
     public function indexAction()
@@ -251,6 +259,38 @@ class BusinessController extends AbstractActionController
         return $view;
     }
 
+    public function timePackagesTabAction()
+    {
+        $business = $this->getBusiness();
+        $buyablePackages = $business->getBusinessBuyableTimePackages();
+        $activeIds = [];
+
+        foreach ($buyablePackages as $pack) {
+            $activeIds[] = $pack->getTimePackage()->getId();
+        }
+
+        $view = new ViewModel([
+            'business' => $business,
+            'packages' => $this->businessTimePackageService->findAll(),
+            'activePackagesId' => $activeIds
+        ]);
+        $view->setTerminal(true);
+
+        return $view;
+    }
+
+    public function setPackagesAsBuyableAction()
+    {
+        $business = $this->getBusiness();
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost()->toArray();
+            $buyableIds = $this->getBuyablePackageIdsFromData($data);
+            $this->businessTimePackageService->setBuyablePackagesFromIds($buyableIds, $business);
+            $this->flashMessenger()->addSuccessMessage($this->translator->translate('Pacchetti acquistabili aggiornati'));
+        }
+        return $this->response;
+    }
+
     public function approveEmployeeAction()
     {
         $businessCode = $this->params()->fromRoute('code', 0);
@@ -355,6 +395,24 @@ class BusinessController extends AbstractActionController
                 'button' => $business->getCode()
             ];
         }, $businesses);
+    }
+
+    /**
+     * This function receive raw $data from the form post
+     * selected packages come in $data as 'package-1234' => 'on' where 1234 is the id of the package
+     * @param $data
+     * @return array
+     */
+    private function getBuyablePackageIdsFromData($data)
+    {
+        $packageIds = [];
+        foreach ($data as $key => $value) {
+            if (substr($key, 0, 7) === 'package' && $value === 'on') {
+                $id = substr($key, 8);
+                $packageIds[] = $id;
+            }
+        }
+        return $packageIds;
     }
 
     public function typeaheadJsonAction()

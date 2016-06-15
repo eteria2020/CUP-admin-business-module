@@ -27,6 +27,29 @@ return [
                             ],
                         ],
                     ],
+                    'time-packages' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/time-packages',
+                            'defaults' => [
+                                '__NAMESPACE__' => 'CUPAdminBusinessModule\Controller',
+                                'controller' => 'TimePackages',
+                                'action' => 'index',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'add' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route'    => '/add',
+                                    'defaults' => [
+                                        'action' => 'add',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                     'penalty' => [
                         'type' => 'Literal',
                         'options' => [
@@ -154,6 +177,24 @@ return [
                                     ],
                                 ],
                             ],
+                            'ajax-tab-time-packages' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/ajax-tab/packages',
+                                    'defaults' => [
+                                        'action' => 'time-packages-tab',
+                                    ],
+                                ],
+                            ],
+                            'set-packages-as-buyable' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/buyable-packages',
+                                    'defaults' => [
+                                        'action' => 'set-packages-as-buyable',
+                                    ],
+                                ],
+                            ],
                             'approve-employee' => [
                                 'type' => 'Segment',
                                 'options' => [
@@ -257,6 +298,7 @@ return [
     'controllers' => [
         'factories' => [
             'CUPAdminBusinessModule\Controller\Business' => 'CUPAdminBusinessModule\Controller\BusinessControllerFactory',
+            'CUPAdminBusinessModule\Controller\TimePackages' => 'CUPAdminBusinessModule\Controller\TimePackagesControllerFactory',
             'CUPAdminBusinessModule\Controller\BusinessPayments' => 'CUPAdminBusinessModule\Controller\BusinessPaymentsControllerFactory',
             'CUPAdminBusinessModule\Controller\BusinessStatistics' => 'CUPAdminBusinessModule\Controller\BusinessStatisticsControllerFactory',
             'CUPAdminBusinessModule\Controller\BusinessTrip' => 'CUPAdminBusinessModule\Controller\BusinessTripControllerFactory',
@@ -271,11 +313,14 @@ return [
          ],
         'invokables' => [
             'CUPAdminBusinessModule\Form\BusinessDetailsForm' => 'CUPAdminBusinessModule\Form\BusinessDetailsForm',
+            'CUPAdminBusinessModule\Form\TimePackageForm' => 'CUPAdminBusinessModule\Form\TimePackageForm',
             'CUPAdminBusinessModule\Form\BusinessFareForm' => 'CUPAdminBusinessModule\Form\BusinessFareForm',
         ]
     ],
     'asset_manager' => [
         'resolver_configs' => [
+            'paths' => [
+                __DIR__.'/../public/assets-modules/cup-admin-business-module',
             'collections' => [
                 'js/trips.js' => [
                     'js/libs/jquery.autocomplete.min.js',
@@ -304,6 +349,7 @@ return [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
                 ['controller' => 'CUPAdminBusinessModule\Controller\Business', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\TimePackages', 'roles' => ['admin']],
                 ['controller' => 'CUPAdminBusinessModule\Controller\BusinessPayments', 'roles' => ['admin']],
                 ['controller' => 'CUPAdminBusinessModule\Controller\BusinessTrip', 'roles' => ['admin']],
                 ['controller' => 'CUPAdminBusinessModule\Controller\Penalty', 'roles' => ['admin']],
@@ -334,6 +380,15 @@ return [
                         'label' => $translator->translate('Addebito penale/extra'),
                         'route' => 'business/penalty',
                         'isVisible' => true
+                    ],
+                    [
+                        'label' => $translator->translate('Gestione pacchetti'),
+                        'route' => 'business/time-packages',
+                        'isVisible' => true
+                    ],
+                    [
+                        'route' => 'business/time-packages/add',
+                        'isVisible' => false
                     ]
                 ],
             ],

@@ -1,4 +1,5 @@
-/* global $ document Spinner translate */
+/* global $ document Spinner translate window */
+
 $(function() {
     'use strict';
 
@@ -32,7 +33,7 @@ $(function() {
         { targets: [3], sortable: false}
     ];
 
-    function initializeDatatables() {
+    function initializeEmployeesDatatables() {
         $('#js-business-employees-table').dataTable({
             order: orderSpecs,
             language: languageSpecs,
@@ -45,17 +46,45 @@ $(function() {
         });
     }
 
+    function initializePackagesTab() {
+        var table = $('#js-time-packages-table');
+        table.dataTable({
+            order: [[0, 'asc']],
+            language: languageSpecs
+        });
+        $('#submit-btn').click(function () {
+            var data = $("input:checked", table.fnGetNodes());
+            $.ajax({
+                url: window.location.href.split('?')[0] + "/buyable-packages",
+                data: data,
+                type: "POST",
+                complete: function() {
+                    window.location.href = window.location.href.split('?')[0] + '?tab=time-packages';
+                }
+            });
+        });
+    }
+
     var target = $('#spinner-loader')[0];
     var spinner = new Spinner().spin(target);
 
     var href = $(document).find('#js-tabs .active a').attr("href");
 
+    function initOpenTab() {
+        var openTab = $('#js-tabs .active');
+        if (openTab.is('#menu-employee')) {
+            initializeEmployeesDatatables();
+        } else if (openTab.is('#menu-time-packages')) {
+            initializePackagesTab();
+        } else if (openTab.is('#menu-payments')) {
+            initializePaymentsDatatable();
+        }
+    }
+
     $('.tab-content .active').load(href, function(){
         spinner.stop();
         $('#js-tabs .active a').tab('show');
-        if ($('#js-tabs .active').is('#menu-employee')) {
-            initializeDatatables();
-        }
+        initOpenTab();
     });
 
     $('#js-tabs li a').click(function() {
@@ -68,11 +97,7 @@ $(function() {
             $(targ).html(data);
             spinner.stop();
             context.tab('show');
-            if (context.parent().is('#menu-employee')) {
-                initializeDatatables();
-            } else if (context.parent().is('#menu-payments')) {
-                initializePaymentsDatatable();
-            }
+            initOpenTab();
         });
         return false;
     });
@@ -179,3 +204,5 @@ $(function() {
         });
     }
 });
+
+

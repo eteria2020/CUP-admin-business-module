@@ -11,6 +11,7 @@ class BusinessControllerFactory implements FactoryInterface
     {
         $businessService = $serviceLocator->getServiceLocator()->get('BusinessCore\Service\BusinessService');
         $datatableService = $serviceLocator->getServiceLocator()->get('BusinessCore\Service\DatatableService');
+        $businessTimePackageService = $serviceLocator->getServiceLocator()->get('BusinessCore\Service\BusinessTimePackageService');
 
         $translator = $serviceLocator->getServiceLocator()->get('translator');
 
@@ -24,7 +25,8 @@ class BusinessControllerFactory implements FactoryInterface
             $businessService,
             $businessDetailsForm,
             $businessConfigParamsForm,
-            $businessFareForm
+            $businessFareForm,
+            $businessTimePackageService
         );
     }
 }
