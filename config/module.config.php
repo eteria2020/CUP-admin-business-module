@@ -144,6 +144,16 @@ return [
                                     ],
                                 ],
                             ],
+                            'ajax-tab-payments' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/ajax-tab/payments',
+                                    'defaults' => [
+                                        'controller' => 'BusinessPayments',
+                                        'action' => 'payments-tab',
+                                    ],
+                                ],
+                            ],
                             'approve-employee' => [
                                 'type' => 'Segment',
                                 'options' => [
@@ -177,6 +187,28 @@ return [
                                     'route' => '/unblock-employee/:id',
                                     'defaults' => [
                                         'action' => 'unblock-employee',
+                                    ],
+                                ],
+                            ],
+
+                            'payments' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/payments',
+                                    'defaults' => [
+                                        'controller' => 'BusinessPayments',
+                                    ],
+                                ],
+                                'may_terminate' => false,
+                                'child_routes' => [
+                                    'datatable' => [
+                                        'type'    => 'Literal',
+                                        'options' => [
+                                            'route'    => '/datatable',
+                                            'defaults' => [
+                                                'action' => 'datatable',
+                                            ],
+                                        ],
                                     ],
                                 ],
                             ],
@@ -225,6 +257,7 @@ return [
     'controllers' => [
         'factories' => [
             'CUPAdminBusinessModule\Controller\Business' => 'CUPAdminBusinessModule\Controller\BusinessControllerFactory',
+            'CUPAdminBusinessModule\Controller\BusinessPayments' => 'CUPAdminBusinessModule\Controller\BusinessPaymentsControllerFactory',
             'CUPAdminBusinessModule\Controller\BusinessStatistics' => 'CUPAdminBusinessModule\Controller\BusinessStatisticsControllerFactory',
             'CUPAdminBusinessModule\Controller\BusinessTrip' => 'CUPAdminBusinessModule\Controller\BusinessTripControllerFactory',
             'CUPAdminBusinessModule\Controller\Penalty' => 'CUPAdminBusinessModule\Controller\PenaltyControllerFactory'
@@ -271,6 +304,7 @@ return [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
                 ['controller' => 'CUPAdminBusinessModule\Controller\Business', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\BusinessPayments', 'roles' => ['admin']],
                 ['controller' => 'CUPAdminBusinessModule\Controller\BusinessTrip', 'roles' => ['admin']],
                 ['controller' => 'CUPAdminBusinessModule\Controller\Penalty', 'roles' => ['admin']],
                 ['controller' => 'CUPAdminBusinessModule\Controller\BusinessStatistics', 'roles' => ['admin']],

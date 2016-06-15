@@ -3,7 +3,6 @@
 namespace CUPAdminBusinessModule\Controller;
 
 use BusinessCore\Entity\Business;
-use BusinessCore\Entity\BusinessEmployee;
 use BusinessCore\Exception\InvalidBusinessFormException;
 use BusinessCore\Exception\InvalidFormDataException;
 use BusinessCore\Form\InputData\BusinessDataFactory;
@@ -225,6 +224,18 @@ class BusinessController extends AbstractActionController
         return $view;
     }
 
+    public function paymentsTabAction()
+    {
+        $business = $this->getBusiness();
+
+        $view = new ViewModel([
+            'business' => $business
+        ]);
+        $view->setTerminal(true);
+
+        return $view;
+    }
+
     public function fareTabAction()
     {
         /** @var Business $business */
@@ -290,8 +301,7 @@ class BusinessController extends AbstractActionController
         $businessCode = $this->params()->fromRoute('code', 0);
         $employeeId = $this->params()->fromRoute('id', 0);
 
-        //@TODO change to unblockEmployee (to avoid sending email)
-        $this->businessService->approveEmployee($businessCode, $employeeId);
+        $this->businessService->unblockEmployee($businessCode, $employeeId);
         $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente sbloccato con successo'));
 
         return $this->redirect()->toRoute(
