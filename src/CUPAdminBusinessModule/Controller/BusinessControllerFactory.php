@@ -9,24 +9,23 @@ class BusinessControllerFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $businessService = $serviceLocator->getServiceLocator()->get('BusinessCore\Service\BusinessService');
-        $datatableService = $serviceLocator->getServiceLocator()->get('BusinessCore\Service\DatatableService');
-        $businessTimePackageService = $serviceLocator->getServiceLocator()->get('BusinessCore\Service\BusinessTimePackageService');
-
-        $translator = $serviceLocator->getServiceLocator()->get('translator');
-
-        $businessDetailsForm = $serviceLocator->getServiceLocator()->get('CUPAdminBusinessModule\Form\BusinessDetailsForm');
-        $businessConfigParamsForm = $serviceLocator->getServiceLocator()->get('CUPAdminBusinessModule\Form\BusinessConfigParamsForm');
-        $businessFareForm = $serviceLocator->getServiceLocator()->get('CUPAdminBusinessModule\Form\BusinessFareForm');
+        $sharedServiceLocator = $serviceLocator->getServiceLocator();
+        $businessService = $sharedServiceLocator->get('BusinessCore\Service\BusinessService');
+        $datatableService = $sharedServiceLocator->get('BusinessCore\Service\DatatableService');
+        $businessTimePackageService = $sharedServiceLocator->get('BusinessCore\Service\BusinessTimePackageService');
+        $businessDetailsForm = $sharedServiceLocator->get('CUPAdminBusinessModule\Form\BusinessDetailsForm');
+        $businessConfigParamsForm = $sharedServiceLocator->get('CUPAdminBusinessModule\Form\BusinessConfigParamsForm');
+        $businessFareForm = $sharedServiceLocator->get('CUPAdminBusinessModule\Form\BusinessFareForm');
+        $translator = $sharedServiceLocator->get('translator');
 
         return new BusinessController(
             $translator,
             $datatableService,
             $businessService,
+            $businessTimePackageService,
             $businessDetailsForm,
             $businessConfigParamsForm,
-            $businessFareForm,
-            $businessTimePackageService
+            $businessFareForm
         );
     }
 }

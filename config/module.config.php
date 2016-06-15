@@ -319,8 +319,6 @@ return [
     ],
     'asset_manager' => [
         'resolver_configs' => [
-            'paths' => [
-                __DIR__.'/../public/assets-modules/cup-admin-business-module',
             'collections' => [
                 'js/trips.js' => [
                     'js/libs/jquery.autocomplete.min.js',
