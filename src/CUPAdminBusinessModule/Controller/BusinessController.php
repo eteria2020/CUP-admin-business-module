@@ -5,11 +5,13 @@ namespace CUPAdminBusinessModule\Controller;
 use BusinessCore\Entity\Business;
 use BusinessCore\Entity\BusinessEmployee;
 use BusinessCore\Exception\InvalidBusinessFormException;
+use BusinessCore\Exception\InvalidFormDataException;
 use BusinessCore\Form\InputData\BusinessDataFactory;
 use BusinessCore\Service\BusinessService;
 use BusinessCore\Service\DatatableService;
 use CUPAdminBusinessModule\Form\BusinessConfigParamsForm;
 use CUPAdminBusinessModule\Form\BusinessDetailsForm;
+use CUPAdminBusinessModule\Form\BusinessFareForm;
 use Doctrine\ORM\EntityNotFoundException;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -41,6 +43,10 @@ class BusinessController extends AbstractActionController
      * @var BusinessConfigParamsForm
      */
     private $businessConfigParamsForm;
+    /**
+     * @var BusinessFareForm
+     */
+    private $businessFareForm;
 
     /**
      * BusinessController constructor.
@@ -49,19 +55,22 @@ class BusinessController extends AbstractActionController
      * @param BusinessService $businessService
      * @param BusinessDetailsForm $businessDetailsForm
      * @param BusinessConfigParamsForm $businessConfigParamsForm
+     * @param BusinessFareForm $businessFareForm
      */
     public function __construct(
         Translator $translator,
         DatatableService $datatableService,
         BusinessService $businessService,
         BusinessDetailsForm $businessDetailsForm,
-        BusinessConfigParamsForm $businessConfigParamsForm
+        BusinessConfigParamsForm $businessConfigParamsForm,
+        BusinessFareForm $businessFareForm
     ) {
         $this->businessService = $businessService;
         $this->translator = $translator;
         $this->datatableService = $datatableService;
         $this->businessDetailsForm = $businessDetailsForm;
         $this->businessConfigParamsForm = $businessConfigParamsForm;
+        $this->businessFareForm = $businessFareForm;
     }
 
     public function indexAction()
@@ -144,6 +153,24 @@ class BusinessController extends AbstractActionController
         );
     }
 
+    public function doEditFareAction()
+    {
+        $business = $this->getBusiness();
+        $data = $this->getRequest()->getPost();
+        try {
+            $this->businessService->newBusinessFare($business, $data['motion'], $data['park']);
+            $this->flashMessenger()->addSuccessMessage($this->translator->translate('Tariffa aggiornata con successo'));
+        } catch (InvalidFormDataException $e) {
+            $this->flashMessenger()->addErrorMessage($this->translator->translate('Valori inseriti non corretti'));
+        }
+
+        return $this->redirect()->toRoute(
+            'business/edit',
+            ['code' => $business->getCode()],
+            ['query' => ['tab' => 'fare']]
+        );
+    }
+
     public function infoTabAction()
     {
         /** @var Business $business */
@@ -192,6 +219,21 @@ class BusinessController extends AbstractActionController
 
         $view = new ViewModel([
             'business' => $business
+        ]);
+        $view->setTerminal(true);
+
+        return $view;
+    }
+
+    public function fareTabAction()
+    {
+        /** @var Business $business */
+        $business = $this->getBusiness();
+        $fare = $business->getActiveBusinessFare();
+        $view = new ViewModel([
+            'business' => $business,
+            'fare' => $fare,
+            'form' => $this->businessFareForm
         ]);
         $view->setTerminal(true);
 

@@ -48,6 +48,11 @@ $this->headScript()
                             <?= $this->translate("Clienti associati"); ?>
                         </a>
                     </li>
+                    <li role="presentation" id="menu-fare" <?= $this->tab == 'fare' ? 'class="active"' : '' ?>>
+                        <a href="<?= $this->url('business/edit/ajax-tab-fare', ['code' => $this->business->getCode()]); ?>" data-target="#tab-fare" role="tab" data-toggle="tab">
+                            <?= $this->translate("Tariffa"); ?>
+                        </a>
+                    </li>
                 </ul>
 
                 <div class="tab-content" style="position: relative; min-height: 200px">
@@ -56,6 +61,7 @@ $this->headScript()
                     <div role="tabpanel" class="tab-pane <?= $this->tab == 'edit' ? 'active' : '' ?>" id="tab-edit"></div>
                     <div role="tabpanel" class="tab-pane <?= $this->tab == 'params' ? 'active' : '' ?>" id="tab-params"></div>
                     <div role="tabpanel" class="tab-pane <?= $this->tab == 'employees' ? 'active' : '' ?>" id="tab-employees"></div>
+                    <div role="tabpanel" class="tab-pane <?= $this->tab == 'fare' ? 'active' : '' ?>" id="tab-fare"></div>
                 </div>
             </div>
         </div>
