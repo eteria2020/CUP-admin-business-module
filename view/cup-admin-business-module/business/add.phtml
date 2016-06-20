@@ -72,7 +72,7 @@ $paramsForm = $this->paramsForm->prepare();
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-3">
+                        <div class="col-lg-2">
                             <?php
                             $field = $detailsForm->get('vatNumber');
                             echo $this->businessFormElement($this->translate("Partita IVA"), $field) ?>
@@ -87,11 +87,18 @@ $paramsForm = $this->paramsForm->prepare();
                             $field = $paramsForm->get('paymentFrequence');
                             echo $this->businessFormElement($this->translate("Frequenza pagamento"), $field) ?>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-2">
                             <?php
                             $field = $paramsForm->get('businessMailControl');
                             echo $this->businessFormElement($this->translate("Controllo email aziendale"), $field) ?>
                         </div>
+                        <div class="col-lg-2">
+                            <?php
+                            $field = $paramsForm->get('subscriptionFeeCents');
+                            $field->setValue(500.00);
+                            echo $this->businessFormElement($this->translate("Quota di iscrizione (€)"), $field) ?>
+                        </div>
+
                     </div>
                     <div class="row">
                         <div class="col-lg-12">

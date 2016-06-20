@@ -63,6 +63,19 @@ class BusinessConfigParamsForm extends Form
         ]);
 
         $this->add([
+            'name'       => 'subscriptionFeeCents',
+            'type'       => 'Zend\Form\Element\Number',
+            'attributes' => [
+                'id'       => 'subscriptionFeeCents',
+                'class'    => 'form-control',
+                'min' => 1.00,
+                'step' => 0.01,
+                'required' => 'required',
+            ],
+
+        ]);
+
+        $this->add([
             'name'       => 'submit',
             'attributes' => [
                 'type'  => 'submit',

@@ -31,6 +31,14 @@ $form = $this->form->prepare();
             </div>
         </div>
         <div class="row">
+            <div class="col-lg-6">
+                <?php
+                $field = $form->get('subscriptionFeeCents');
+                $field->setValue($this->business->getReadableSubscriptionFee());
+                echo $this->businessFormElement($this->translate("Quota di iscrizione (€)"), $field) ?>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-lg-12">
                 <button type="submit" class="btn btn-success"><?= $this->translate("Modifica parametri aziendali"); ?></button>
             </div>

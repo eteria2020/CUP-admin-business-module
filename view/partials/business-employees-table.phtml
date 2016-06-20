@@ -11,7 +11,9 @@
             <tr>
                 <th class="name-column"><?= $this->translate("Nome e cognome"); ?></th>
                 <th class="email-column"><?= $this->translate("Email"); ?></th>
+                <th class="group-column"><?= $this->translate("Gruppo"); ?></th>
                 <th class="status-column"><?= $this->translate("Stato"); ?></th>
+                <th class="pin-column"><?= $this->translate("PIN Aziendale"); ?></th>
                 <th class="button-column"><?= $this->translate("Azioni"); ?></th>
             </tr>
             </thead>
@@ -21,24 +23,26 @@
                 <tr>
                     <td><?= $employee->getName() . " " . $employee->getSurname(); ?></td>
                     <td><?= $employee->getEmail(); ?></td>
-                    <td><?= $this->BusinessEmployeeStatus($be->getStatus()); ?></td>
+                    <td><?= $be->getGroupName() ?></td>
+                    <td><?= $this->businessEmployeeStatus($be->getStatus()); ?></td>
+                    <td><?= $employee->getBusinessPin() ?></td>
                     <td>
                         <?php
                         if ($be->isBlocked()) { ?>
                             <a href="<?= $this->url('business/edit/unblock-employee', ['id' => $employee->getId(), 'code' => $this->business->getCode()]); ?>"
                                onclick="return confirm('<?= $this->translate("Sei sicuro di voler sbloccare questo utente?"); ?>')"
-                               class="btn-margin btn btn-info btn-xs">
+                               class="btn-margin validation-btn btn btn-primary btn-xs">
                                 <?= $this->translate("Sblocca"); ?>
                             </a>
                             <?php
                             } else if ($be->isApproved()) { ?>
                                 <a href="<?= $this->url('business/edit/block-employee', ['id' => $employee->getId(), 'code' => $this->business->getCode()]); ?>"
                                    onclick="return confirm('<?= $this->translate("Sei sicuro di voler bloccare questo utente?"); ?>')"
-                                   class="btn-margin btn btn-default btn-xs">
+                                   class="btn-margin btn btn-warning btn-xs">
                                     <?= $this->translate("Blocca"); ?>
                                 </a>
                             <?php
-                            } else { ?>
+                            } else if ($be->isPending()) { ?>
                                 <a href="<?= $this->url('business/edit/approve-employee', ['id' => $employee->getId(), 'code' => $this->business->getCode()]); ?>"
                                    onclick="return confirm('<?= $this->translate("Sei sicuro di voler approvare questo utente?"); ?>')"
                                    class="btn-margin btn btn-success btn-xs">
@@ -48,7 +52,7 @@
                             }?>
                         <a href="<?= $this->url('business/edit/remove-employee', ['id' => $employee->getId(), 'code' => $this->business->getCode()]); ?>"
                            onclick="return confirm('<?= $this->translate("Sei sicuro di voler eliminare questo utente?"); ?>')"
-                           class="btn btn-warning btn-xs">
+                           class="btn-margin btn btn-danger btn-xs">
                             <?= $this->translate("Elimina"); ?>
                         </a>
                     </td>
