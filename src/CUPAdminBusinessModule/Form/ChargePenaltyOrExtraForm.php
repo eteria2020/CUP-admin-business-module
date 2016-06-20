@@ -2,7 +2,8 @@
 
 namespace CUPAdminBusinessModule\Form;
 
-use BusinessCore\Entity\BusinessPayment;
+use BusinessCore\Entity\Base\BusinessPayment;
+use BusinessCore\Entity\ExtraPayment;
 use Zend\Form\Form;
 use Zend\Mvc\I18n\Translator;
 
@@ -15,11 +16,12 @@ class ChargePenaltyOrExtraForm extends Form
 
         $this->add([
             'name'       => 'business',
-            'type'       => 'Zend\Form\Element\Select',
+            'type'       => 'Zend\Form\Element\Text',
             'attributes' => [
                 'id'       => 'business',
                 'class'    => 'form-control',
                 'required' => 'required',
+                'placeholder' => $translator->translate("Inizia a digitare il nome dell'azienda per l'autocompletamento")
             ]
         ]);
 
@@ -37,17 +39,14 @@ class ChargePenaltyOrExtraForm extends Form
         ]);
 
         $this->add([
-            'name'       => 'type',
-            'type'       => 'Zend\Form\Element\Select',
+            'name'       => 'reason',
+            'type'       => 'Zend\Form\Element\Text',
             'attributes' => [
-                'id'       => 'type',
-                'class'    => 'form-control'
-            ],
-            'options'    => [
-                'value_options' => [
-                    BusinessPayment::EXTRA_TYPE => $translator->translate("Extra"),
-                    BusinessPayment::PENALTY_TYPE => $translator->translate("Penale")
-                ]
+                'id'       => 'reason',
+                'maxlength' => 64,
+                'class'    => 'form-control',
+                'required' => 'required',
+                'placeholder' => $translator->translate("Causale addebito")
             ]
         ]);
     }

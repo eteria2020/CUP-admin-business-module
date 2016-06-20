@@ -53,11 +53,11 @@ class PenaltyController extends AbstractActionController
         if ($this->getRequest()->isPost()) {
             try {
                 $data = $this->getRequest()->getPost();
-                $business = $this->businessService->getBusinessByCode($data['business']);
-                $this->businessPaymentService->addPenaltyOrExtra($business, $data['amount'], $data['type']);
+                $business = $this->businessService->findByName($data['business']);
+                $this->businessPaymentService->addPenaltyOrExtra($business, $data['amount'], $data['reason']);
                 $this->flashMessenger()->addSuccessMessage($this->translator->translate('Addebito avvenuto con successo'));
             } catch (InvalidFormDataException $e) {
-                $this->flashMessenger()->addSuccessMessage($this->translator->translate('I dati inseriti non sono validi'));
+                $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
 
             return $this->redirect()->toRoute(
