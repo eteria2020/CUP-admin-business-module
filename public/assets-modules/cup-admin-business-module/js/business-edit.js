@@ -1,10 +1,13 @@
-/* global $ document Spinner translate window */
+/* global $ document Spinner translate location window */
 
 $(function() {
     'use strict';
 
-    var orderSpecs = [[0, 'desc']];
+    function currentHref() {
+        return location.protocol + '//' + location.host + location.pathname;
+    }
 
+    var orderSpecs = [[0, 'desc']];
     var languageSpecs = {
         "sEmptyTable": translate("sEmptyTable"),
         "sInfo": translate("sInfo"),
@@ -29,11 +32,16 @@ $(function() {
         }
     };
 
-    var columnDefs = [
-        { targets: [3], sortable: false}
-    ];
+    var target = $('#spinner-loader')[0];
+    var spinner = new Spinner().spin(target);
+
+    var href = $(document).find('#js-tabs .active a').attr("href");
 
     function initializeEmployeesDatatables() {
+        var columnDefs = [
+            { targets: [3], sortable: false}
+        ];
+
         $('#js-business-employees-table').dataTable({
             order: orderSpecs,
             language: languageSpecs,
@@ -55,20 +63,151 @@ $(function() {
         $('#submit-btn').click(function () {
             var data = $("input:checked", table.fnGetNodes());
             $.ajax({
-                url: window.location.href.split('?')[0] + "/buyable-packages",
+                url: currentHref() + "/buyable-packages",
                 data: data,
                 type: "POST",
                 complete: function() {
-                    window.location.href = window.location.href.split('?')[0] + '?tab=time-packages';
+                    window.location.href = currentHref() + '?tab=time-packages';
                 }
             });
         });
     }
 
-    var target = $('#spinner-loader')[0];
-    var spinner = new Spinner().spin(target);
+    function initializePaymentsDatatable() {
+        var table = $('#js-business-payments-table');
+        var search = $('#js-value');
+        var column = $('#js-column');
+        var paymentType = $('#js-payment-type');
+        var paymentStatus = $('#js-payment-status');
 
-    var href = $(document).find('#js-tabs .active a').attr("href");
+        var from = $('#js-date-from');
+        var to = $('#js-date-to');
+
+        var searchByType = false;
+        var searchByStatus = false;
+        search.val('');
+        column.val('select');
+
+        table.dataTable({
+            "processing": true,
+            "serverSide": true,
+            "bStateSave": false,
+            "bFilter": false,
+            "sAjaxSource": currentHref() + "/payments/datatable",
+            "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
+                oSettings.jqXHR = $.ajax({
+                    "dataType": 'json',
+                    "type": "POST",
+                    "url": sSource,
+                    "data": aoData,
+                    "success": fnCallback
+                });
+            },
+            "fnServerParams": function ( aoData ) {
+                aoData.push({ "name": "column", "value": $(column).val()});
+                var value = $(search).val().trim();
+                if (searchByType) {
+                    value = paymentType.val();
+                }
+                if (searchByStatus) {
+                    value = paymentStatus.val();
+                }
+                aoData.push({ "name": "searchValue", "value": value });
+
+                aoData.push({ "name": "fromDate", "value": $(from).val().trim()});
+                aoData.push({ "name": "toDate", "value": $(to).val().trim()});
+                aoData.push({ "name": "columnFromDate", "value": "created_ts"});
+                aoData.push({ "name": "columnToDate", "value": "created_ts"});
+            },
+            "order": [[0, 'asc']],
+            "columns": [
+                {data: 'created_ts'},
+                {data: 'type'},
+                {data: 'amount'},
+                {data: 'status'},
+                {data: 'payed_on_ts'},
+                {data: 'expected_payed_ts'},
+                {data: 'details'}
+            ],
+            "columnDefs": [
+                {
+                    targets: 5,
+                    sortable: false
+                }
+            ],
+            "lengthMenu": [
+                [100, 200, 300],
+                [100, 200, 300]
+            ],
+            "pageLength": 100,
+            "pagingType": "bootstrap_full_number",
+            "language": {
+                "sEmptyTable": translate("sEmptyTable"),
+                "sInfo": translate("sInfo"),
+                "sInfoEmpty": translate("sInfoEmpty"),
+                "sInfoFiltered": translate("sInfoFiltered"),
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": translate("sLengthMenu"),
+                "sLoadingRecords": translate("sLoadingRecords"),
+                "sProcessing": translate("sProcessing"),
+                "sSearch": translate("sSearch"),
+                "sZeroRecords": translate("sZeroRecords"),
+                "oPaginate": {
+                    "sFirst": translate("oPaginateFirst"),
+                    "sPrevious": translate("oPaginatePrevious"),
+                    "sNext": translate("oPaginateNext"),
+                    "sLast": translate("oPaginateLast")
+                },
+                "oAria": {
+                    "sSortAscending": translate("sSortAscending"),
+                    "sSortDescending": translate("sSortDescending")
+                }
+            }
+        });
+
+        $('.date-picker').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd',
+            weekStart: 1
+        });
+
+        $('#js-search').click(function() {
+            table.fnFilter();
+        });
+
+        $('#js-clear').click(function() {
+            search.val('');
+            search.prop('disabled', false);
+            paymentType.hide();
+            column.val('select');
+            search.show();
+        });
+
+        $(column).change(function() {
+            var value = $(this).val();
+            searchByType = false;
+            searchByStatus = false;
+            paymentType.hide();
+            paymentStatus.hide();
+            search.hide();
+
+            switch (value) {
+                case 'type' :
+                    paymentType.show();
+                    searchByType = true;
+                    break;
+                case 'status' :
+                    paymentStatus.show();
+                    searchByStatus = true;
+                    break;
+                default:
+                    search.show();
+                    break;
+            }
+        });
+        table.fnFilter();
+    }
 
     function initOpenTab() {
         var openTab = $('#js-tabs .active');
@@ -101,108 +240,6 @@ $(function() {
         });
         return false;
     });
-
-    function initializePaymentsDatatable() {
-        var table = $('#js-business-payments-table');
-        var search = $('#js-value');
-        var column = $('#js-column');
-        var paymentType = $('#js-payment-type');
-
-        var searchByType = false;
-        search.val('');
-        column.val('select');
-
-        table.dataTable({
-            "processing": true,
-            "serverSide": true,
-            "bStateSave": false,
-            "bFilter": false,
-            "sAjaxSource": window.location.href + "/payments/datatable",
-            "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
-                oSettings.jqXHR = $.ajax( {
-                    "dataType": 'json',
-                    "type": "POST",
-                    "url": sSource,
-                    "data": aoData,
-                    "success": fnCallback
-                } );
-            },
-            "fnServerParams": function ( aoData ) {
-                aoData.push({ "name": "column", "value": $(column).val()});
-                var value = $(search).val().trim();
-                if (searchByType) {
-                    value = paymentType.val();
-                }
-                aoData.push({ "name": "searchValue", "value": value });
-            },
-            "order": [[0, 'asc']],
-            "columns": [
-                {data: 'bp.createdTs'},
-                {data: 'bp.type'},
-                {data: 'bp.amount'},
-                {data: 'bp.payedOnTs'}
-            ],
-            "columnDefs": [],
-            "lengthMenu": [
-                [100, 200, 300],
-                [100, 200, 300]
-            ],
-            "pageLength": 100,
-            "pagingType": "bootstrap_full_number",
-            "language": {
-                "sEmptyTable": translate("sEmptyTable"),
-                "sInfo": translate("sInfo"),
-                "sInfoEmpty": translate("sInfoEmpty"),
-                "sInfoFiltered": translate("sInfoFiltered"),
-                "sInfoPostFix": "",
-                "sInfoThousands": ",",
-                "sLengthMenu": translate("sLengthMenu"),
-                "sLoadingRecords": translate("sLoadingRecords"),
-                "sProcessing": translate("sProcessing"),
-                "sSearch": translate("sSearch"),
-                "sZeroRecords": translate("sZeroRecords"),
-                "oPaginate": {
-                    "sFirst": translate("oPaginateFirst"),
-                    "sPrevious": translate("oPaginatePrevious"),
-                    "sNext": translate("oPaginateNext"),
-                    "sLast": translate("oPaginateLast")
-                },
-                "oAria": {
-                    "sSortAscending": translate("sSortAscending"),
-                    "sSortDescending": translate("sSortDescending")
-                }
-            }
-        });
-
-        $('#js-search').click(function() {
-            table.fnFilter();
-        });
-
-        $('#js-clear').click(function() {
-            search.val('');
-            search.prop('disabled', false);
-            paymentType.hide();
-            column.val('select');
-            search.show();
-        });
-
-        $(column).change(function() {
-            var value = $(this).val();
-            searchByType = false;
-            paymentType.hide();
-            search.hide();
-
-            switch (value) {
-                case 'bp.type' :
-                    paymentType.show();
-                    searchByType = true;
-                    break;
-                default:
-                    search.show();
-                    break;
-            }
-        });
-    }
 });
 
 

@@ -1,4 +1,6 @@
 <?php
+use BusinessCore\Entity\Base\BusinessPayment;
+
 ?>
 
 <div class="row">
@@ -7,27 +9,48 @@
         <?= $this->partial('partials/flash-messages.phtml', []); ?>
 
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-5">
                 <div class="form-inline">
                     <div class="form-group">
                         <select name="column" id="js-column" class="form-control">
                             <option value="select" selected>-- <?= $this->translate("Seleziona"); ?> --</option>
-                            <option value="bp.type"><?= $this->translate("Tipologia"); ?></option>
-
+                            <option value="type"><?= $this->translate("Tipologia"); ?></option>
+                            <option value="status"><?= $this->translate("Stato pagamento"); ?></option>
                         </select>
                     </div>
                     <div class="form-group">
                         <select name="js-payment-type" id="js-payment-type" class="form-control" style="display: none;">
-                            <option value="time_package"><?= $this->translate("Pacchetto minuti"); ?></option>
-                            <option value="trip"><?= $this->translate("Corsa"); ?></option>
+                            <option value="<?= BusinessPayment::TYPE_PACKAGE ?>"><?= $this->translate("Pacchetto minuti"); ?></option>
+                            <option value="<?= BusinessPayment::TYPE_TRIP ?>"><?= $this->translate("Corsa"); ?></option>
+                            <option value="<?= BusinessPayment::TYPE_EXTRA ?>"><?= $this->translate("Extra/penale"); ?></option>
+                            <option value="<?= BusinessPayment::TYPE_SUBSCRIPTION ?>"><?= $this->translate("Sottoscrizione"); ?></option>
                         </select>
                         <select name="js-payment-status" id="js-payment-status" class="form-control" style="display: none;">
-                            <option value="1"><?= $this->translate("Pagato"); ?></option>
-                            <option value=null><?= $this->translate("Non pagato"); ?></option>
+                            <option value="<?= BusinessPayment::STATUS_PENDING ?>"><?= $this->translate("Non pagato"); ?></option>
+                            <option value="<?= BusinessPayment::STATUS_EXPECTED_PAYED ?>"><?= $this->translate("Pagato ma in attesa di conferma"); ?></option>
+                            <option value="<?= BusinessPayment::STATUS_CONFIRMED_PAYED ?>"><?= $this->translate("Pagato"); ?></option>
+                            <option value="<?= BusinessPayment::STATUS_INVOICED ?>"><?= $this->translate("Fatturato"); ?></option>
                         </select>
                         <input type="text" name="value" value="" class="form-control" id="js-value"
                                placeholder="<?= $this->translate("Filtra..."); ?>">
                     </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label> <?= $this->translate("Data inserimento da"); ?>: </label>
+                        <input class="form-control form-control-inline input-small date-picker" size="16"
+                               type="text" id="js-date-from"
+                               placeholder="<?= $this->translate("Data inizio"); ?>">
+                    </div>
+                    <div class="form-group">
+                        <label> <?= $this->translate("a"); ?>: </label>
+                        <input class="form-control form-control-inline input-small date-picker" size="16"
+                               type="text" id="js-date-to"
+                               placeholder="<?= $this->translate("Data fine"); ?>">
+                    </div>
+
                     <div class="btn-group">
                         <button type="button" class="btn green js-search" id="js-search"><i
                                 class="fa fa-search"></i> <?= $this->translate("Cerca"); ?></button>
@@ -65,6 +88,9 @@
                         <th><?= $this->translate("Tipologia"); ?></th>
                         <th><?= $this->translate("Importo"); ?></th>
                         <th><?= $this->translate("Stato pagamento"); ?></th>
+                        <th><?= $this->translate("Conferma pagamento"); ?></th>
+                        <th><?= $this->translate("Segnato come pagato"); ?></th>
+                        <th><?= $this->translate("Dettagli"); ?></th>
                     </tr>
                     </thead>
                 </table>

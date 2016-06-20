@@ -1,11 +1,13 @@
 <?php
 $this->headLink()
     ->appendStylesheet('/js/datatables/plugins/bootstrap/dataTables.bootstrap.css')
+    ->appendStylesheet('/js/plugins/bootstrap-datepicker/css/datepicker3.css')
     ->appendStylesheet($this->basePath() .'/css/business-edit.css');
 $this->headScript()
     ->prependFile($this->basePath() .'/js/spin.min.js')
     ->appendFile('/js/datatables/media/js/jquery.dataTables.min.js')
     ->appendFile('/js/datatables/plugins/bootstrap/dataTables.bootstrap.js')
+    ->appendFile('/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')
     ->appendFile($this->basePath() .'/js/business-edit.js');
 ?>
 <div class="page-content-wrapper">

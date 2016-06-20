@@ -242,6 +242,15 @@ return [
                                 ],
                                 'may_terminate' => false,
                                 'child_routes' => [
+                                    'confirm' => [
+                                        'type'    => 'Segment',
+                                        'options' => [
+                                            'route'    => '/confirm/:type/:id',
+                                            'defaults' => [
+                                                'action' => 'confirmPayment',
+                                            ],
+                                        ],
+                                    ],
                                     'datatable' => [
                                         'type'    => 'Literal',
                                         'options' => [

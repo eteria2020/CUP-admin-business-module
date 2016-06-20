@@ -3,7 +3,11 @@
 namespace CUPAdminBusinessModule\Controller;
 
 use Application\Controller\Plugin\TranslatorPlugin;
-use BusinessCore\Entity\BusinessPayment;
+use BusinessCore\Entity\Base\BusinessPayment;
+use BusinessCore\Entity\BusinessTripPayment;
+use BusinessCore\Entity\ExtraPayment;
+use BusinessCore\Entity\SubscriptionPayment;
+use BusinessCore\Entity\TimePackagePayment;
 use BusinessCore\Service\BusinessPaymentService;
 use BusinessCore\Service\BusinessService;
 use BusinessCore\Service\DatatableService;
@@ -75,48 +79,82 @@ class BusinessPaymentsController extends AbstractActionController
     {
         $filters = $this->params()->fromPost();
         $business = $this->getBusiness();
+        $totalPayments = $this->businessPaymentService->getTotalPaymentsByBusiness($business);
         $searchCriteria = $this->datatableService->getSearchCriteria($filters);
+        $businessPaymentsNumber = $this->businessPaymentService->countFilteredPaymentsByBusiness($business, $searchCriteria);
         $businessPayments = $this->businessPaymentService->searchPaymentsByBusiness($business, $searchCriteria);
         $dataDataTable = $this->mapBusinessPaymentsToDatatable($businessPayments);
-        $totalPayments = $this->businessPaymentService->getTotalPaymentsByBusiness($business);
 
         return new JsonModel([
             'draw'            => $this->params()->fromQuery('sEcho', 0),
             'recordsTotal'    => $totalPayments,
-            'recordsFiltered' => count($dataDataTable),
+            'recordsFiltered' => $businessPaymentsNumber,
             'data'            => $dataDataTable
         ]);
     }
 
+    public function confirmPaymentAction()
+    {
+        $business = $this->getBusiness();
+        $type = $this->params()->fromRoute('type', 0);
+        $id = $this->params()->fromRoute('id', 0);
+
+        $className = null;
+        switch ($type) {
+            case BusinessPayment::TYPE_TRIP:
+                $className = BusinessTripPayment::CLASS_NAME;
+                break;
+            case BusinessPayment::TYPE_PACKAGE:
+                $className = TimePackagePayment::CLASS_NAME;
+                break;
+            case BusinessPayment::TYPE_EXTRA:
+                $className = ExtraPayment::CLASS_NAME;
+                break;
+            case BusinessPayment::TYPE_SUBSCRIPTION:
+                $className = SubscriptionPayment::CLASS_NAME;
+                break;
+            default:
+                throw new \Exception;
+        }
+
+        $this->businessPaymentService->flagPaymentAsConfirmedPayedByWire($className, $id);
+        return $this->redirect()->toRoute(
+            'business/edit',
+            ['code' => $business->getCode()],
+            ['query' => ['tab' => 'payments']]
+        );
+    }
+
     private function mapBusinessPaymentsToDatatable(array $businessPayments)
     {
-        return array_map(function (BusinessPayment $businessPayment) {
+        return array_map(function ($businessPayment) {
+
+            $payedOn = empty($businessPayment['payed_on_ts']) ? '-' : date_create($businessPayment['payed_on_ts'])->format('d-m-Y H:i:s');
+            $flaggedAsPayedOn = empty($businessPayment['expected_payed_ts']) ? '-' : date_create($businessPayment['expected_payed_ts'])->format('d-m-Y H:i:s');
             return [
-                'bp' => [
-                    'createdTs' => $businessPayment->getCreatedTs()->format('d-m-Y H:i:s'),
-                    'type' => $this->formatPaymentType($businessPayment->getType()),
-                    'amount' => $this->formatAmount($businessPayment->getAmount(), $businessPayment->getCurrency()),
-                    'payedOnTs' => $this->formatStatus($businessPayment->getPayedOnTs()),
-                ]
+                'created_ts' => date_create($businessPayment['created_ts'])->format('d-m-Y H:i:s'),
+                'type' => $this->formatPaymentType($businessPayment['type']),
+                'amount' => $this->formatAmount($businessPayment['amount'], $businessPayment['currency']),
+                'payed_on_ts' => $payedOn,
+                'expected_payed_ts' => $flaggedAsPayedOn,
+                'status' => $this->formatStatus($businessPayment['status']),
+                'details' => $this->formatAdditionalDetails($businessPayment)
             ];
         }, $businessPayments);
     }
 
+
     private function formatPaymentType($paymentType)
     {
         switch ($paymentType) {
-            case BusinessPayment::TIME_PACKAGE_TYPE:
+            case BusinessPayment::TYPE_PACKAGE:
                 return $this->translatorPlugin()->translate("Pacchetto minuti");
-                break;
-            case BusinessPayment::TRIP_TYPE:
+            case BusinessPayment::TYPE_EXTRA:
+                return $this->translatorPlugin()->translate("Extra / Penale");
+            case BusinessPayment::TYPE_TRIP:
                 return $this->translatorPlugin()->translate("Corsa");
-                break;
-            case BusinessPayment::EXTRA_TYPE:
-                return $this->translatorPlugin()->translate("Extra");
-                break;
-            case BusinessPayment::PENALTY_TYPE:
-                return $this->translatorPlugin()->translate("Penale");
-                break;
+            case BusinessPayment::TYPE_SUBSCRIPTION:
+                return $this->translatorPlugin()->translate("Sottoscrizione");
             default:
                 return $paymentType;
         }
@@ -128,16 +166,45 @@ class BusinessPaymentsController extends AbstractActionController
         switch ($currency) {
             case 'EUR':
                 $currencySymbol = "€";
+                break;
         }
         return sprintf("%s %s", number_format($amount / 100, 2, '.', ''), $currencySymbol);
     }
 
-    private function formatStatus(\DateTime $payedOnTs = null)
+    private function formatStatus($status)
     {
-        if (is_null($payedOnTs)) {
-            return $this->translatorPlugin()->translate("Non pagato");
-        } else {
-            return sprintf($this->translatorPlugin()->translate("Pagato in data %s"), $payedOnTs->format('d-m-Y'));
+        switch ($status) {
+            case BusinessPayment::STATUS_CONFIRMED_PAYED:
+                return $this->translatorPlugin()->translate("Pagato");
+            case BusinessPayment::STATUS_EXPECTED_PAYED:
+                return $this->translatorPlugin()->translate("Pagato, in attesa di conferma");
+            case BusinessPayment::STATUS_INVOICED:
+                return $this->translatorPlugin()->translate("Pagato e fatturato");
+            case BusinessPayment::STATUS_PENDING:
+                return $this->translatorPlugin()->translate("Non pagato");
         }
+        return $status;
+    }
+
+    private function formatAdditionalDetails($businessPayment)
+    {
+        $business = $this->getBusiness();
+        $status = $businessPayment['status'];
+        if ($status == BusinessPayment::STATUS_EXPECTED_PAYED) {
+            $type = $businessPayment['type'];
+            $paymentId = $businessPayment['payment_id'];
+            $url = $this->url()->fromRoute(
+                'business/edit/payments/confirm',
+                [
+                    'code' => $business->getCode(),
+                    'type' => $type,
+                    'id' => $paymentId
+                ]
+            );
+            $text = $this->translatorPlugin()->translate("Conferma come pagata");
+            return sprintf("<a href=%s>%s</a>", $url, $text);
+        }
+
+        return '-';
     }
 }
