@@ -28,16 +28,29 @@ $(function() {
             ]
         },
         options: {
+            title: {
+                display: true,
+                text: 'Minuti corse'
+            },
             responsive: true,
             mantainAspectRatio: false,
             legend: {
                 display: false
+            },
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'minuti'
+                    }
+                }]
             }
         }
     };
 
+    var chart;
     function initChart() {
-        new Chart.Bar(ctx, chartData);
+        chart = new Chart.Bar(ctx, chartData);
     }
 
     function getChartData () {
@@ -51,7 +64,7 @@ $(function() {
                 chartData.data.labels = data.labels;
                 chartData.data.datasets[0].data = data.data;
 
-                initChart();
+                chart.update();
             }
         );
     }
