@@ -6,6 +6,7 @@ use BusinessCore\Entity\Business;
 use BusinessCore\Exception\InvalidBusinessFormException;
 use BusinessCore\Exception\InvalidFormDataException;
 use BusinessCore\Form\InputData\BusinessDataFactory;
+use BusinessCore\Service\BusinessFleetService;
 use BusinessCore\Service\BusinessService;
 use BusinessCore\Service\BusinessTimePackageService;
 use BusinessCore\Service\DatatableService;
@@ -51,6 +52,10 @@ class BusinessController extends AbstractActionController
      * @var BusinessTimePackageService
      */
     private $businessTimePackageService;
+    /**
+     * @var BusinessFleetService
+     */
+    private $fleetService;
 
     /**
      * BusinessController constructor.
@@ -61,6 +66,7 @@ class BusinessController extends AbstractActionController
      * @param BusinessDetailsForm $businessDetailsForm
      * @param BusinessConfigParamsForm $businessConfigParamsForm
      * @param BusinessFareForm $businessFareForm
+     * @param BusinessFleetService $fleetService
      */
     public function __construct(
         Translator $translator,
@@ -69,7 +75,8 @@ class BusinessController extends AbstractActionController
         BusinessTimePackageService $businessTimePackageService,
         BusinessDetailsForm $businessDetailsForm,
         BusinessConfigParamsForm $businessConfigParamsForm,
-        BusinessFareForm $businessFareForm
+        BusinessFareForm $businessFareForm,
+        BusinessFleetService $fleetService
     ) {
         $this->businessService = $businessService;
         $this->translator = $translator;
@@ -78,6 +85,7 @@ class BusinessController extends AbstractActionController
         $this->businessConfigParamsForm = $businessConfigParamsForm;
         $this->businessFareForm = $businessFareForm;
         $this->businessTimePackageService = $businessTimePackageService;
+        $this->fleetService = $fleetService;
     }
 
     public function indexAction()
@@ -91,6 +99,8 @@ class BusinessController extends AbstractActionController
             $data = $this->getRequest()->getPost()->toArray();
 
             try {
+                $data['fleet'] = $this->fleetService->findFleetById(intval($data['fleet']));
+
                 $inputData = BusinessDataFactory::businessDetailsfromArray($data);
                 $inputParams = BusinessDataFactory::businessConfigParamsfromArray($data);
 

@@ -16,6 +16,7 @@ class BusinessControllerFactory implements FactoryInterface
         $businessDetailsForm = $sharedServiceLocator->get('CUPAdminBusinessModule\Form\BusinessDetailsForm');
         $businessConfigParamsForm = $sharedServiceLocator->get('CUPAdminBusinessModule\Form\BusinessConfigParamsForm');
         $businessFareForm = $sharedServiceLocator->get('CUPAdminBusinessModule\Form\BusinessFareForm');
+        $fleetService = $sharedServiceLocator->get('BusinessCore\Service\BusinessFleetService');
         $translator = $sharedServiceLocator->get('translator');
 
         return new BusinessController(
@@ -25,7 +26,8 @@ class BusinessControllerFactory implements FactoryInterface
             $businessTimePackageService,
             $businessDetailsForm,
             $businessConfigParamsForm,
-            $businessFareForm
+            $businessFareForm,
+            $fleetService
         );
     }
 }

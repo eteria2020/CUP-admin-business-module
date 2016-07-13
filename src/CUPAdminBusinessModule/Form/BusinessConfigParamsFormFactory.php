@@ -20,6 +20,8 @@ class BusinessConfigParamsFormFactory implements FactoryInterface
         $translator = $serviceLocator->get('translator');
         $paymentHelper = new BusinessPaymentHelper($translator);
 
-        return new BusinessConfigParamsForm($translator, $paymentHelper);
+        $fleetService = $serviceLocator->get('BusinessCore\Service\BusinessFleetService');
+
+        return new BusinessConfigParamsForm($translator, $paymentHelper, $fleetService);
     }
 }

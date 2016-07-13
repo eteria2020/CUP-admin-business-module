@@ -3,14 +3,25 @@
 namespace CUPAdminBusinessModule\Form;
 
 use BusinessCore\Entity\Business;
+use BusinessCore\Service\BusinessFleetService;
 use CUPAdminBusinessModule\Form\Helper\BusinessPaymentHelper;
 use Zend\Form\Form;
 use Zend\Mvc\I18n\Translator;
 
 class BusinessConfigParamsForm extends Form
 {
-    public function __construct(Translator $translator, BusinessPaymentHelper $businessPaymentHelper)
-    {
+    public function __construct(
+        Translator $translator,
+        BusinessPaymentHelper $businessPaymentHelper,
+        BusinessFleetService $fleetService
+    ) {
+        $fleets = $fleetService->findAll();
+        $fleetsSelect = [];
+
+        foreach ($fleets as $fleet) {
+            $fleetsSelect[$fleet->getId()] = $fleet->getName();
+        }
+
         parent::__construct('business');
         $this->setAttribute('method', 'post');
 
@@ -73,6 +84,18 @@ class BusinessConfigParamsForm extends Form
                 'required' => 'required',
             ],
 
+        ]);
+
+        $this->add([
+            'name' => 'fleet',
+            'type' => 'Zend\Form\Element\Select',
+            'attributes' => [
+                'id' => 'fleet',
+                'class'    => 'form-control'
+            ],
+            'options' => [
+                'value_options' => $fleetsSelect
+            ]
         ]);
 
         $this->add([
