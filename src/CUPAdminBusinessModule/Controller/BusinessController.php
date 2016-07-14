@@ -157,6 +157,7 @@ class BusinessController extends AbstractActionController
         $business = $this->getBusiness();
         $data = $this->getRequest()->getPost()->toArray();
         try {
+            $data['fleet'] = $this->fleetService->findFleetById(intval($data['fleet']));
             $inputData = BusinessDataFactory::businessConfigParamsfromArray($data);
             $this->businessService->updateBusinessConfigParams($business, $inputData);
             $this->flashMessenger()->addSuccessMessage($this->translator->translate('Parametri aziendali modificati con successo'));
