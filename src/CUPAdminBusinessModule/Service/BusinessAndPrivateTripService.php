@@ -2,65 +2,35 @@
 
 namespace CUPAdminBusinessModule\Service;
 
-use BusinessCore\Entity\Business;
-use BusinessCore\Entity\Repository\BusinessTripRepository;
 use BusinessCore\Service\Helper\SearchCriteria;
-
-use CUPAdminBusinessModule\Service\Repository\BusinessAndPrivateTripRepository;
-use Doctrine\ORM\EntityManager;
+use CUPAdminBusinessModule\Service\Queries\BusinessAndPrivateTripQueries;
 use SharengoCore\Entity\Repository\TripsRepository;
 
 class BusinessAndPrivateTripService
 {
     /**
-     * @var EntityManager
+     * @var BusinessAndPrivateTripQueries
      */
-    private $entityManager;
+    private $businessAndPrivateTripQueries;
 
-    /**
-     * @var BusinessTripRepository
-     */
-    private $businessTripRepository;
-    /**
-     * @var TripsRepository
-     */
-    private $privateTripRepository;
-    /**
-     * @var BusinessAndPrivateTripRepository
-     */
-    private $businessAndPrivateTripRepository;
-
-    /**
-     * BusinessService constructor.
-     * @param EntityManager $entityManager
-     * @param BusinessTripRepository $businessTripRepository
-     * @param TripsRepository $privateTripRepository
-     * @param BusinessAndPrivateTripRepository $businessAndPrivateTripRepository
-     */
     public function __construct(
-        EntityManager $entityManager,
-        BusinessTripRepository $businessTripRepository,
-        TripsRepository $privateTripRepository,
-        BusinessAndPrivateTripRepository $businessAndPrivateTripRepository
+        BusinessAndPrivateTripQueries $businessAndPrivateTripQueries
     ) {
-        $this->entityManager = $entityManager;
-        $this->businessTripRepository = $businessTripRepository;
-        $this->privateTripRepository = $privateTripRepository;
-        $this->businessAndPrivateTripRepository = $businessAndPrivateTripRepository;
+        $this->businessAndPrivateTripQueries = $businessAndPrivateTripQueries;
     }
 
     public function searchTrips(SearchCriteria $searchCriteria)
     {
-        return $this->businessAndPrivateTripRepository->searchTrips($searchCriteria);
+        return $this->businessAndPrivateTripQueries->searchTrips($searchCriteria);
     }
 
     public function getTotalTrips()
     {
-        return $this->businessAndPrivateTripRepository->countAll();
+        return $this->businessAndPrivateTripQueries->countAll();
     }
 
     public function countFilteredTripWithoutPagination($searchCriteria)
     {
-        return $this->businessAndPrivateTripRepository->searchTrips($searchCriteria, true);
+        return $this->businessAndPrivateTripQueries->searchTrips($searchCriteria, true);
     }
 }

@@ -301,6 +301,37 @@ return [
                         ],
                     ],
                 ]
+            ],
+            'invoices-download' => [
+                'type' => 'Segment',
+                'options' => [
+                    'route' => '/invoice',
+                    'defaults' => [
+                        '__NAMESPACE__' => 'Application\Controller',
+                        'controller' => 'Invoices',
+                    ],
+                ],
+                'may_terminate' => false,
+                'child_routes' => [
+                    'private' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/private/:id',
+                            'defaults' => [
+                                'action' => 'private-invoice-pdf',
+                            ],
+                        ],
+                    ],
+                    'business' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/business/:id',
+                            'defaults' => [
+                                'action' => 'business-invoice-pdf',
+                            ],
+                        ],
+                    ],
+                ]
             ]
         ]
     ],
@@ -311,7 +342,9 @@ return [
             'CUPAdminBusinessModule\Controller\BusinessPayments' => 'CUPAdminBusinessModule\Controller\BusinessPaymentsControllerFactory',
             'CUPAdminBusinessModule\Controller\BusinessStatistics' => 'CUPAdminBusinessModule\Controller\BusinessStatisticsControllerFactory',
             'CUPAdminBusinessModule\Controller\BusinessTrip' => 'CUPAdminBusinessModule\Controller\BusinessTripControllerFactory',
-            'CUPAdminBusinessModule\Controller\Penalty' => 'CUPAdminBusinessModule\Controller\PenaltyControllerFactory'
+            'CUPAdminBusinessModule\Controller\Penalty' => 'CUPAdminBusinessModule\Controller\PenaltyControllerFactory',
+            //Overwrite default invoicesController to have also business invoices in the view
+            'Application\Controller\Invoices' => 'CUPAdminBusinessModule\Controller\InvoiceControllerFactory',
         ]
     ],
     'service_manager' => [
@@ -319,6 +352,7 @@ return [
             'CUPAdminBusinessModule\Form\BusinessConfigParamsForm' => 'CUPAdminBusinessModule\Form\BusinessConfigParamsFormFactory',
             'CUPAdminBusinessModule\Form\ChargePenaltyOrExtraForm' => 'CUPAdminBusinessModule\Form\ChargePenaltyOrExtraFormFactory',
             'CUPAdminBusinessModule\Service\BusinessAndPrivateTripService' => 'CUPAdminBusinessModule\Service\BusinessAndPrivateTripServiceFactory',
+            'CUPAdminBusinessModule\Service\BusinessAndPrivateInvoiceService' => 'CUPAdminBusinessModule\Service\BusinessAndPrivateInvoiceServiceFactory',
          ],
         'invokables' => [
             'CUPAdminBusinessModule\Form\BusinessDetailsForm' => 'CUPAdminBusinessModule\Form\BusinessDetailsForm',
@@ -361,6 +395,7 @@ return [
                 ['controller' => 'CUPAdminBusinessModule\Controller\BusinessTrip', 'roles' => ['admin']],
                 ['controller' => 'CUPAdminBusinessModule\Controller\Penalty', 'roles' => ['admin']],
                 ['controller' => 'CUPAdminBusinessModule\Controller\BusinessStatistics', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\Invoice', 'roles' => ['admin']],
             ],
         ],
     ],

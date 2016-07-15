@@ -1,11 +1,11 @@
 <?php
 
-namespace CUPAdminBusinessModule\Service\Repository;
+namespace CUPAdminBusinessModule\Service\Queries;
 
 use BusinessCore\Service\Helper\SearchCriteria;
 use Doctrine\ORM\EntityManager;
 
-class BusinessAndPrivateTripRepository
+class BusinessAndPrivateTripQueries
 {
     /**
      * @var EntityManager
