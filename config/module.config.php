@@ -27,6 +27,18 @@ return [
                             ],
                         ],
                     ],
+                    'disable-contract' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route'    => '/disable-contract/:code',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]{6}',
+                            ],
+                            'defaults' => [
+                                'action' => 'disable-contract',
+                            ],
+                        ],
+                    ],
                     'time-packages' => [
                         'type' => 'Segment',
                         'options' => [
@@ -183,6 +195,15 @@ return [
                                     'route'    => '/ajax-tab/packages',
                                     'defaults' => [
                                         'action' => 'time-packages-tab',
+                                    ],
+                                ],
+                            ],
+                            'ajax-tab-contract-status' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/ajax-tab/contract',
+                                    'defaults' => [
+                                        'action' => 'contract-tab',
                                     ],
                                 ],
                             ],

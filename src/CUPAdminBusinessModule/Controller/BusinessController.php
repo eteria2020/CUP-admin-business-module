@@ -290,6 +290,28 @@ class BusinessController extends AbstractActionController
         return $view;
     }
 
+    public function contractTabAction()
+    {
+        $business = $this->getBusiness();
+        $view = new ViewModel([
+            'business' => $business,
+        ]);
+
+        $view->setTerminal(true);
+        return $view;
+    }
+
+    public function disableContractAction()
+    {
+        $business = $this->getBusiness();
+        $this->businessService->disableContract($business);
+        return $this->redirect()->toRoute(
+            'business/edit',
+            ['code' => $business->getCode()],
+            ['query' => ['tab' => 'contract-status']]
+        );
+    }
+
     public function setPackagesAsBuyableAction()
     {
         $business = $this->getBusiness();
