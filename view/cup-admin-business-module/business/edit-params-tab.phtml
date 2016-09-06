@@ -13,7 +13,14 @@ $form = $this->form->prepare();
                 echo $this->businessFormElement($this->translate("Frequenza pagamento"), $field) ?>
             </div>
         </div>
-
+        <div class="row">
+            <div class="col-lg-6">
+                <?php
+                $field = $form->get('invoiceFrequence');
+                $field->setValue($this->business->getInvoiceFrequence());
+                echo $this->businessFormElement($this->translate("Frequenza fatturazione"), $field) ?>
+            </div>
+        </div>
         <div class="row">
             <div class="col-lg-6">
                 <?php

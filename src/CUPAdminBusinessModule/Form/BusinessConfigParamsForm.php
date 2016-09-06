@@ -59,6 +59,23 @@ class BusinessConfigParamsForm extends Form
         ]);
 
         $this->add([
+            'name'       => 'invoiceFrequence',
+            'type'       => 'Zend\Form\Element\Select',
+            'attributes' => [
+                'id'       => 'invoiceFrequence',
+                'class'    => 'form-control'
+            ],
+            'options'    => [
+                'value_options' => [
+                    null => '---',
+                    Business::FREQUENCE_WEEKLY => $businessPaymentHelper->getPrintableVersion(Business::FREQUENCE_WEEKLY),
+                    Business::FREQUENCE_FORTNIGHTLY => $businessPaymentHelper->getPrintableVersion(Business::FREQUENCE_FORTNIGHTLY),
+                    Business::FREQUENCE_MONTHLY => $businessPaymentHelper->getPrintableVersion(Business::FREQUENCE_MONTHLY)
+                ]
+            ]
+        ]);
+
+        $this->add([
             'name'       => 'businessMailControl',
             'type'       => 'Zend\Form\Element\Select',
             'attributes' => [
