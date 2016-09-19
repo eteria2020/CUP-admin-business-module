@@ -20,17 +20,18 @@ $paramsForm = $this->paramsForm->prepare();
         <div class="row">
             <div class="col-md-12">
                 <?php echo $this->partial('partials/flash-messages.phtml', []); ?>
+
                 <?= $this->form()->openTag($detailsForm); ?>
                     <div class="row">
                         <div class="col-lg-3">
                             <?php
                             $field = $detailsForm->get('name');
-                            echo $this->businessFormElement($this->translate("Ragione Sociale"), $field) ?>
+                            echo $this->businessFormElement($this->translate("Ragione Sociale (*)"), $field) ?>
                         </div>
                         <div class="col-lg-3">
                             <?php
                             $field = $detailsForm->get('domains');
-                            echo $this->businessFormElement($this->translate("Domini"), $field) ?>
+                            echo $this->businessFormElement($this->translate("Domini") . ' <small>'.$this->translate("separati da uno spazio").'</small>', $field) ?>
                         </div>
                         <div class="col-lg-3">
                             <?php
@@ -48,22 +49,22 @@ $paramsForm = $this->paramsForm->prepare();
                         <div class="col-lg-3">
                             <?php
                             $field = $detailsForm->get('address');
-                            echo $this->businessFormElement($this->translate("Indirizzo"), $field) ?>
+                            echo $this->businessFormElement($this->translate("Indirizzo (*)"), $field) ?>
                         </div>
                         <div class="col-lg-3">
                             <?php
                             $field = $detailsForm->get('zipCode');
-                            echo $this->businessFormElement($this->translate("CAP"), $field) ?>
+                            echo $this->businessFormElement($this->translate("CAP (*)"), $field) ?>
                         </div>
                         <div class="col-lg-3">
                             <?php
                             $field = $detailsForm->get('province');
-                            echo $this->businessFormElement($this->translate("Provincia"), $field) ?>
+                            echo $this->businessFormElement($this->translate("Provincia (*)"), $field) ?>
                         </div>
                         <div class="col-lg-3">
                             <?php
                             $field = $detailsForm->get('city');
-                            echo $this->businessFormElement($this->translate("Città"), $field) ?>
+                            echo $this->businessFormElement($this->translate("Città (*)"), $field) ?>
                         </div>
                     </div>
                     <div class="row">
@@ -75,7 +76,7 @@ $paramsForm = $this->paramsForm->prepare();
                         <div class="col-lg-3">
                             <?php
                             $field = $detailsForm->get('vatNumber');
-                            echo $this->businessFormElement($this->translate("Partita IVA"), $field) ?>
+                            echo $this->businessFormElement($this->translate("Partita IVA (*)"), $field) ?>
                         </div>
                         <div class="col-lg-3">
                             <?php
@@ -108,9 +109,14 @@ $paramsForm = $this->paramsForm->prepare();
                         <div class="col-lg-3">
                             <?php
                             $field = $paramsForm->get('fleet');
-                            echo $this->businessFormElement($this->translate("Flotta"), $field) ?>
+                            echo $this->businessFormElement($this->translate("Flotta (*)"), $field) ?>
                         </div>
                     </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <?= $this->translate("I campi contrassegnati con (*) sono obbligatori"); ?>
+                    </div>
+                </div>
                     <div class="row">
                         <div class="col-lg-12">
                             <button type="submit" class="btn btn-success"><?= $this->translate("Aggiungi Azienda"); ?></button>
