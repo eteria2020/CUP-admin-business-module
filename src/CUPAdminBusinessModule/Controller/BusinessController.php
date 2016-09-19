@@ -424,8 +424,10 @@ class BusinessController extends AbstractActionController
                     'city' => $business->getCity(),
                     'phone' => $business->getPhone(),
                     'insertedTs' => $business->getInsertedTs()->format('d-m-Y H:i:s'),
+                    'isEnabled' => $business->isEnabled()? $this->translator->translate('Abilitata'): $this->translator->translate("Non abilitata"),
+
                 ],
-                'button' => $business->getCode()
+                'button' => $business->getCode(),
             ];
         }, $businesses);
     }

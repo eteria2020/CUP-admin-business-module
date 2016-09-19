@@ -37,6 +37,7 @@ $(function() {
             {data: 'e.phone'},
             {data: 'e.vatNumber'},
             {data: 'e.insertedTs'},
+            {data: 'e.isEnabled'},
             {data: 'button'}
         ],
 
@@ -54,7 +55,7 @@ $(function() {
                 }
             },
             {
-                targets: 7,
+                targets: 8,
                 data: 'button',
                 searchable: false,
                 sortable: false,
