@@ -134,6 +134,15 @@ return [
                                     ],
                                 ],
                             ],
+                            'do-business-user' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/business-user',
+                                    'defaults' => [
+                                        'action' => 'do-business-user',
+                                    ],
+                                ],
+                            ],
                             'ajax-tab-edit' => [
                                 'type'    => 'Segment',
                                 'options' => [
@@ -204,6 +213,15 @@ return [
                                     'route'    => '/ajax-tab/contract',
                                     'defaults' => [
                                         'action' => 'contract-tab',
+                                    ],
+                                ],
+                            ],
+                            'ajax-tab-business-user' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/ajax-tab/business-user',
+                                    'defaults' => [
+                                        'action' => 'business-user-tab',
                                     ],
                                 ],
                             ],
@@ -379,6 +397,7 @@ return [
             'CUPAdminBusinessModule\Form\BusinessDetailsForm' => 'CUPAdminBusinessModule\Form\BusinessDetailsForm',
             'CUPAdminBusinessModule\Form\TimePackageForm' => 'CUPAdminBusinessModule\Form\TimePackageForm',
             'CUPAdminBusinessModule\Form\BusinessFareForm' => 'CUPAdminBusinessModule\Form\BusinessFareForm',
+            'CUPAdminBusinessModule\Form\BusinessUserForm' => 'CUPAdminBusinessModule\Form\BusinessUserForm',
         ]
     ],
     'asset_manager' => [

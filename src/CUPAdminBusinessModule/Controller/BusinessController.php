@@ -4,9 +4,11 @@ namespace CUPAdminBusinessModule\Controller;
 
 use BusinessCore\Entity\Business;
 use BusinessCore\Exception\InvalidBusinessFormException;
+use BusinessCore\Exception\InvalidBusinessUserFormException;
 use BusinessCore\Exception\InvalidFormDataException;
 use BusinessCore\Form\InputData\BusinessConfigParams;
 use BusinessCore\Form\InputData\BusinessDataFactory;
+use BusinessCore\Form\InputData\BusinessUserFactory;
 use BusinessCore\Service\BusinessFleetService;
 use BusinessCore\Service\BusinessPaymentService;
 use BusinessCore\Service\BusinessService;
@@ -15,12 +17,14 @@ use BusinessCore\Service\DatatableService;
 use CUPAdminBusinessModule\Form\BusinessConfigParamsForm;
 use CUPAdminBusinessModule\Form\BusinessDetailsForm;
 use CUPAdminBusinessModule\Form\BusinessFareForm;
+use CUPAdminBusinessModule\Form\BusinessUserForm;
 use Doctrine\ORM\EntityNotFoundException;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\I18n\Translator;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
+use ZfcUser\Options\UserServiceOptionsInterface;
 
 class BusinessController extends AbstractActionController
 {
@@ -62,6 +66,14 @@ class BusinessController extends AbstractActionController
      * @var BusinessPaymentService
      */
     private $businessPaymentService;
+    /**
+     * @var BusinessUserForm
+     */
+    private $businessUserForm;
+    /**
+     * @var UserServiceOptionsInterface
+     */
+    private $userServiceOptions;
 
     /**
      * BusinessController constructor.
@@ -72,8 +84,10 @@ class BusinessController extends AbstractActionController
      * @param BusinessDetailsForm $businessDetailsForm
      * @param BusinessConfigParamsForm $businessConfigParamsForm
      * @param BusinessFareForm $businessFareForm
+     * @param BusinessUserForm $businessUserForm
      * @param BusinessFleetService $fleetService
      * @param BusinessPaymentService $businessPaymentService
+     * @param UserServiceOptionsInterface $userServiceOptions
      */
     public function __construct(
         Translator $translator,
@@ -83,8 +97,10 @@ class BusinessController extends AbstractActionController
         BusinessDetailsForm $businessDetailsForm,
         BusinessConfigParamsForm $businessConfigParamsForm,
         BusinessFareForm $businessFareForm,
+        BusinessUserForm $businessUserForm,
         BusinessFleetService $fleetService,
-        BusinessPaymentService $businessPaymentService
+        BusinessPaymentService $businessPaymentService,
+        UserServiceOptionsInterface $userServiceOptions
     ) {
         $this->businessService = $businessService;
         $this->translator = $translator;
@@ -95,6 +111,8 @@ class BusinessController extends AbstractActionController
         $this->businessTimePackageService = $businessTimePackageService;
         $this->fleetService = $fleetService;
         $this->businessPaymentService = $businessPaymentService;
+        $this->businessUserForm = $businessUserForm;
+        $this->userServiceOptions = $userServiceOptions;
     }
 
     public function indexAction()
@@ -172,7 +190,7 @@ class BusinessController extends AbstractActionController
             $this->businessService->updateBusinessConfigParams($business, $inputData);
             $this->flashMessenger()->addSuccessMessage($this->translator->translate('Parametri aziendali modificati con successo'));
         } catch (InvalidBusinessFormException $e) {
-            $this->flashMessenger()->addErrorMessage($e->getMessage());
+            $this->flashMessenger()->addErrorMessage($this->translator->translate($e->getMessage()));
         }
         return $this->redirect()->toRoute(
             'business/edit',
@@ -196,6 +214,25 @@ class BusinessController extends AbstractActionController
             'business/edit',
             ['code' => $business->getCode()],
             ['query' => ['tab' => 'fare']]
+        );
+    }
+
+    public function doBusinessUserAction()
+    {
+        $business = $this->getBusiness();
+        $data = $this->getRequest()->getPost();
+        try {
+            $user = BusinessUserFactory::businessUserfromArrayAndOptions($business, $data, $this->userServiceOptions);
+            $this->businessService->persistBusinessUser($user);
+            $this->flashMessenger()->addSuccessMessage($this->translator->translate('Utente business aggiunto con successo'));
+        } catch (InvalidBusinessUserFormException $e) {
+            $this->flashMessenger()->addErrorMessage($this->translator->translate($e->getMessage()));
+        }
+
+        return $this->redirect()->toRoute(
+            'business/edit',
+            ['code' => $business->getCode()],
+            ['query' => ['tab' => 'business-user']]
         );
     }
 
@@ -306,6 +343,20 @@ class BusinessController extends AbstractActionController
         $business = $this->getBusiness();
         $view = new ViewModel([
             'business' => $business,
+        ]);
+
+        $view->setTerminal(true);
+        return $view;
+    }
+
+    public function businessUserTabAction()
+    {
+        $business = $this->getBusiness();
+        $webUser = $this->businessService->findBusinessWebuser($business);
+        $view = new ViewModel([
+            'webuser' => $webUser,
+            'business' => $business,
+            'form' => $this->businessUserForm,
         ]);
 
         $view->setTerminal(true);

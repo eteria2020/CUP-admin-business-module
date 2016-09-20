@@ -17,8 +17,10 @@ class BusinessControllerFactory implements FactoryInterface
         $businessDetailsForm = $sharedServiceLocator->get('CUPAdminBusinessModule\Form\BusinessDetailsForm');
         $businessConfigParamsForm = $sharedServiceLocator->get('CUPAdminBusinessModule\Form\BusinessConfigParamsForm');
         $businessFareForm = $sharedServiceLocator->get('CUPAdminBusinessModule\Form\BusinessFareForm');
+        $businessUserForm = $sharedServiceLocator->get('CUPAdminBusinessModule\Form\BusinessUserForm');
         $fleetService = $sharedServiceLocator->get('BusinessCore\Service\BusinessFleetService');
         $translator = $sharedServiceLocator->get('translator');
+        $userOptions = $sharedServiceLocator->get('zfcuser_module_options');
 
         return new BusinessController(
             $translator,
@@ -28,8 +30,10 @@ class BusinessControllerFactory implements FactoryInterface
             $businessDetailsForm,
             $businessConfigParamsForm,
             $businessFareForm,
+            $businessUserForm,
             $fleetService,
-            $businessPaymentsService
+            $businessPaymentsService,
+            $userOptions
         );
     }
 }

@@ -70,6 +70,11 @@ $this->headScript()
                             <?= $this->translate("Stato Contratto Cartasi"); ?>
                         </a>
                     </li>
+                    <li role="presentation" id="menu-contract-status" <?= $this->tab == 'business-user' ? 'class="active"' : '' ?>>
+                        <a href="<?= $this->url('business/edit/ajax-tab-business-user', ['code' => $this->business->getCode()]); ?>" data-target="#tab-business-user" role="tab" data-toggle="tab">
+                            <?= $this->translate("Business User"); ?>
+                        </a>
+                    </li>
                 </ul>
 
                 <div class="tab-content" style="position: relative; min-height: 200px">
@@ -82,6 +87,7 @@ $this->headScript()
                     <div role="tabpanel" class="tab-pane <?= $this->tab == 'fare' ? 'active' : '' ?>" id="tab-fare"></div>
                     <div role="tabpanel" class="tab-pane <?= $this->tab == 'time-packages' ? 'active' : '' ?>" id="tab-time-packages"></div>
                     <div role="tabpanel" class="tab-pane <?= $this->tab == 'contract-status' ? 'active' : '' ?>" id="tab-contract-status"></div>
+                    <div role="tabpanel" class="tab-pane <?= $this->tab == 'business-user' ? 'active' : '' ?>" id="tab-business-user"></div>
                 </div>
             </div>
         </div>

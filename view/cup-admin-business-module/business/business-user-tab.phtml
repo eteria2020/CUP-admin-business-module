@@ -1,0 +1,79 @@
+<?php
+$this->form->setAttribute('action', $this->url('business/edit/do-business-user', ['code' => $this->business->getCode()]));
+$form = $this->form->prepare();
+?>
+
+<?php if ($this->webuser instanceof \BusinessCore\Entity\Webuser) { ?>
+    <div class="row">
+        <div class="col-lg-12">
+            <h4><b><?= $this->translate("Utente aziendale: "); ?></b></h4>
+            <h4><b><?= $this->translate("Id: ") ?></b><?= $this->webuser->getId() ?></h4>
+            <h4><b><?= $this->translate("Nome: ") ?></b><?= $this->webuser->getDisplayName() ?></h4>
+            <h4><b><?= $this->translate("Email: ") ?></b><?= $this->webuser->getEmail() ?></h4>
+        </div>
+    </div>
+    <?php
+} else { ?>
+    <div class="row">
+        <div class="col-lg-12">
+            <?= $this->form()->openTag($form); ?>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label><?= $this->translate("Nome"); ?></label>
+                        <?php
+                        $field = $form->get('name');
+                        echo $this->formElement($field->setAttribute('class', 'form-control'));
+                        echo $this->formElementErrors($field, ['class' => 'text-danger']);
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label><?= $this->translate("Email"); ?></label>
+                        <?php
+                        $field = $form->get('email');
+                        echo $this->formElement($field->setAttribute('class', 'form-control'));
+                        echo $this->formElementErrors($field, ['class' => 'text-danger']);
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label><?= $this->translate("Password"); ?></label>
+                        <small><?= $this->translate("minimo 8 caratteri"); ?></small>
+                        <?php
+                        $field = $form->get('password1');
+                        echo $this->formElement($field->setAttribute('class', 'form-control'));
+                        echo $this->formElementErrors($field, ['class' => 'text-danger']);
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label><?= $this->translate("Ripeti password"); ?></label>
+                        <?php
+                        $field = $form->get('password2');
+                        echo $this->formElement($field->setAttribute('class', 'form-control'));
+                        echo $this->formElementErrors($field, ['class' => 'text-danger']);
+                        ?>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <button type="submit" class="btn btn-success"><?= $this->translate("Aggiungi"); ?></button>
+                </div>
+            </div>
+            <?= $this->form()->closeTag(); ?>
+        </div>
+    </div>
+<?php } ?>
