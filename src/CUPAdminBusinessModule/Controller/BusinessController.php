@@ -5,8 +5,10 @@ namespace CUPAdminBusinessModule\Controller;
 use BusinessCore\Entity\Business;
 use BusinessCore\Exception\InvalidBusinessFormException;
 use BusinessCore\Exception\InvalidFormDataException;
+use BusinessCore\Form\InputData\BusinessConfigParams;
 use BusinessCore\Form\InputData\BusinessDataFactory;
 use BusinessCore\Service\BusinessFleetService;
+use BusinessCore\Service\BusinessPaymentService;
 use BusinessCore\Service\BusinessService;
 use BusinessCore\Service\BusinessTimePackageService;
 use BusinessCore\Service\DatatableService;
@@ -56,6 +58,10 @@ class BusinessController extends AbstractActionController
      * @var BusinessFleetService
      */
     private $fleetService;
+    /**
+     * @var BusinessPaymentService
+     */
+    private $businessPaymentService;
 
     /**
      * BusinessController constructor.
@@ -67,6 +73,7 @@ class BusinessController extends AbstractActionController
      * @param BusinessConfigParamsForm $businessConfigParamsForm
      * @param BusinessFareForm $businessFareForm
      * @param BusinessFleetService $fleetService
+     * @param BusinessPaymentService $businessPaymentService
      */
     public function __construct(
         Translator $translator,
@@ -76,7 +83,8 @@ class BusinessController extends AbstractActionController
         BusinessDetailsForm $businessDetailsForm,
         BusinessConfigParamsForm $businessConfigParamsForm,
         BusinessFareForm $businessFareForm,
-        BusinessFleetService $fleetService
+        BusinessFleetService $fleetService,
+        BusinessPaymentService $businessPaymentService
     ) {
         $this->businessService = $businessService;
         $this->translator = $translator;
@@ -86,6 +94,7 @@ class BusinessController extends AbstractActionController
         $this->businessFareForm = $businessFareForm;
         $this->businessTimePackageService = $businessTimePackageService;
         $this->fleetService = $fleetService;
+        $this->businessPaymentService = $businessPaymentService;
     }
 
     public function indexAction()
@@ -159,6 +168,7 @@ class BusinessController extends AbstractActionController
         try {
             $data['fleet'] = $this->fleetService->findFleetById(intval($data['fleet']));
             $inputData = BusinessDataFactory::businessConfigParamsfromArray($data);
+            $this->manageChangeInBusinessSubscriptionFee($business, $inputData);
             $this->businessService->updateBusinessConfigParams($business, $inputData);
             $this->flashMessenger()->addSuccessMessage($this->translator->translate('Parametri aziendali modificati con successo'));
         } catch (InvalidBusinessFormException $e) {
@@ -221,8 +231,9 @@ class BusinessController extends AbstractActionController
     {
         /** @var Business $business */
         $business = $this->getBusiness();
-
+        $subscriptionPayment = $this->businessPaymentService->getBusinessSubscriptionPayment($business);
         $view = new ViewModel([
+            'subscriptionPayed' => $subscriptionPayment->isPayed() || $subscriptionPayment->isExpectedPayed(),
             'business' => $business,
             'form' => $this->businessConfigParamsForm
         ]);
@@ -464,5 +475,11 @@ class BusinessController extends AbstractActionController
         return new JsonModel([
             'businesses' => $businesses
         ]);
+    }
+
+    private function manageChangeInBusinessSubscriptionFee(Business $business, BusinessConfigParams $inputData)
+    {
+        $newAmount = $inputData->getSubscriptionFeeCents();
+        $this->businessPaymentService->manageChangeInBusinessSubscriptionFee($business, $newAmount);
     }
 }

@@ -42,7 +42,7 @@ $form = $this->form->prepare();
                 <?php
                 $field = $form->get('subscriptionFeeCents');
                 $field->setValue($this->business->getReadableSubscriptionFee());
-                echo $this->businessFormElement($this->translate("Quota di iscrizione (€)"), $field) ?>
+                echo $this->businessFormElement($this->translate("Quota di iscrizione (€)"), $field, $this->subscriptionPayed) ?>
             </div>
         </div>
         <div class="row">
