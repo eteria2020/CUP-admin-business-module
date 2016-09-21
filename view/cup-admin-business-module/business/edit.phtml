@@ -47,7 +47,7 @@ $this->headScript()
                     </li>
                     <li role="presentation" id="menu-employee" <?= $this->tab == 'employees' ? 'class="active"' : '' ?>>
                         <a href="<?= $this->url('business/edit/ajax-tab-employees', ['code' => $this->business->getCode()]); ?>" data-target="#tab-employees" role="tab" data-toggle="tab">
-                            <?= $this->translate("Clienti associati"); ?>
+                            <?= $this->translate("Dipendenti"); ?>
                         </a>
                     </li>
                     <li role="presentation" id="menu-payments" <?= $this->tab == 'payments' ? 'class="active"' : '' ?>>
