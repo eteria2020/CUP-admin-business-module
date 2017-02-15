@@ -11,7 +11,7 @@ $form = $this->form->prepare();
                 <?php
                 $field = $form->get('name');
                 $field->setValue($this->business->getName());
-                echo $this->businessFormElement($this->translate("Ragione Sociale"), $field) ?>
+                echo $this->businessFormElement($this->translate("Ragione Sociale (*)"), $field) ?>
             </div>
             <div class="col-lg-3">
                 <?php
@@ -38,25 +38,25 @@ $form = $this->form->prepare();
                 <?php
                 $field = $form->get('address');
                 $field->setValue($this->business->getAddress());
-                echo $this->businessFormElement($this->translate("Indirizzo"), $field) ?>
+                echo $this->businessFormElement($this->translate("Indirizzo (*)"), $field) ?>
             </div>
             <div class="col-lg-2">
                 <?php
                 $field = $form->get('zipCode');
                 $field->setValue($this->business->getZipCode());
-                echo $this->businessFormElement($this->translate("CAP"), $field) ?>
+                echo $this->businessFormElement($this->translate("CAP (*)"), $field) ?>
             </div>
             <div class="col-lg-2">
                 <?php
                 $field = $form->get('province');
                 $field->setValue($this->business->getProvince());
-                echo $this->businessFormElement($this->translate("Provincia"), $field) ?>
+                echo $this->businessFormElement($this->translate("Provincia (*)"), $field) ?>
             </div>
             <div class="col-lg-2">
                 <?php
                 $field = $form->get('city');
                 $field->setValue($this->business->getCity());
-                echo $this->businessFormElement($this->translate("Città"), $field) ?>
+                echo $this->businessFormElement($this->translate("Città (*)"), $field) ?>
             </div>
             <div class="col-lg-3">
                 <?php
@@ -66,11 +66,16 @@ $form = $this->form->prepare();
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <?php
                 $field = $form->get('vatNumber');
                 $field->setValue($this->business->getVatNumber());
-                echo $this->businessFormElement($this->translate("Partita IVA"), $field) ?>
+                echo $this->businessFormElement($this->translate("Partita IVA (*)"), $field) ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <?= $this->translate("I campi contrassegnati con (*) sono obbligatori"); ?>
             </div>
         </div>
         <div class="row">

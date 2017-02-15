@@ -1,11 +1,13 @@
 <?php
 $this->headLink()
     ->appendStylesheet('/js/datatables/plugins/bootstrap/dataTables.bootstrap.css')
+    ->appendStylesheet('/js/plugins/bootstrap-datepicker/css/datepicker3.css')
     ->appendStylesheet($this->basePath() .'/css/business-edit.css');
 $this->headScript()
     ->prependFile($this->basePath() .'/js/spin.min.js')
     ->appendFile('/js/datatables/media/js/jquery.dataTables.min.js')
     ->appendFile('/js/datatables/plugins/bootstrap/dataTables.bootstrap.js')
+    ->appendFile('/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')
     ->appendFile($this->basePath() .'/js/business-edit.js');
 ?>
 <div class="page-content-wrapper">
@@ -45,7 +47,32 @@ $this->headScript()
                     </li>
                     <li role="presentation" id="menu-employee" <?= $this->tab == 'employees' ? 'class="active"' : '' ?>>
                         <a href="<?= $this->url('business/edit/ajax-tab-employees', ['code' => $this->business->getCode()]); ?>" data-target="#tab-employees" role="tab" data-toggle="tab">
-                            <?= $this->translate("Clienti associati"); ?>
+                            <?= $this->translate("Dipendenti"); ?>
+                        </a>
+                    </li>
+                    <li role="presentation" id="menu-payments" <?= $this->tab == 'payments' ? 'class="active"' : '' ?>>
+                        <a href="<?= $this->url('business/edit/ajax-tab-payments', ['code' => $this->business->getCode()]); ?>" data-target="#tab-payments" role="tab" data-toggle="tab">
+                            <?= $this->translate("Pagamenti"); ?>
+                        </a>
+                    </li>
+                    <li role="presentation" id="menu-fare" <?= $this->tab == 'fare' ? 'class="active"' : '' ?>>
+                        <a href="<?= $this->url('business/edit/ajax-tab-fare', ['code' => $this->business->getCode()]); ?>" data-target="#tab-fare" role="tab" data-toggle="tab">
+                            <?= $this->translate("Tariffa"); ?>
+                        </a>
+                    </li>
+                    <li role="presentation" id="menu-time-packages" <?= $this->tab == 'time-packages' ? 'class="active"' : '' ?>>
+                        <a href="<?= $this->url('business/edit/ajax-tab-time-packages', ['code' => $this->business->getCode()]); ?>" data-target="#tab-time-packages" role="tab" data-toggle="tab">
+                            <?= $this->translate("Pacchetti minuti"); ?>
+                        </a>
+                    </li>
+                    <li role="presentation" id="menu-contract-status" <?= $this->tab == 'contract-status' ? 'class="active"' : '' ?>>
+                        <a href="<?= $this->url('business/edit/ajax-tab-contract-status', ['code' => $this->business->getCode()]); ?>" data-target="#tab-contract-status" role="tab" data-toggle="tab">
+                            <?= $this->translate("Stato Contratto Cartasi"); ?>
+                        </a>
+                    </li>
+                    <li role="presentation" id="menu-contract-status" <?= $this->tab == 'business-user' ? 'class="active"' : '' ?>>
+                        <a href="<?= $this->url('business/edit/ajax-tab-business-user', ['code' => $this->business->getCode()]); ?>" data-target="#tab-business-user" role="tab" data-toggle="tab">
+                            <?= $this->translate("Business User"); ?>
                         </a>
                     </li>
                 </ul>
@@ -56,6 +83,11 @@ $this->headScript()
                     <div role="tabpanel" class="tab-pane <?= $this->tab == 'edit' ? 'active' : '' ?>" id="tab-edit"></div>
                     <div role="tabpanel" class="tab-pane <?= $this->tab == 'params' ? 'active' : '' ?>" id="tab-params"></div>
                     <div role="tabpanel" class="tab-pane <?= $this->tab == 'employees' ? 'active' : '' ?>" id="tab-employees"></div>
+                    <div role="tabpanel" class="tab-pane <?= $this->tab == 'payments' ? 'active' : '' ?>" id="tab-payments"></div>
+                    <div role="tabpanel" class="tab-pane <?= $this->tab == 'fare' ? 'active' : '' ?>" id="tab-fare"></div>
+                    <div role="tabpanel" class="tab-pane <?= $this->tab == 'time-packages' ? 'active' : '' ?>" id="tab-time-packages"></div>
+                    <div role="tabpanel" class="tab-pane <?= $this->tab == 'contract-status' ? 'active' : '' ?>" id="tab-contract-status"></div>
+                    <div role="tabpanel" class="tab-pane <?= $this->tab == 'business-user' ? 'active' : '' ?>" id="tab-business-user"></div>
                 </div>
             </div>
         </div>

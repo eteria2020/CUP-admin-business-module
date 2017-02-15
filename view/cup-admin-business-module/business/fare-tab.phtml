@@ -1,0 +1,42 @@
+<?php
+$this->form->setAttribute('action', $this->url('business/edit/do-edit-fare', ['code' => $this->business->getCode()]));
+$form = $this->form->prepare();
+?>
+<div class="row">
+    <div class="col-lg-12">
+        <?= $this->form()->openTag($form); ?>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label><?= $this->translate("Percentuale di sconto tariffa corsa"); ?></label>
+                    <?php
+                    $field = $form->get('motion');
+                    $field->setValue($this->fare->getMotionDiscount());
+                    echo $this->formElement($field->setAttribute('class', 'form-control'));
+                    echo $this->formElementErrors($field, ['class' => 'text-danger']);
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label><?= $this->translate("Percentuale di sconto tariffa in sosta"); ?></label>
+                    <?php
+                    $field = $form->get('park');
+                    $field->setValue($this->fare->getParkDiscount());
+                    echo $this->formElement($field->setAttribute('class', 'form-control'));
+                    echo $this->formElementErrors($field, ['class' => 'text-danger']);
+                    ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <button type="submit" class="btn btn-success"><?= $this->translate("Modifica tariffa aziendale"); ?></button>
+            </div>
+        </div>
+        <?= $this->form()->closeTag(); ?>
+    </div>
+</div>

@@ -27,6 +27,73 @@ return [
                             ],
                         ],
                     ],
+                    'disable-contract' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route'    => '/disable-contract/:code',
+                            'constraints' => [
+                                'code' => '[a-zA-Z0-9]{6}',
+                            ],
+                            'defaults' => [
+                                'action' => 'disable-contract',
+                            ],
+                        ],
+                    ],
+                    'time-packages' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/time-packages',
+                            'defaults' => [
+                                '__NAMESPACE__' => 'CUPAdminBusinessModule\Controller',
+                                'controller' => 'TimePackages',
+                                'action' => 'index',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'add' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route'    => '/add',
+                                    'defaults' => [
+                                        'action' => 'add',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'penalty' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route'    => '/penality',
+                            'defaults' => [
+                                'controller' => 'Penalty',
+                                'action' => 'charge',
+                            ],
+                        ],
+                    ],
+                    'stats' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route'    => '/stats',
+                            'defaults' => [
+                                'controller' => 'BusinessStatistics',
+                                'action' => 'index',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'data' => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'    => '/data',
+                                    'defaults' => [
+                                        'action' => 'data',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                     'edit' => [
                         'type' => 'Segment',
                         'options' => [
@@ -55,6 +122,24 @@ return [
                                     'route' => '/edit-params',
                                     'defaults' => [
                                         'action' => 'do-edit-params',
+                                    ],
+                                ],
+                            ],
+                            'do-edit-fare' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/edit-fare',
+                                    'defaults' => [
+                                        'action' => 'do-edit-fare',
+                                    ],
+                                ],
+                            ],
+                            'do-business-user' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/business-user',
+                                    'defaults' => [
+                                        'action' => 'do-business-user',
                                     ],
                                 ],
                             ],
@@ -94,6 +179,61 @@ return [
                                     ],
                                 ],
                             ],
+                            'ajax-tab-fare' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/ajax-tab/fare',
+                                    'defaults' => [
+                                        'action' => 'fare-tab',
+                                    ],
+                                ],
+                            ],
+                            'ajax-tab-payments' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/ajax-tab/payments',
+                                    'defaults' => [
+                                        'controller' => 'BusinessPayments',
+                                        'action' => 'payments-tab',
+                                    ],
+                                ],
+                            ],
+                            'ajax-tab-time-packages' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/ajax-tab/packages',
+                                    'defaults' => [
+                                        'action' => 'time-packages-tab',
+                                    ],
+                                ],
+                            ],
+                            'ajax-tab-contract-status' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/ajax-tab/contract',
+                                    'defaults' => [
+                                        'action' => 'contract-tab',
+                                    ],
+                                ],
+                            ],
+                            'ajax-tab-business-user' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/ajax-tab/business-user',
+                                    'defaults' => [
+                                        'action' => 'business-user-tab',
+                                    ],
+                                ],
+                            ],
+                            'set-packages-as-buyable' => [
+                                'type'    => 'Segment',
+                                'options' => [
+                                    'route'    => '/buyable-packages',
+                                    'defaults' => [
+                                        'action' => 'set-packages-as-buyable',
+                                    ],
+                                ],
+                            ],
                             'approve-employee' => [
                                 'type' => 'Segment',
                                 'options' => [
@@ -130,6 +270,37 @@ return [
                                     ],
                                 ],
                             ],
+
+                            'payments' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/payments',
+                                    'defaults' => [
+                                        'controller' => 'BusinessPayments',
+                                    ],
+                                ],
+                                'may_terminate' => false,
+                                'child_routes' => [
+                                    'confirm' => [
+                                        'type'    => 'Segment',
+                                        'options' => [
+                                            'route'    => '/confirm/:type/:id',
+                                            'defaults' => [
+                                                'action' => 'confirmPayment',
+                                            ],
+                                        ],
+                                    ],
+                                    'datatable' => [
+                                        'type'    => 'Literal',
+                                        'options' => [
+                                            'route'    => '/datatable',
+                                            'defaults' => [
+                                                'action' => 'datatable',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ]
                     ],
                     'datatable' => [
@@ -141,29 +312,107 @@ return [
                             ],
                         ],
                     ],
+                    'typeahead-json' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/typeahead-json',
+                            'defaults' => [
+                                'action' => 'typeahead-json',
+                            ],
+                        ],
+                    ],
                 ],
+            ],
+            /**
+             * Overwrite Application module routes to allow specific business filtering
+             */
+            'trips' => [
+                'child_routes' => [
+                    'datatable' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/datatable',
+                            'defaults' => [
+                                '__NAMESPACE__' => 'CUPAdminBusinessModule\Controller',
+                                'controller' => 'BusinessTrip',
+                                'action' => 'datatable',
+                            ],
+                        ],
+                    ],
+                ]
+            ],
+            'invoices-download' => [
+                'type' => 'Segment',
+                'options' => [
+                    'route' => '/invoice',
+                    'defaults' => [
+                        '__NAMESPACE__' => 'Application\Controller',
+                        'controller' => 'Invoices',
+                    ],
+                ],
+                'may_terminate' => false,
+                'child_routes' => [
+                    'private' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/private/:id',
+                            'defaults' => [
+                                'action' => 'private-invoice-pdf',
+                            ],
+                        ],
+                    ],
+                    'business' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/business/:id',
+                            'defaults' => [
+                                'action' => 'business-invoice-pdf',
+                            ],
+                        ],
+                    ],
+                ]
             ]
         ]
     ],
     'controllers' => [
         'factories' => [
-            'CUPAdminBusinessModule\Controller\Business' => 'CUPAdminBusinessModule\Controller\BusinessControllerFactory'
+            'CUPAdminBusinessModule\Controller\Business' => 'CUPAdminBusinessModule\Controller\BusinessControllerFactory',
+            'CUPAdminBusinessModule\Controller\TimePackages' => 'CUPAdminBusinessModule\Controller\TimePackagesControllerFactory',
+            'CUPAdminBusinessModule\Controller\BusinessPayments' => 'CUPAdminBusinessModule\Controller\BusinessPaymentsControllerFactory',
+            'CUPAdminBusinessModule\Controller\BusinessStatistics' => 'CUPAdminBusinessModule\Controller\BusinessStatisticsControllerFactory',
+            'CUPAdminBusinessModule\Controller\BusinessTrip' => 'CUPAdminBusinessModule\Controller\BusinessTripControllerFactory',
+            'CUPAdminBusinessModule\Controller\Penalty' => 'CUPAdminBusinessModule\Controller\PenaltyControllerFactory',
+            //Overwrite default invoicesController to have also business invoices in the view
+            'Application\Controller\Invoices' => 'CUPAdminBusinessModule\Controller\InvoiceControllerFactory',
         ]
     ],
     'service_manager' => [
         'factories' => [
             'CUPAdminBusinessModule\Form\BusinessConfigParamsForm' => 'CUPAdminBusinessModule\Form\BusinessConfigParamsFormFactory',
+            'CUPAdminBusinessModule\Form\ChargePenaltyOrExtraForm' => 'CUPAdminBusinessModule\Form\ChargePenaltyOrExtraFormFactory',
+            'CUPAdminBusinessModule\Service\BusinessAndPrivateTripService' => 'CUPAdminBusinessModule\Service\BusinessAndPrivateTripServiceFactory',
+            'CUPAdminBusinessModule\Service\BusinessAndPrivateInvoiceService' => 'CUPAdminBusinessModule\Service\BusinessAndPrivateInvoiceServiceFactory',
          ],
         'invokables' => [
             'CUPAdminBusinessModule\Form\BusinessDetailsForm' => 'CUPAdminBusinessModule\Form\BusinessDetailsForm',
+            'CUPAdminBusinessModule\Form\TimePackageForm' => 'CUPAdminBusinessModule\Form\TimePackageForm',
+            'CUPAdminBusinessModule\Form\BusinessFareForm' => 'CUPAdminBusinessModule\Form\BusinessFareForm',
+            'CUPAdminBusinessModule\Form\BusinessUserForm' => 'CUPAdminBusinessModule\Form\BusinessUserForm',
         ]
     ],
     'asset_manager' => [
         'resolver_configs' => [
-            'map' => [
-                'js/business.js' => __DIR__.'/../public/assets-modules/cup-admin-business-module/js/business.js',
-                'js/business-edit.js' => __DIR__.'/../public/assets-modules/cup-admin-business-module/js/business-edit.js',
-                'css/business-edit.css' => __DIR__.'/../public/assets-modules/cup-admin-business-module/css/business-edit.css'
+            'collections' => [
+                'js/trips.js' => [
+                    'js/libs/jquery.autocomplete.min.js',
+                    'js/business-trips.js',
+                ],
+                'css/trips.css' => [
+                    'css/autocomplete.css',
+                ],
+            ],
+            'paths' => [
+                __DIR__.'/../public/assets-modules/cup-admin-business-module'
             ],
         ],
     ],
@@ -181,6 +430,12 @@ return [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
                 ['controller' => 'CUPAdminBusinessModule\Controller\Business', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\TimePackages', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\BusinessPayments', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\BusinessTrip', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\Penalty', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\BusinessStatistics', 'roles' => ['admin']],
+                ['controller' => 'CUPAdminBusinessModule\Controller\Invoice', 'roles' => ['admin']],
             ],
         ],
     ],
@@ -197,9 +452,33 @@ return [
                         'label' => $translator->translate('Elenco'),
                         'route' => 'business',
                         'isVisible' => true
+                    ],
+                    [
+                        'label' => $translator->translate('Statistiche'),
+                        'route' => 'business/stats',
+                        'isVisible' => true
+                    ],
+                    [
+                        'label' => $translator->translate('Addebito penale/extra'),
+                        'route' => 'business/penalty',
+                        'isVisible' => true
+                    ],
+                    [
+                        'label' => $translator->translate('Gestione pacchetti'),
+                        'route' => 'business/time-packages',
+                        'isVisible' => true
+                    ],
+                    [
+                        'route' => 'business/time-packages/add',
+                        'isVisible' => false
                     ]
                 ],
             ],
         ]
-    ]
+    ],
+    'datatable-filters' => [
+        'trips-index' => [
+            'b.name' => $translator->translate("Azienda")
+        ]
+    ],
 ];
