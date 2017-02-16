@@ -1,9 +1,7 @@
-/* global $ confirm translate */
-
+/* global $ translate */
 $(function() {
-    'use strict';
-
-    var table = $('#js-business-table');
+    "use strict";
+    var table = $('#js-customer-business-invoices-table');
     var search = $('#js-value');
     var column = $('#js-column');
     search.val('');
@@ -14,7 +12,7 @@ $(function() {
         "serverSide": true,
         "bStateSave": false,
         "bFilter": false,
-        "sAjaxSource": "/business/datatable",
+        "sAjaxSource": "/invoices/datatable",
         "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
             oSettings.jqXHR = $.ajax( {
                 "dataType": 'json',
@@ -26,42 +24,22 @@ $(function() {
         },
         "fnServerParams": function ( aoData ) {
             aoData.push({ "name": "column", "value": $(column).val()});
-            aoData.push({ "name": "searchValue", "value": search.val().trim()});
+            aoData.push({ "name": "searchValue", "value": $(search).val().trim()});
         },
-        "order": [[0, 'desc']],
+        "order": [[0, 'asc']],
         "columns": [
-            {data: 'e.name'},
-            {data: 'e.code'},
-            {data: 'e.domains'},
-            {data: 'e.city'},
-            {data: 'e.phone'},
-            {data: 'e.vatNumber'},
-            {data: 'e.insertedTs'},
-            {data: 'e.isEnabled'},
-            {data: 'button'}
+            {data: 'invoice_number'},
+            {data: 'date'},
+            {data: 'name'},
+            {data: 'type'},
+            {data: 'amount'},
+            {data: 'invoice_pdf_url'}
         ],
-
         "columnDefs": [
             {
-                targets: 2,
-                searchable: false,
+                targets: 5,
                 sortable: false,
-                "render": function (data) {
-                    var out = '';
-                    $.each(data, function(i, val) {
-                        out += val + "<br>";
-                    });
-                    return out;
-                }
-            },
-            {
-                targets: 8,
-                data: 'button',
-                searchable: false,
-                sortable: false,
-                render: function (data) {
-                    return '<a href="/business/' + data + '" class="btn btn-default btn-xs">' + translate("modify") + '</a>';
-                }
+                className: "sng-dt-center"
             }
         ],
         "lengthMenu": [
@@ -71,7 +49,7 @@ $(function() {
         "pageLength": 100,
         "pagingType": "bootstrap_full_number",
         "language": {
-            "sEmptyTable": translate("sEmptyTable"),
+            "sEmptyTable": translate("sInvoicesEmptyTable"),
             "sInfo": translate("sInfo"),
             "sInfoEmpty": translate("sInfoEmpty"),
             "sInfoFiltered": translate("sInfoFiltered"),
@@ -101,6 +79,14 @@ $(function() {
 
     $('#js-clear').click(function() {
         search.val('');
+        search.prop('disabled', false);
         column.val('select');
+        search.show();
     });
+
+    $(column).change(function() {
+        search.show();
+        search.val('');
+    });
+
 });

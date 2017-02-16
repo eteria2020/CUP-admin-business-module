@@ -2,11 +2,10 @@
 
 namespace CUPAdminBusinessModule\Form;
 
-use CUPAdminBusinessModule\Form\Helper\BusinessPaymentHelper;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class BusinessConfigParamsFormFactory implements FactoryInterface
+class ChargePenaltyOrExtraFormFactory implements FactoryInterface
 {
     /**
      * Create service
@@ -18,10 +17,7 @@ class BusinessConfigParamsFormFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $translator = $serviceLocator->get('translator');
-        $paymentHelper = new BusinessPaymentHelper($translator);
 
-        $fleetService = $serviceLocator->get('BusinessCore\Service\BusinessFleetService');
-
-        return new BusinessConfigParamsForm($translator, $paymentHelper, $fleetService);
+        return new ChargePenaltyOrExtraForm($translator);
     }
 }

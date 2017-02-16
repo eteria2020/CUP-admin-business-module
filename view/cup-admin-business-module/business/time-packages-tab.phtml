@@ -1,0 +1,59 @@
+<?php
+?>
+<div class="row">
+    <div class="col-md-12">
+        <?php echo $this->partial('partials/flash-messages.phtml', []); ?>
+    </div>
+</div>
+<div class="row">
+    <a style="margin-bottom: 3px" id="submit-btn" class="btn btn-success pull-right"> <?= $this->translate("Salva pacchetti acquistabili"); ?></a>
+    <a style="margin-bottom: 3px; margin-right: 3px;" href="<?php echo $this->url('business/time-packages/add'); ?>" class="btn btn-success pull-right"> <?= $this->translate("Crea nuovo pacchetto"); ?></a>
+</div>
+<div class="row">
+<div class="portlet box green">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="fa fa-cogs"></i><?= $this->translate("Elenco pacchetti"); ?>
+        </div>
+    </div>
+
+    <div class="portlet-body">
+        <table class="table table-striped table-bordered table-hover" id="js-time-packages-table">
+            <thead>
+            <tr>
+                <th><?= $this->translate("ID"); ?></th>
+                <th><?= $this->translate("Minuti"); ?></th>
+                <th><?= $this->translate("Descrizione"); ?></th>
+                <th><?= $this->translate("Costo"); ?></th>
+                <th><?= $this->translate("Data creazione"); ?></th>
+                <th><?= $this->translate("Acquistabile"); ?></th>
+            </tr>
+            </thead>
+            <?php /** @var \BusinessCore\Entity\TimePackage $timePackage */
+            foreach ($this->packages as $timePackage):
+                $minutes = $this->translate("%s min.");
+                $minutes = sprintf($minutes, $timePackage->getMinutes());
+
+                $description = $this->translate("Pacchetto di %s minuti");
+                $description = sprintf($description, $timePackage->getMinutes());
+
+                $cost = number_format($timePackage->getCost() / 100, 2, '.', '') . ' €';
+                $buyable = in_array($timePackage->getId(), $this->activePackagesId);
+                ?>
+                <tr>
+                    <td><?= $timePackage->getId() ?></td>
+                    <td><?= $minutes ?></td>
+                    <td><?= $description ?></td>
+
+                    <td><?= $cost ?></td>
+                    <td><?= $timePackage->getInsertedTs()->format('Y-m-d H:i:s') ?></td>
+                    <td>
+                        <input type="checkbox" name="package-<?= $timePackage->getId() ?>" <?= $buyable ? 'checked' : '' ?>>
+                    </td>
+                </tr>
+                <?php
+            endforeach; ?>
+        </table>
+    </div>
+</div>
+</div>

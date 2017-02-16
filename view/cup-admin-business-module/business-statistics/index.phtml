@@ -1,0 +1,85 @@
+<?php
+$this->headLink()
+    ->appendStylesheet('/js/plugins/bootstrap-datepicker/css/datepicker3.css')
+    ->appendStylesheet($this->basePath() .'/css/autocomplete.css');
+$this->headScript()
+    ->appendFile('/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')
+    ->appendFile($this->basePath() .'/js/libs/jquery.autocomplete.min.js')
+    ->appendFile($this->basePath() .'/js/libs/Chart.min.js')
+    ->appendFile($this->basePath() .'/js/statistics.js');
+
+?>
+<div class="page-content-wrapper">
+    <div class="page-content">
+
+        <!-- BEGIN PAGE HEADER-->
+        <h3 class="page-title">
+            <?= $this->translate("STATISTICHE AZIENDE"); ?>
+        </h3>
+
+        <div class="page-bar">
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <?php echo $this->partial('partials/flash-messages.phtml', []); ?>
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label><?= $this->translate("Seleziona azienda"); ?></label>
+                                <input type="text" name="value" value="" class="form-control form-control-inline input-small" id="business-name"
+                                       placeholder="<?= $this->translate("Filtra..."); ?>">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label> <?= $this->translate("da"); ?>: </label>
+                                <input class="form-control form-control-inline input-small date-picker" size="16"
+                                       type="text" id="js-date-from"
+                                       placeholder="<?= $this->translate("Data inizio"); ?>">
+                            </div>
+                            <div class="form-group">
+                                <label> <?= $this->translate("a"); ?>: </label>
+                                <input class="form-control form-control-inline input-small date-picker" size="16"
+                                       type="text" id="js-date-to"
+                                       placeholder="<?= $this->translate("Data fine"); ?>">
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn green js-search" id="js-search"><i
+                                        class="fa fa-filter"></i> <?= $this->translate("Aggiorna grafico"); ?></button>
+                                <button type="button" class="btn green dropdown-toggle" data-toggle="dropdown"><i
+                                        class="fa fa-angle-down"></i></button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="#" id="js-clear"><i
+                                                class="fa fa-remove"></i> <?= $this->translate("Pulisci Ricerca"); ?>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-cogs"></i><?= $this->translate("Statistiche"); ?>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <canvas id="chart" height="120"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
