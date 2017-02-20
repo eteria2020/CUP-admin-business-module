@@ -185,6 +185,11 @@ class BusinessController extends AbstractActionController
         $data = $this->getRequest()->getPost()->toArray();
         try {
             $data['fleet'] = $this->fleetService->findFleetById(intval($data['fleet']));
+            //if subscription fee cents was disabled, because it has already been payed
+            //"data" won't contain the value, so I set it manually as the current amount
+            if (!isset($data['subscriptionFeeCents'])) {
+                $data['subscriptionFeeCents'] = $business->getReadableSubscriptionFee();
+            }
             $inputData = BusinessDataFactory::businessConfigParamsfromArray($data);
             $this->manageChangeInBusinessSubscriptionFee($business, $inputData);
             $this->businessService->updateBusinessConfigParams($business, $inputData);
