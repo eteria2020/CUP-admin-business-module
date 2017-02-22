@@ -395,8 +395,8 @@ class BusinessController extends AbstractActionController
     {
         $businessCode = $this->params()->fromRoute('code', 0);
         $employeeId = $this->params()->fromRoute('id', 0);
-
-        $this->businessService->approveEmployee($businessCode, $employeeId);
+        $business = $this->businessService->getBusinessByCode($businessCode);
+        $this->businessService->approveEmployee($business, $employeeId);
         $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente approvato'));
 
         return $this->redirect()->toRoute(
@@ -410,8 +410,8 @@ class BusinessController extends AbstractActionController
     {
         $businessCode = $this->params()->fromRoute('code', 0);
         $employeeId = $this->params()->fromRoute('id', 0);
-
-        $this->businessService->removeEmployee($businessCode, $employeeId);
+        $business = $this->businessService->getBusinessByCode($businessCode);
+        $this->businessService->removeEmployee($business, $employeeId);
         $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente eliminato con successo'));
 
         return $this->redirect()->toRoute(
@@ -425,8 +425,8 @@ class BusinessController extends AbstractActionController
     {
         $businessCode = $this->params()->fromRoute('code', 0);
         $employeeId = $this->params()->fromRoute('id', 0);
-
-        $this->businessService->blockEmployee($businessCode, $employeeId);
+        $business = $this->businessService->getBusinessByCode($businessCode);
+        $this->businessService->blockEmployee($business, $employeeId);
         $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente bloccato con successo'));
 
         return $this->redirect()->toRoute(
@@ -440,8 +440,8 @@ class BusinessController extends AbstractActionController
     {
         $businessCode = $this->params()->fromRoute('code', 0);
         $employeeId = $this->params()->fromRoute('id', 0);
-
-        $this->businessService->unblockEmployee($businessCode, $employeeId);
+        $business = $this->businessService->getBusinessByCode($businessCode);
+        $this->businessService->unblockEmployee($business, $employeeId);
         $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente sbloccato con successo'));
 
         return $this->redirect()->toRoute(
