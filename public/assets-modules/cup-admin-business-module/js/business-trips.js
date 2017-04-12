@@ -178,7 +178,7 @@ $(function() {
         dataTableVars.searchValue.val("");
 
         disableBusinessSearch();
-        if (value === "c.timestampEnd") {
+        if (value === "e.timestampEnd") {
             filterWithNull = true;
             dataTableVars.searchValue.prop("disabled", true);
         } else if (value === 'b.name') {
