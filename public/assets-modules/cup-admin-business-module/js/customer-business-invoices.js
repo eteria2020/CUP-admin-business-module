@@ -12,7 +12,7 @@ $(function() {
         "serverSide": true,
         "bStateSave": false,
         "bFilter": false,
-        "sAjaxSource": "/invoices/datatable",
+        "sAjaxSource": "/invoices/datatable-business-private",
         "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
             oSettings.jqXHR = $.ajax( {
                 "dataType": 'json',

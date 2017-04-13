@@ -326,6 +326,42 @@ return [
             /**
              * Overwrite Application module routes to allow specific business filtering
              */
+            'invoices' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/invoices',
+                    'defaults' => [
+                        '__NAMESPACE__' => 'CUPAdminBusinessModule\Controller',
+                        'controller'    => 'Invoice',
+                        'action' => 'index'
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'datatable' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/datatable',
+                            'defaults' => [
+                                '__NAMESPACE__' => 'Application\Controller',
+                                'controller' => 'Invoices',
+                                'action' => 'datatable',
+                            ],
+                        ],
+                    ],
+                    'datatable-business-private' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/datatable-business-private',
+                            'defaults' => [
+                                '__NAMESPACE__' => 'CUPAdminBusinessModule\Controller',
+                                'controller' => 'Invoice',
+                                'action' => 'datatable',
+                            ],
+                        ],
+                    ],
+                ]
+            ],
             'trips' => [
                 'child_routes' => [
                     'datatable' => [
@@ -346,8 +382,8 @@ return [
                 'options' => [
                     'route' => '/invoice',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller' => 'Invoices',
+                        '__NAMESPACE__' => 'CUPAdminBusinessModule\Controller',
+                        'controller' => 'Invoice',
                     ],
                 ],
                 'may_terminate' => false,
@@ -382,8 +418,7 @@ return [
             'CUPAdminBusinessModule\Controller\BusinessStatistics' => 'CUPAdminBusinessModule\Controller\BusinessStatisticsControllerFactory',
             'CUPAdminBusinessModule\Controller\BusinessTrip' => 'CUPAdminBusinessModule\Controller\BusinessTripControllerFactory',
             'CUPAdminBusinessModule\Controller\Penalty' => 'CUPAdminBusinessModule\Controller\PenaltyControllerFactory',
-            //Overwrite default invoicesController to have also business invoices in the view
-            'Application\Controller\Invoices' => 'CUPAdminBusinessModule\Controller\InvoiceControllerFactory',
+            'CUPAdminBusinessModule\Controller\Invoice' => 'CUPAdminBusinessModule\Controller\InvoiceControllerFactory',
         ]
     ],
     'service_manager' => [
