@@ -6,10 +6,6 @@ use BusinessCore\Service\DatatableService;
 use CUPAdminBusinessModule\Service\BusinessAndPrivateTripService;
 use SharengoCore\Entity\TripPayments;
 use SharengoCore\Entity\Trips;
-use SharengoCore\Service\EventsService;
-use SharengoCore\Service\TripCostComputerService;
-use SharengoCore\Service\TripsService;
-use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Helper\Url;
 use Zend\View\Model\JsonModel;
@@ -82,13 +78,22 @@ class BusinessTripController extends AbstractActionController
 
             $plate = $this->getClickablePlate($trip);
 
+            $parentId = "";
+            $parentStart = "";
+            $parent = $trip->getParent();
+
+            if ($parent !== null && $parent instanceof Trips && $parent->getId() != -1) {
+                $parentId = "<br>(" . $parent->getId() . ")";
+                $parentStart = "<br>(" . $parent->getTimestampBeginning()->format('d-m-Y H:i:s') . ")";
+            }
+
             $tripCost = $this->calculateTripCost($trip);
             return [
                 'e' => [
-                    'id' => $trip->getId() ,
+                    'id' => $trip->getId() . $parentId,
                     'kmBeginning' => $trip->getKmBeginning(),
                     'kmEnd' => $trip->getKmEnd(),
-                    'timestampBeginning' => $trip->getTimestampBeginning()->format('d-m-Y H:i:s'),
+                    'timestampBeginning' => $trip->getTimestampBeginning()->format('d-m-Y H:i:s') . $parentStart,
                     'timestampEnd' => (is_null($trip->getTimestampEnd()) ? '' : $trip->getTimestampEnd()->format('d-m-Y H:i:s')),
                     'parkSeconds' => $trip->getParkSeconds() . ' sec',
                     'payable' => $trip->getPayable() ? $translator->translate('Si') : $translator->translate('No'),

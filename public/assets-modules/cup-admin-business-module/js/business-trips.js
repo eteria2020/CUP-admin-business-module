@@ -15,7 +15,7 @@ $(function() {
         from: $("#js-date-from"),
         columnFromDate: "e.timestampBeginning",
         to: $("#js-date-to"),
-        columnFromEnd: "e.timestampEnd"
+        columnToDate: "e.timestampEnd"
     };
 
     var filterWithNull = false;
@@ -48,6 +48,7 @@ $(function() {
             });
         },
         "fnServerParams": function ( aoData ) {
+
             if (filterWithNull) {
                 aoData.push({ "name": "column", "value": ""});
                 aoData.push({ "name": "searchValue", "value": ""});
@@ -56,10 +57,10 @@ $(function() {
                 aoData.push({ "name": "column", "value": $(dataTableVars.column).val()});
                 aoData.push({ "name": "searchValue", "value": dataTableVars.searchValue.val().trim()});
             }
-            aoData.push({ "name": "from", "value": $(dataTableVars.from).val().trim()});
-            aoData.push({ "name": "to", "value": $(dataTableVars.to).val().trim()});
+            aoData.push({ "name": "fromDate", "value": $(dataTableVars.from).val().trim()});
+            aoData.push({ "name": "toDate", "value": $(dataTableVars.to).val().trim()});
             aoData.push({ "name": "columnFromDate", "value": dataTableVars.columnFromDate});
-            aoData.push({ "name": "columnFromEnd", "value": dataTableVars.columnFromEnd});
+            aoData.push({ "name": "columnToDate", "value": dataTableVars.columnToDate});
         },
         "order": [[dataTableVars.iSortCol_0, dataTableVars.sSortDir_0]],
         "columns": [
