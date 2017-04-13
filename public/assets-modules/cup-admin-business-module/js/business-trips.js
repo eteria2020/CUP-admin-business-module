@@ -9,7 +9,7 @@ $(function() {
     var dataTableVars = {
         searchValue: searchValue,
         column: $("#js-column"),
-        iSortCol_0: 0,
+        iSortCol_0: 9,
         sSortDir_0: "desc",
         iDisplayLength: 100,
         from: $("#js-date-from"),
@@ -40,7 +40,11 @@ $(function() {
                 "url": sSource,
                 "data": aoData,
                 "success": fnCallback,
-                "error": function() {}
+                "statusCode": {
+                    200: function(data, textStatus, jqXHR) {
+                        loginRedirect(data, textStatus, jqXHR);
+                    }
+                }
             });
         },
         "fnServerParams": function ( aoData ) {
@@ -98,11 +102,22 @@ $(function() {
                 sortable: false
             },
             {
+                targets: 12,
+                sortable: false,
+                "render": function ( data ) {
+                    return renderParkingMinutes(data);
+                }
+            },
+            {
                 targets: 13,
                 sortable: false
             },
             {
                 targets: 14,
+                sortable: false
+            },
+            {
+                targets: 16,
                 sortable: false
             },
             {
@@ -222,6 +237,17 @@ $(function() {
 
     function disableBusinessSearch() {
         searchValue.autocomplete('disable');
+    }
+
+    function renderParkingMinutes(data){
+        data = data.replace(" sec", "").trim();
+        if (data === "") {
+            data = "0";
+        }
+
+        data = Math.round(parseInt(data) / 60);
+        data = data.toString() + " min";
+        return data;
     }
 
     searchValue.autocomplete({

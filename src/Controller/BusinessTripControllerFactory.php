@@ -14,9 +14,13 @@ class BusinessTripControllerFactory implements FactoryInterface
         $businessAndPrivateTripService = $sharedServiceLocator->get('CUPAdminBusinessModule\Service\BusinessAndPrivateTripService');
         $datatableService = $sharedServiceLocator->get('BusinessCore\Service\DatatableService');
 
+        $urlHelper = $sharedServiceLocator->get('viewhelpermanager')->get('url');
+
+
         return new BusinessTripController(
             $businessAndPrivateTripService,
-            $datatableService
+            $datatableService,
+            $urlHelper
         );
     }
 }

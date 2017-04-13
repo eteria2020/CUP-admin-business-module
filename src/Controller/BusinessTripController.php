@@ -11,6 +11,7 @@ use SharengoCore\Service\TripCostComputerService;
 use SharengoCore\Service\TripsService;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Helper\Url;
 use Zend\View\Model\JsonModel;
 
 class BusinessTripController extends AbstractActionController
@@ -23,18 +24,25 @@ class BusinessTripController extends AbstractActionController
      * @var BusinessAndPrivateTripService
      */
     private $businessAndPrivateTripService;
+    /**
+     * @var Url
+     */
+    private $urlHelper;
 
     /**
      * BusinessTripController constructor.
-     * @param DatatableService $datatableService
      * @param BusinessAndPrivateTripService $businessAndPrivateTripService
+     * @param DatatableService $datatableService
+     * @param Url $urlHelper
      */
     public function __construct(
         BusinessAndPrivateTripService $businessAndPrivateTripService,
-        DatatableService $datatableService
+        DatatableService $datatableService,
+        Url $urlHelper
     ) {
         $this->businessAndPrivateTripService = $businessAndPrivateTripService;
         $this->datatableService = $datatableService;
+        $this->urlHelper = $urlHelper;
     }
 
     public function datatableAction()
@@ -54,10 +62,25 @@ class BusinessTripController extends AbstractActionController
         ]);
     }
 
+    private function getClickablePlate(Trips $trip)
+    {
+        $urlHelper = $this->urlHelper;
+        return sprintf(
+            '<a href="%s">%s</a>',
+            $urlHelper(
+                'cars/edit',
+                ['plate' => $trip->getCar()->getPlate()]
+            ),
+            $trip->getCar()->getPlate()
+        );
+    }
+
     private function mapBusinessTripsToDatatable(array $trips)
     {
         return array_map(function (Trips $trip) {
             $translator = $this->TranslatorPlugin();
+
+            $plate = $this->getClickablePlate($trip);
 
             $tripCost = $this->calculateTripCost($trip);
             return [
@@ -80,7 +103,7 @@ class BusinessTripController extends AbstractActionController
                     'mobile' => $trip->getCustomer()->getMobile()
                 ],
                 'c' => [
-                    'plate' => $trip->getCar()->getPlate(),
+                    'plate' => $plate,
                     'label' => $trip->getCar()->getLabel(),
                     'parking' => $trip->getCar()->getParking() ? $translator->translate('Si') : $translator->translate('No'),
                     'keyStatus' => $trip->getCar()->getKeystatus()
