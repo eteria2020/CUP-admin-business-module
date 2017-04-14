@@ -363,6 +363,16 @@ return [
                 ]
             ],
             'trips' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/trips',
+                    'defaults' => [
+                        '__NAMESPACE__' => 'CUPAdminBusinessModule\Controller',
+                        'controller' => 'BusinessTrip',
+                        'action' => 'index'
+                    ]
+                ],
+                'may_terminate' => true,
                 'child_routes' => [
                     'datatable' => [
                         'type'    => 'Literal',
@@ -437,15 +447,6 @@ return [
     ],
     'asset_manager' => [
         'resolver_configs' => [
-            'collections' => [
-                'js/trips.js' => [
-                    'js/libs/jquery.autocomplete.min.js',
-                    'js/business-trips.js',
-                ],
-                'css/trips.css' => [
-                    'css/autocomplete.css',
-                ],
-            ],
             'paths' => [
                 __DIR__.'/../public/assets-modules/cup-admin-business-module'
             ],
@@ -509,11 +510,6 @@ return [
                     ]
                 ],
             ],
-        ]
-    ],
-    'datatable-filters' => [
-        'trips-index' => [
-            'b.name' => $translator->translate("Azienda")
         ]
     ],
 ];

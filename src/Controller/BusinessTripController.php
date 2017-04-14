@@ -7,8 +7,10 @@ use CUPAdminBusinessModule\Service\BusinessAndPrivateTripService;
 use SharengoCore\Entity\TripPayments;
 use SharengoCore\Entity\Trips;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Session\Container;
 use Zend\View\Helper\Url;
 use Zend\View\Model\JsonModel;
+use Zend\View\Model\ViewModel;
 
 class BusinessTripController extends AbstractActionController
 {
@@ -24,21 +26,48 @@ class BusinessTripController extends AbstractActionController
      * @var Url
      */
     private $urlHelper;
+    /**
+     * @var Container
+     */
+    private $datatableFiltersSessionContainer;
 
     /**
      * BusinessTripController constructor.
      * @param BusinessAndPrivateTripService $businessAndPrivateTripService
      * @param DatatableService $datatableService
      * @param Url $urlHelper
+     * @param Container $datatableFiltersSessionContainer
      */
     public function __construct(
         BusinessAndPrivateTripService $businessAndPrivateTripService,
         DatatableService $datatableService,
-        Url $urlHelper
+        Url $urlHelper,
+        Container $datatableFiltersSessionContainer
     ) {
         $this->businessAndPrivateTripService = $businessAndPrivateTripService;
         $this->datatableService = $datatableService;
         $this->urlHelper = $urlHelper;
+        $this->datatableFiltersSessionContainer = $datatableFiltersSessionContainer;
+    }
+
+    /**
+     * This method return an array containing the DataTable filters,
+     * from a Session Container.
+     *
+     * @return array
+     */
+    private function getDataTableSessionFilters()
+    {
+        return $this->datatableFiltersSessionContainer->offsetGet('Trips');
+    }
+
+    public function indexAction()
+    {
+        $sessionDatatableFilters = $this->getDataTableSessionFilters();
+
+        return new ViewModel([
+            'filters' => json_encode($sessionDatatableFilters),
+        ]);
     }
 
     public function datatableAction()

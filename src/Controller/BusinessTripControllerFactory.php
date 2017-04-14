@@ -4,6 +4,7 @@ namespace CUPAdminBusinessModule\Controller;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Session\Container;
 
 class BusinessTripControllerFactory implements FactoryInterface
 {
@@ -16,11 +17,16 @@ class BusinessTripControllerFactory implements FactoryInterface
 
         $urlHelper = $sharedServiceLocator->get('viewhelpermanager')->get('url');
 
+        $datatablesSessionNamespace = $sharedServiceLocator->get('Configuration')['session']['datatablesNamespace'];
+        // Creating DataTable Filters Session Container
+        $datatableFiltersSessionContainer = new Container($datatablesSessionNamespace);
+
 
         return new BusinessTripController(
             $businessAndPrivateTripService,
             $datatableService,
-            $urlHelper
+            $urlHelper,
+            $datatableFiltersSessionContainer
         );
     }
 }
