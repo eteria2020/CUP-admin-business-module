@@ -447,6 +447,15 @@ return [
     ],
     'asset_manager' => [
         'resolver_configs' => [
+            'collections' => [
+                'js/trips.js' => [
+                    'js/libs/jquery.autocomplete.min.js',
+                    'js/business-trips.js',
+                ],
+                'css/trips.css' => [
+                    'css/autocomplete.css',
+                ],
+            ],
             'paths' => [
                 __DIR__.'/../public/assets-modules/cup-admin-business-module'
             ],

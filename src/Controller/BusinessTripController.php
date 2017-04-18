@@ -73,6 +73,9 @@ class BusinessTripController extends AbstractActionController
     public function datatableAction()
     {
         $filters = $this->params()->fromPost();
+
+        if (!empty($filters)) $this->datatableFiltersSessionContainer->offsetSet('Trips', $filters);
+
         $searchCriteria = $this->datatableService->getSearchCriteria($filters);
         $trips = $this->businessAndPrivateTripService->searchTrips($searchCriteria);
         $tripsWithoutPagination = $this->businessAndPrivateTripService->countFilteredTripWithoutPagination($searchCriteria);
