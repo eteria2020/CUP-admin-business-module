@@ -71,8 +71,15 @@ class BusinessAndPrivateInvoiceQueries
         $searchValue = $searchCriteria->getSearchValue();
         if (!empty($searchColumn) && !empty($searchValue)) {
             $likeValue = strtolower("%" . $searchValue . "%");
-            $sql .= 'AND LOWER(' . $searchColumn . ') LIKE :value ';
+            if($searchColumn==="customer_name"){
+                $sql .= 'AND LOWER(name) LIKE :value AND is_business=false ';
+            } else if($searchColumn==="business_name"){
+                $sql .= 'AND LOWER(name) LIKE :value AND is_business=true ';
+            } else {
+                $sql .= 'AND LOWER(' . $searchColumn . ') LIKE :value ';
+            }
             $query->setParameter('value', $likeValue);
+
         }
 
         $fromDate = $searchCriteria->getFromDate();
