@@ -56,11 +56,13 @@ class BusinessAndPrivateInvoiceQueries
         }
 
         $sql = 'select ' . $select . ' from (
-            select bi.id, bi.fleet_id, bi.invoice_number, b.name as name, bi.invoice_date as date, bi.type, bi.amount as total, true as is_business from business.business_invoice as bi
+            select bi.id, bi.fleet_id, bi.invoice_number, b.name as name, bi.invoice_date as date, bi.type, bi.amount as total, true as is_business, f.name as fleet_name from business.business_invoice as bi
             left join business.business as b on (b.code = bi.business_code)
+            inner join fleets as f on (f.id = bi.fleet_id)
             union all
-            select pi.id, pi.fleet_id, pi.invoice_number, concat_ws(\' \', c.surname::text, c.name::text) AS name, pi.invoice_date as date, pi.type::text, pi.amount as total, false as is_business from invoices as pi
+            select pi.id, pi.fleet_id, pi.invoice_number, concat_ws(\' \', c.surname::text, c.name::text) AS name, pi.invoice_date as date, pi.type::text, pi.amount as total, false as is_business, f.name as fleet_name from invoices as pi
             left join customers as c on (c.id = pi.customer_id)
+            inner join fleets as f on (f.id = pi.fleet_id)
             ) sub WHERE 1 = 1 ';
 
         $query = $this->entityManager->createNativeQuery($sql, $rsm);
@@ -69,8 +71,15 @@ class BusinessAndPrivateInvoiceQueries
         $searchValue = $searchCriteria->getSearchValue();
         if (!empty($searchColumn) && !empty($searchValue)) {
             $likeValue = strtolower("%" . $searchValue . "%");
-            $sql .= 'AND LOWER(' . $searchColumn . ') LIKE :value ';
+            if($searchColumn==="customer_name"){
+                $sql .= 'AND LOWER(name) LIKE :value AND is_business=false ';
+            } else if($searchColumn==="business_name"){
+                $sql .= 'AND LOWER(name) LIKE :value AND is_business=true ';
+            } else {
+                $sql .= 'AND LOWER(' . $searchColumn . ') LIKE :value ';
+            }
             $query->setParameter('value', $likeValue);
+
         }
 
         $fromDate = $searchCriteria->getFromDate();
