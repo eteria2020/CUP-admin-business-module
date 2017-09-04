@@ -130,7 +130,8 @@ class BusinessTripController extends AbstractActionController
                     'parkSeconds' => $trip->getParkSeconds() . ' sec',
                     'payable' => $trip->getPayable() ? $translator->translate('Si') : $translator->translate('No'),
                     'totalCost' => ['amount' => $tripCost, 'id' => $trip->getId()],
-                    'idLink' => $trip->getId()
+                    'idLink' => $trip->getId(),
+                    'isBusiness' => is_null($trip->getPinType()) ? $translator->translate('No') : $translator->translate('Si')
                 ],
                 'cu' => [
                     'id' => $trip->getCustomer()->getId(),

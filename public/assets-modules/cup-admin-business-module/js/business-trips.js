@@ -83,6 +83,7 @@ $(function() {
             {data: "payed"},
             {data: "e.totalCost"},
             {data: "f.name"},
+            {data: "e.isBusiness"},
             {data: "e.idLink"}
         ],
         "columnDefs": [
@@ -129,7 +130,7 @@ $(function() {
                 }
             },
             {
-                targets: 19,
+                targets: 20,
                 sortable: false,
                 "render": function ( data ) {
                     return renderInfoButton(data);
