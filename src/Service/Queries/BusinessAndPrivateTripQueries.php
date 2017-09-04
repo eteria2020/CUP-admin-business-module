@@ -87,8 +87,15 @@ class BusinessAndPrivateTripQueries
         if (!$countFiltered) {
             $sortColumn = $searchCriteria->getSortColumn();
             $sortOrder = $searchCriteria->getSortOrder();
-            if (!empty($sortColumn) && !empty($sortOrder)) {
-                $dql .= 'ORDER BY ' . $sortColumn . ' ' . $sortOrder . ' ';
+
+            if ($sortColumn === "e.isBusiness") {
+                if (!empty($sortOrder)) {
+                    $dql .= 'ORDER BY e.pinType ' . $sortOrder . ' , e.id desc ';
+                }
+            } else {
+                if (!empty($sortColumn) && !empty($sortOrder)) {
+                    $dql .= 'ORDER BY ' . $sortColumn . ' ' . $sortOrder . ' ';
+                }
             }
 
             $paginationLength = $searchCriteria->getPaginationLength();
