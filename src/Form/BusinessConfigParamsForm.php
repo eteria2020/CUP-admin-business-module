@@ -84,8 +84,8 @@ class BusinessConfigParamsForm extends Form
             ],
             'options'    => [
                 'value_options' => [
-                    0 => $translator->translate("No"),
-                    1 => $translator->translate("Si")
+                    'false' => $translator->translate("No"),
+                    'true' => $translator->translate("Si")
                     ]
                 ]
         ]);
