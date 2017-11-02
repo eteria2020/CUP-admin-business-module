@@ -76,6 +76,21 @@ class BusinessConfigParamsForm extends Form
         ]);
 
         $this->add([
+            'name'       => 'businessEnabled',
+            'type'       => 'Zend\Form\Element\Select',
+            'attributes' => [
+                'id'       => 'businessEnabled',
+                'class'    => 'form-control'
+            ],
+            'options'    => [
+                'value_options' => [
+                    'false' => $translator->translate("No"),
+                    'true' => $translator->translate("Si")
+                    ]
+                ]
+        ]);
+
+        $this->add([
             'name'       => 'businessMailControl',
             'type'       => 'Zend\Form\Element\Select',
             'attributes' => [
