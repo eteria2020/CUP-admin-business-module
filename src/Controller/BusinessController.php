@@ -26,8 +26,8 @@ use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use ZfcUser\Options\UserServiceOptionsInterface;
 
-class BusinessController extends AbstractActionController
-{
+class BusinessController extends AbstractActionController {
+
     /**
      * @var BusinessService
      */
@@ -42,34 +42,42 @@ class BusinessController extends AbstractActionController
      * @var DatatableService
      */
     private $datatableService;
+
     /**
      * @var BusinessDetailsForm
      */
     private $businessDetailsForm;
+
     /**
      * @var BusinessConfigParamsForm
      */
     private $businessConfigParamsForm;
+
     /**
      * @var BusinessFareForm
      */
     private $businessFareForm;
+
     /**
      * @var BusinessTimePackageService
      */
     private $businessTimePackageService;
+
     /**
      * @var BusinessFleetService
      */
     private $fleetService;
+
     /**
      * @var BusinessPaymentService
      */
     private $businessPaymentService;
+
     /**
      * @var BusinessUserForm
      */
     private $businessUserForm;
+
     /**
      * @var UserServiceOptionsInterface
      */
@@ -90,17 +98,7 @@ class BusinessController extends AbstractActionController
      * @param UserServiceOptionsInterface $userServiceOptions
      */
     public function __construct(
-        Translator $translator,
-        DatatableService $datatableService,
-        BusinessService $businessService,
-        BusinessTimePackageService $businessTimePackageService,
-        BusinessDetailsForm $businessDetailsForm,
-        BusinessConfigParamsForm $businessConfigParamsForm,
-        BusinessFareForm $businessFareForm,
-        BusinessUserForm $businessUserForm,
-        BusinessFleetService $fleetService,
-        BusinessPaymentService $businessPaymentService,
-        UserServiceOptionsInterface $userServiceOptions
+    Translator $translator, DatatableService $datatableService, BusinessService $businessService, BusinessTimePackageService $businessTimePackageService, BusinessDetailsForm $businessDetailsForm, BusinessConfigParamsForm $businessConfigParamsForm, BusinessFareForm $businessFareForm, BusinessUserForm $businessUserForm, BusinessFleetService $fleetService, BusinessPaymentService $businessPaymentService, UserServiceOptionsInterface $userServiceOptions
     ) {
         $this->businessService = $businessService;
         $this->translator = $translator;
@@ -115,13 +113,11 @@ class BusinessController extends AbstractActionController
         $this->userServiceOptions = $userServiceOptions;
     }
 
-    public function indexAction()
-    {
+    public function indexAction() {
         return new ViewModel();
     }
 
-    public function addAction()
-    {
+    public function addAction() {
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
 
@@ -147,8 +143,7 @@ class BusinessController extends AbstractActionController
         ]);
     }
 
-    public function editAction()
-    {
+    public function editAction() {
         $code = $this->params()->fromRoute('code', 0);
         $business = $this->businessService->getBusinessByCode($code);
         $tab = $this->params()->fromQuery('tab', 'info');
@@ -161,8 +156,7 @@ class BusinessController extends AbstractActionController
         ]);
     }
 
-    public function doEditDetailsAction()
-    {
+    public function doEditDetailsAction() {
         $business = $this->getBusiness();
         $data = $this->getRequest()->getPost()->toArray();
         try {
@@ -173,14 +167,11 @@ class BusinessController extends AbstractActionController
             $this->flashMessenger()->addErrorMessage($e->getMessage());
         }
         return $this->redirect()->toRoute(
-            'business/edit',
-            ['code' => $business->getCode()],
-            ['query' => ['tab' => 'edit']]
+                        'business/edit', ['code' => $business->getCode()], ['query' => ['tab' => 'edit']]
         );
     }
 
-    public function doEditParamsAction()
-    {
+    public function doEditParamsAction() {
         $business = $this->getBusiness();
         $data = $this->getRequest()->getPost()->toArray();
         try {
@@ -198,14 +189,11 @@ class BusinessController extends AbstractActionController
             $this->flashMessenger()->addErrorMessage($this->translator->translate($e->getMessage()));
         }
         return $this->redirect()->toRoute(
-            'business/edit',
-            ['code' => $business->getCode()],
-            ['query' => ['tab' => 'params']]
+                        'business/edit', ['code' => $business->getCode()], ['query' => ['tab' => 'params']]
         );
     }
 
-    public function doEditFareAction()
-    {
+    public function doEditFareAction() {
         $business = $this->getBusiness();
         $data = $this->getRequest()->getPost();
         try {
@@ -216,14 +204,11 @@ class BusinessController extends AbstractActionController
         }
 
         return $this->redirect()->toRoute(
-            'business/edit',
-            ['code' => $business->getCode()],
-            ['query' => ['tab' => 'fare']]
+                        'business/edit', ['code' => $business->getCode()], ['query' => ['tab' => 'fare']]
         );
     }
 
-    public function doBusinessUserAction()
-    {
+    public function doBusinessUserAction() {
         $business = $this->getBusiness();
         $data = $this->getRequest()->getPost();
         try {
@@ -235,14 +220,11 @@ class BusinessController extends AbstractActionController
         }
 
         return $this->redirect()->toRoute(
-            'business/edit',
-            ['code' => $business->getCode()],
-            ['query' => ['tab' => 'business-user']]
+                        'business/edit', ['code' => $business->getCode()], ['query' => ['tab' => 'business-user']]
         );
     }
 
-    public function infoTabAction()
-    {
+    public function infoTabAction() {
         /** @var Business $business */
         $business = $this->getBusiness();
 
@@ -255,8 +237,7 @@ class BusinessController extends AbstractActionController
         return $view;
     }
 
-    public function editDetailsTabAction()
-    {
+    public function editDetailsTabAction() {
         /** @var Business $business */
         $business = $this->getBusiness();
 
@@ -269,8 +250,7 @@ class BusinessController extends AbstractActionController
         return $view;
     }
 
-    public function editParamsTabAction()
-    {
+    public function editParamsTabAction() {
         /** @var Business $business */
         $business = $this->getBusiness();
         $subscriptionPayment = $this->businessPaymentService->getBusinessSubscriptionPayment($business);
@@ -284,8 +264,7 @@ class BusinessController extends AbstractActionController
         return $view;
     }
 
-    public function employeesTabAction()
-    {
+    public function employeesTabAction() {
         $business = $this->getBusiness();
 
         $view = new ViewModel([
@@ -296,8 +275,7 @@ class BusinessController extends AbstractActionController
         return $view;
     }
 
-    public function paymentsTabAction()
-    {
+    public function paymentsTabAction() {
         $business = $this->getBusiness();
 
         $view = new ViewModel([
@@ -308,8 +286,7 @@ class BusinessController extends AbstractActionController
         return $view;
     }
 
-    public function fareTabAction()
-    {
+    public function fareTabAction() {
         /** @var Business $business */
         $business = $this->getBusiness();
         $fare = $business->getActiveBusinessFare();
@@ -323,8 +300,7 @@ class BusinessController extends AbstractActionController
         return $view;
     }
 
-    public function timePackagesTabAction()
-    {
+    public function timePackagesTabAction() {
         $business = $this->getBusiness();
         $buyablePackages = $business->getBusinessBuyableTimePackages();
         $activeIds = [];
@@ -343,8 +319,7 @@ class BusinessController extends AbstractActionController
         return $view;
     }
 
-    public function contractTabAction()
-    {
+    public function contractTabAction() {
         $business = $this->getBusiness();
         $view = new ViewModel([
             'business' => $business,
@@ -354,8 +329,7 @@ class BusinessController extends AbstractActionController
         return $view;
     }
 
-    public function businessUserTabAction()
-    {
+    public function businessUserTabAction() {
         $business = $this->getBusiness();
         $webUser = $this->businessService->findBusinessWebuser($business);
         $view = new ViewModel([
@@ -368,19 +342,15 @@ class BusinessController extends AbstractActionController
         return $view;
     }
 
-    public function disableContractAction()
-    {
+    public function disableContractAction() {
         $business = $this->getBusiness();
         $this->businessService->disableContract($business);
         return $this->redirect()->toRoute(
-            'business/edit',
-            ['code' => $business->getCode()],
-            ['query' => ['tab' => 'contract-status']]
+                        'business/edit', ['code' => $business->getCode()], ['query' => ['tab' => 'contract-status']]
         );
     }
 
-    public function setPackagesAsBuyableAction()
-    {
+    public function setPackagesAsBuyableAction() {
         $business = $this->getBusiness();
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
@@ -391,8 +361,7 @@ class BusinessController extends AbstractActionController
         return $this->response;
     }
 
-    public function approveEmployeeAction()
-    {
+    public function approveEmployeeAction() {
         $businessCode = $this->params()->fromRoute('code', 0);
         $employeeId = $this->params()->fromRoute('id', 0);
         $business = $this->businessService->getBusinessByCode($businessCode);
@@ -400,14 +369,11 @@ class BusinessController extends AbstractActionController
         $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente approvato'));
 
         return $this->redirect()->toRoute(
-            'business/edit',
-            ['code' => $businessCode],
-            ['query' => ['tab' => 'employees']]
+                        'business/edit', ['code' => $businessCode], ['query' => ['tab' => 'employees']]
         );
     }
 
-    public function removeEmployeeAction()
-    {
+    public function removeEmployeeAction() {
         $businessCode = $this->params()->fromRoute('code', 0);
         $employeeId = $this->params()->fromRoute('id', 0);
         $business = $this->businessService->getBusinessByCode($businessCode);
@@ -415,14 +381,11 @@ class BusinessController extends AbstractActionController
         $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente eliminato con successo'));
 
         return $this->redirect()->toRoute(
-            'business/edit',
-            ['code' => $businessCode],
-            ['query' => ['tab' => 'employees']]
+                        'business/edit', ['code' => $businessCode], ['query' => ['tab' => 'employees']]
         );
     }
 
-    public function blockEmployeeAction()
-    {
+    public function blockEmployeeAction() {
         $businessCode = $this->params()->fromRoute('code', 0);
         $employeeId = $this->params()->fromRoute('id', 0);
         $business = $this->businessService->getBusinessByCode($businessCode);
@@ -430,14 +393,11 @@ class BusinessController extends AbstractActionController
         $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente bloccato con successo'));
 
         return $this->redirect()->toRoute(
-            'business/edit',
-            ['code' => $businessCode],
-            ['query' => ['tab' => 'employees']]
+                        'business/edit', ['code' => $businessCode], ['query' => ['tab' => 'employees']]
         );
     }
 
-    public function unblockEmployeeAction()
-    {
+    public function unblockEmployeeAction() {
         $businessCode = $this->params()->fromRoute('code', 0);
         $employeeId = $this->params()->fromRoute('id', 0);
         $business = $this->businessService->getBusinessByCode($businessCode);
@@ -445,14 +405,11 @@ class BusinessController extends AbstractActionController
         $this->flashMessenger()->addSuccessMessage($this->translator->translate('Dipendente sbloccato con successo'));
 
         return $this->redirect()->toRoute(
-            'business/edit',
-            ['code' => $businessCode],
-            ['query' => ['tab' => 'employees']]
+                        'business/edit', ['code' => $businessCode], ['query' => ['tab' => 'employees']]
         );
     }
 
-    public function datatableAction()
-    {
+    public function datatableAction() {
         $filters = $this->params()->fromPost();
         $searchCriteria = $this->datatableService->getSearchCriteria($filters);
         $businesses = $this->businessService->searchBusinesses($searchCriteria);
@@ -460,15 +417,14 @@ class BusinessController extends AbstractActionController
         $totalBusinesses = $this->businessService->getTotalBusinesses();
 
         return new JsonModel([
-            'draw'            => $this->params()->fromQuery('sEcho', 0),
-            'recordsTotal'    => $totalBusinesses,
+            'draw' => $this->params()->fromQuery('sEcho', 0),
+            'recordsTotal' => $totalBusinesses,
             'recordsFiltered' => count($dataDataTable),
-            'data'            => $dataDataTable
+            'data' => $dataDataTable
         ]);
     }
 
-    protected function getBusiness()
-    {
+    protected function getBusiness() {
         $code = $this->params()->fromRoute('code', 0);
         $business = $this->businessService->getBusinessByCode($code);
 
@@ -479,9 +435,18 @@ class BusinessController extends AbstractActionController
         return $business;
     }
 
-    private function mapBusinessesToDatatable(array $businesses)
-    {
+    private function mapBusinessesToDatatable(array $businesses) {
         return array_map(function (Business $business) {
+            $paymentType = $this->translator->translate('Gold list');
+            switch ($business->getPaymentType()) {
+                case Business::TYPE_WIRE_TRANSFER:
+                    $paymentType = $this->translator->translate('Bonifico');
+                    break;
+                case Business::TYPE_CREDIT_CARD:
+                    $paymentType = $this->translator->translate('Carta');
+                    break;
+            }
+
             return [
                 'e' => [
                     'name' => $business->getName(),
@@ -491,8 +456,8 @@ class BusinessController extends AbstractActionController
                     'city' => $business->getCity(),
                     'phone' => $business->getPhone(),
                     'insertedTs' => $business->getInsertedTs()->format('d-m-Y H:i:s'),
-                    'isEnabled' => $business->isEnabled()? $this->translator->translate('Abilitata'): $this->translator->translate("Non abilitata"),
-
+                    'isEnabled' => $business->isEnabled() ? $this->translator->translate('Si') : $this->translator->translate("No"),
+                    'payment_type' => $paymentType,
                 ],
                 'button' => $business->getCode(),
             ];
@@ -505,8 +470,7 @@ class BusinessController extends AbstractActionController
      * @param $data
      * @return array
      */
-    private function getBuyablePackageIdsFromData($data)
-    {
+    private function getBuyablePackageIdsFromData($data) {
         $packageIds = [];
         foreach ($data as $key => $value) {
             if (substr($key, 0, 7) === 'package' && $value === 'on') {
@@ -517,8 +481,7 @@ class BusinessController extends AbstractActionController
         return $packageIds;
     }
 
-    public function typeaheadJsonAction()
-    {
+    public function typeaheadJsonAction() {
         $searchValue = $this->params()->fromQuery()['query'];
         $businesses = $this->businessService->findBySearchValue($searchValue);
 
@@ -533,9 +496,9 @@ class BusinessController extends AbstractActionController
         ]);
     }
 
-    private function manageChangeInBusinessSubscriptionFee(Business $business, BusinessConfigParams $inputData)
-    {
+    private function manageChangeInBusinessSubscriptionFee(Business $business, BusinessConfigParams $inputData) {
         $newAmount = $inputData->getSubscriptionFeeCents();
         $this->businessPaymentService->manageChangeInBusinessSubscriptionFee($business, $newAmount);
     }
+
 }

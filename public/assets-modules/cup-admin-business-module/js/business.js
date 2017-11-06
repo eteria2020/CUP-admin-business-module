@@ -38,6 +38,7 @@ $(function() {
             {data: 'e.vatNumber'},
             {data: 'e.insertedTs'},
             {data: 'e.isEnabled'},
+            {data: 'e.payment_type'},
             {data: 'button'}
         ],
 
@@ -55,7 +56,7 @@ $(function() {
                 }
             },
             {
-                targets: 8,
+                targets: 9,
                 data: 'button',
                 searchable: false,
                 sortable: false,
