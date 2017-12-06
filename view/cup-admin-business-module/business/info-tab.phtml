@@ -5,6 +5,15 @@ $form = $this->form->prepare();
     <div class="col-lg-12">
         <div class="row">
             <div class="col-lg-3">
+                <div class="form-group">
+                    <label> <?php echo $this->translate("Azienda abilitata");?></label>
+                    <input type="text" class="form-control" disabled="disabled" value="<?php echo ($this->business->isEnabled()) ? $this->translate("SI") : $this->translate("NO")?>">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3">
                 <?php
                 $field = $form->get('name');
                 $field->setValue($this->business->getName());
@@ -68,6 +77,52 @@ $form = $this->form->prepare();
                 $field = $form->get('vatNumber');
                 $field->setValue($this->business->getVatNumber());
                 echo $this->businessFormElement($this->translate("Partita IVA"), $field, true) ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <label> <?php echo $this->translate("Inserimento");?></label>
+                <input type="text" class="form-control" disabled="disabled" value="<?php echo (is_null($this->business->getInsertedTs())) ? $this->translate("mai") : $this->business->getInsertedTs()->format("d-m-y H:i:s")?>">
+            </div>
+            <div class="col-lg-3">
+                <label> <?php echo $this->translate("Aggiornamento");?></label>
+                <input type="text" class="form-control" disabled="disabled" value="<?php echo (is_null($this->business->getUpdatedTs())) ? $this->translate("mai") : $this->business->getUpdatedTs()->format("d-m-y H:i:s")?>">
+            </div>
+            <div class="col-lg-3">
+                <label> <?php echo $this->translate("Pagamento frequenza (ultimo)");?></label>
+                <input type="text" class="form-control" disabled="disabled" value="<?php
+                $frequence = $this->business->getPaymentFrequence();
+                if($frequence==="weekly") {
+                    $frequence = $this->translate("settimanale");
+                } else if ($frequence==="fortnightly") {
+                    $frequence = $this->translate("quindicinale");
+                } else if ($frequence==="monthly") {
+                    $frequence = $this->translate("mensile");
+                }
+
+                $last = $this->translate("mai");
+                if (!is_null($this->business->getLastPaymentExecution())) {
+                    $last = $this->business->getLastPaymentExecution()->format("d-m-y H:i:s");
+                }
+                echo $frequence." (".$last.")";?>">
+            </div>
+            <div class="col-lg-3">
+                <label> <?php echo $this->translate("Fatturazione frequenza (ultimo)");?></label>
+                <input type="text" class="form-control" disabled="disabled" value="<?php
+                $frequence = $this->business->getInvoiceFrequence();
+                if($frequence==="weekly") {
+                    $frequence = $this->translate("settimanale");
+                } else if ($frequence==="fortnightly") {
+                    $frequence = $this->translate("quindicinale");
+                } else if ($frequence==="monthly") {
+                    $frequence = $this->translate("mensile");
+                }
+
+                $last = "mai";
+                if (!is_null($this->business->getLastInvoiceExecution())) {
+                    $last = $this->business->getLastInvoiceExecution()->format("d-m-y H:i:s");
+                }
+                echo $frequence." (".$last.")";?>">
             </div>
         </div>
     </div>
