@@ -17,9 +17,10 @@ class PenaltyControllerFactory implements FactoryInterface
         $sharedServiceManager = $serviceLocator->getServiceLocator();
         $chargePenaltyOrExtraForm = $sharedServiceManager->get('CUPAdminBusinessModule\Form\ChargePenaltyOrExtraForm');
         $businessService = $sharedServiceManager->get('BusinessCore\Service\BusinessService');
+        $businessFleetService = $sharedServiceManager->get('BusinessCore\Service\BusinessFleetService');
         $businessPaymentService = $sharedServiceManager->get('BusinessCore\Service\BusinessPaymentService');
         $translator = $sharedServiceManager->get('translator');
 
-        return new PenaltyController($chargePenaltyOrExtraForm, $businessPaymentService, $businessService, $translator);
+        return new PenaltyController($chargePenaltyOrExtraForm, $businessPaymentService, $businessService, $businessFleetService, $translator);
     }
 }
