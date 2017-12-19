@@ -1,9 +1,9 @@
 <?php
 $this->headLink()
-    ->appendStylesheet('/css/autocomplete.css');
+        ->appendStylesheet('/css/autocomplete.css');
 $this->headScript()
-    ->appendFile($this->basePath() .'/js/libs/jquery.autocomplete.min.js')
-    ->appendFile($this->basePath() .'/js/penalty.js');
+        ->appendFile($this->basePath() . '/js/libs/jquery.autocomplete.min.js')
+        ->appendFile($this->basePath() . '/js/penalty.js');
 
 $form = $this->form->prepare();
 ?>
@@ -20,37 +20,59 @@ $form = $this->form->prepare();
 
         <?= $this->form()->openTag($form); ?>
 
-            <div class="form-group row">
-                <label for="select-business" class="col-sm-2 form-control-label"><?= $this->translate("Seleziona l'azienda"); ?></label>
-                <div class="col-sm-10">
-                    <?php
-                    $field = $form->get('business');
-                    echo $this->formElement($field) ?>
-                </div>
+        <div class="form-group row">
+            <label for="select-business" class="col-sm-2 form-control-label"><?= $this->translate("Seleziona l'azienda"); ?></label>
+            <div class="col-sm-10">
+                <?php
+                $field = $form->get('business');
+                echo $this->formElement($field)
+                ?>
             </div>
-            <div class="form-group row">
-                <label for="amount" class="col-sm-2 form-control-label"><?= $this->translate("Importo"); ?></label>
-                <div class="col-sm-10">
-                    <?php
-                    $field = $form->get('amount');
-                    echo $this->formElement($field) ?>
-                </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 form-control-label"><?= $this->translate("Flotta"); ?></label>
+            <div class="col-sm-10">
+                <select name="fleet" id="fleet" class="form-control">
+                    <?php foreach ($this->fleets as $fleet): ?>
+                        <option value="<?= $fleet->getId() ?>" <?= $fleet->getId()===1?"selected":"" ?>><?= $fleet->getName() ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
-            <div class="form-group row">
-                <label for="type" class="col-sm-2 form-control-label"><?= $this->translate("Causale"); ?></label>
-                <div class="col-sm-10">
-                    <?php
-                    $field = $form->get('reason');
-                    echo $this->formElement($field) ?>
-                </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 form-control-label"><?= $this->translate("Tipologia"); ?></label>
+            <div class="col-sm-10">
+                <select name="payment_type" id="payment_type" class="form-control">
+                    <option value="extra" selected>extra</option>
+                    <option value="penality">penality</option>
+                </select>
             </div>
+        </div>
+        <div class="form-group row">
+            <label for="amount" class="col-sm-2 form-control-label"><?= $this->translate("Importo"); ?></label>
+            <div class="col-sm-10">
+                <?php
+                $field = $form->get('amount');
+                echo $this->formElement($field)
+                ?>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="type" class="col-sm-2 form-control-label"><?= $this->translate("Causale"); ?></label>
+            <div class="col-sm-10">
+                <?php
+                $field = $form->get('reason');
+                echo $this->formElement($field)
+                ?>
+            </div>
+        </div>
 
-            <div class="form-group row">
-                <div class="col-sm-offset-2 col-sm-2">
-                    <button type="submit" class="btn btn-secondary"><?= $this->translate("Addebita importo"); ?></button>
-                </div>
+        <div class="form-group row">
+            <div class="col-sm-offset-2 col-sm-2">
+                <button type="submit" class="btn btn-secondary"><?= $this->translate("Addebita importo"); ?></button>
             </div>
-        <?= $this->form()->closeTag(); ?>
+        </div>
+<?= $this->form()->closeTag(); ?>
         <!-- END PAGE CONTENT-->
     </div>
 </div>
