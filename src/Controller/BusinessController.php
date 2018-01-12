@@ -212,8 +212,16 @@ class BusinessController extends AbstractActionController {
         $business = $this->getBusiness();
         $data = $this->getRequest()->getPost();
         try {
-            $user = BusinessUserFactory::businessUserfromArrayAndOptions($business, $data, $this->userServiceOptions);
-            $this->businessService->persistBusinessUser($user);
+            $webUser = $this->businessService->findBusinessWebuser($business);
+
+            if (is_null($webUser)) {
+                $webUser = BusinessUserFactory::businessUserfromArrayAndOptions($business, $data, $this->userServiceOptions);
+            } else {
+                $webUser = BusinessUserFactory::businessUserPasswordChange($webUser, $data, $this->userServiceOptions);
+            }
+
+            $this->businessService->persistBusinessUser($webUser);
+
             $this->flashMessenger()->addSuccessMessage($this->translator->translate('Utente business aggiunto con successo'));
         } catch (InvalidBusinessUserFormException $e) {
             $this->flashMessenger()->addErrorMessage($this->translator->translate($e->getMessage()));
