@@ -10,10 +10,51 @@ $form = $this->form->prepare();
             <h4><b><?= $this->translate("Id: ") ?></b><?= $this->webuser->getId() ?></h4>
             <h4><b><?= $this->translate("Nome: ") ?></b><?= $this->webuser->getDisplayName() ?></h4>
             <h4><b><?= $this->translate("Email: ") ?></b><?= $this->webuser->getEmail() ?></h4>
+            <br/>
+            <h4><b><?= $this->translate("Cambia password "); ?></b></h4>
+            <div class="row">
+                <?= $this->form()->openTag($form); ?>
+                <div class="col-lg-6">
+
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                            <label><?= $this->translate("Password"); ?></label>
+                            <small><?= $this->translate("minimo 8 caratteri"); ?></small>
+                            <?php
+                            $field = $form->get('password1');
+                            echo $this->formElement($field->setAttribute('class', 'form-control'));
+                            echo $this->formElementErrors($field, ['class' => 'text-danger']);
+                            ?>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                            <label><?= $this->translate("Ripeti password"); ?></label>
+                            <?php
+                            $field = $form->get('password2');
+                            echo $this->formElement($field->setAttribute('class', 'form-control'));
+                            echo $this->formElementErrors($field, ['class' => 'text-danger']);
+                            ?>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <br>
+                            <button type="submit" class="btn btn-success"><?= $this->translate("Cambia"); ?></button>
+                        </div>
+                    </div>
+                </div>
+                <?= $this->form()->closeTag(); ?>
+
+            </div>
+            <div class="row">
+
+            </div>
         </div>
     </div>
-    <?php
-} else { ?>
+<?php } else {
+    ?>
     <div class="row">
         <div class="col-lg-12">
             <?= $this->form()->openTag($form); ?>
