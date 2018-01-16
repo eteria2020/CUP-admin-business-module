@@ -131,17 +131,12 @@ class BusinessTripController extends AbstractActionController {
                     'id' => $trip->getCustomer()->getId(),
                     'email' => $trip->getCustomer()->getEmail(),
                     'surname' => $trip->getCustomer()->getSurname(),
-                    'name' => $trip->getCustomer()->getName(),
-                    'mobile' => $trip->getCustomer()->getMobile()
+                    'name' => $trip->getCustomer()->getName()
                 ],
                 'c' => [
                     'plate' => $plate,
                     'label' => $trip->getCar()->getLabel(),
-                    'parking' => $trip->getCar()->getParking() ? $translator->translate('Si') : $translator->translate('No'),
-                    'keyStatus' => $trip->getCar()->getKeystatus()
-                ],
-                'cc' => [
-                    'code' => is_object($trip->getCustomer()->getCard()) ? $trip->getCustomer()->getCard()->getCode() : ''
+                    'parking' => $trip->getCar()->getParking() ? $translator->translate('Si') : $translator->translate('No')
                 ],
                 'f' => [
                     'name' => $trip->getFleetName(),
