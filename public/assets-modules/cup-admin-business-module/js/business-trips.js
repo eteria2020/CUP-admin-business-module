@@ -9,7 +9,7 @@ $(function() {
     var dataTableVars = {
         searchValue: searchValue,
         column: $("#js-column"),
-        iSortCol_0: 5,
+        iSortCol_0: 6,
         sSortDir_0: "desc",
         iDisplayLength: 100,
         from: $("#js-date-from"),
@@ -66,9 +66,10 @@ $(function() {
         "columns": [
             {data: "e.id"},
             {data: "cu.email"},
-            {data: "cu.surname"},
-            {data: "cu.name"},
+            {data: "cu.fullname"},
             {data: "c.plate"},
+            {data: "e.kmBeginning"},
+            {data: "e.kmEnd"},
             {data: "e.timestampBeginning"},
             {data: "e.timestampEnd"},
             {data: "duration"},
@@ -83,45 +84,50 @@ $(function() {
         ],
         "columnDefs": [
             {
+                targets: 0,
+                "render": function ( data ) {
+                    return renderTripLink(data);
+                }
+            },
+            {
                 targets: 1,
                 visible: false
             },
             {
-                targets: [2, 3],
+                targets: 2,
                 "render": function (data, type, row) {
                     return '<a href="/customers/edit/' + row.cu.id + '" title="' +
-                        translate("showProfile") + " " + row.cu.name + " " +
-                        row.cu.surname + ' ">' + data + '</a>';
+                        translate("showProfile") + " " + row.cu.fullname + ' ">' + data + '</a>';
                 }
             },
             {
-                targets: 7,
+                targets: 8,
                 sortable: false
             },
             {
-                targets: 8,
+                targets: 9,
                 sortable: false,
                 "render": function ( data ) {
                     return renderParkingMinutes(data);
                 }
             },
             {
-                targets: 9,
-                sortable: false
-            },
-            {
-                targets: 11,
+                targets: 10,
                 sortable: false
             },
             {
                 targets: 12,
+                sortable: false
+            },
+            {
+                targets: 13,
                 sortable: false,
                 "render": function ( data ) {
                     return renderCostButton(data);
                 }
             },
             {
-                targets: 15,
+                targets: 16,
                 sortable: false,
                 "render": function ( data ) {
                     return renderInfoButton(data);
@@ -217,6 +223,14 @@ $(function() {
     function renderAmount(amount)
     {
         return (Math.floor(amount / 100)) + "," + toStringKeepZero(amount % 100) + " \u20ac";
+    }
+
+    function renderTripLink(data) {
+        var tripId = data;
+        if(data.indexOf("<br>")!==-1) {
+            tripId = data.substring(0, data.indexOf("<br>"));
+        }
+        return '<a href="/trips/details/' + tripId + '">' + data + '</a>';
     }
 
     function toStringKeepZero(value)
