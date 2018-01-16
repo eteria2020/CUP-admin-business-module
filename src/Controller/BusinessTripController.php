@@ -11,21 +11,25 @@ use Zend\Session\Container;
 use Zend\View\Helper\Url;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
+use BusinessCore\Entity\BusinessTripPayment;
 
-class BusinessTripController extends AbstractActionController
-{
+class BusinessTripController extends AbstractActionController {
+
     /**
      * @var DatatableService
      */
     private $datatableService;
+
     /**
      * @var BusinessAndPrivateTripService
      */
     private $businessAndPrivateTripService;
+
     /**
      * @var Url
      */
     private $urlHelper;
+
     /**
      * @var Container
      */
@@ -39,10 +43,7 @@ class BusinessTripController extends AbstractActionController
      * @param Container $datatableFiltersSessionContainer
      */
     public function __construct(
-        BusinessAndPrivateTripService $businessAndPrivateTripService,
-        DatatableService $datatableService,
-        Url $urlHelper,
-        Container $datatableFiltersSessionContainer
+    BusinessAndPrivateTripService $businessAndPrivateTripService, DatatableService $datatableService, Url $urlHelper, Container $datatableFiltersSessionContainer
     ) {
         $this->businessAndPrivateTripService = $businessAndPrivateTripService;
         $this->datatableService = $datatableService;
@@ -56,13 +57,11 @@ class BusinessTripController extends AbstractActionController
      *
      * @return array
      */
-    private function getDataTableSessionFilters()
-    {
+    private function getDataTableSessionFilters() {
         return $this->datatableFiltersSessionContainer->offsetGet('Trips');
     }
 
-    public function indexAction()
-    {
+    public function indexAction() {
         $sessionDatatableFilters = $this->getDataTableSessionFilters();
 
         return new ViewModel([
@@ -70,11 +69,11 @@ class BusinessTripController extends AbstractActionController
         ]);
     }
 
-    public function datatableAction()
-    {
+    public function datatableAction() {
         $filters = $this->params()->fromPost();
 
-        if (!empty($filters)) $this->datatableFiltersSessionContainer->offsetSet('Trips', $filters);
+        if (!empty($filters))
+            $this->datatableFiltersSessionContainer->offsetSet('Trips', $filters);
 
         $searchCriteria = $this->datatableService->getSearchCriteria($filters);
         $trips = $this->businessAndPrivateTripService->searchTrips($searchCriteria);
@@ -83,28 +82,23 @@ class BusinessTripController extends AbstractActionController
         $totalTrips = $this->businessAndPrivateTripService->getTotalTrips();
 
         return new JsonModel([
-            'draw'            => $this->params()->fromQuery('sEcho', 0),
-            'recordsTotal'    => $totalTrips,
+            'draw' => $this->params()->fromQuery('sEcho', 0),
+            'recordsTotal' => $totalTrips,
             'recordsFiltered' => $tripsWithoutPagination,
-            'data'            => $dataDataTable
+            'data' => $dataDataTable
         ]);
     }
 
-    private function getClickablePlate(Trips $trip)
-    {
+    private function getClickablePlate(Trips $trip) {
         $urlHelper = $this->urlHelper;
         return sprintf(
-            '<a href="%s">%s</a>',
-            $urlHelper(
-                'cars/edit',
-                ['plate' => $trip->getCar()->getPlate()]
-            ),
-            $trip->getCar()->getPlate()
+                '<a href="%s">%s</a>', $urlHelper(
+                        'cars/edit', ['plate' => $trip->getCar()->getPlate()]
+                ), $trip->getCar()->getPlate()
         );
     }
 
-    private function mapBusinessTripsToDatatable(array $trips)
-    {
+    private function mapBusinessTripsToDatatable(array $trips) {
         return array_map(function (Trips $trip) {
             $translator = $this->TranslatorPlugin();
 
@@ -131,58 +125,85 @@ class BusinessTripController extends AbstractActionController
                     'payable' => $trip->getPayable() ? $translator->translate('Si') : $translator->translate('No'),
                     'totalCost' => ['amount' => $tripCost, 'id' => $trip->getId()],
                     'idLink' => $trip->getId(),
-                    'isBusiness' => is_null($trip->getPinType()) ? $translator->translate('No') : $translator->translate('Si')
+                    'isBusiness' => $trip->isBusiness() ? $translator->translate('Si') : $translator->translate('No')
                 ],
                 'cu' => [
                     'id' => $trip->getCustomer()->getId(),
                     'email' => $trip->getCustomer()->getEmail(),
-                    'surname' => $trip->getCustomer()->getSurname(),
-                    'name' => $trip->getCustomer()->getName(),
-                    'mobile' => $trip->getCustomer()->getMobile()
+                    'fullname' => $trip->getCustomer()->getSurname() . ' ' . $trip->getCustomer()->getName()
                 ],
                 'c' => [
                     'plate' => $plate,
                     'label' => $trip->getCar()->getLabel(),
-                    'parking' => $trip->getCar()->getParking() ? $translator->translate('Si') : $translator->translate('No'),
-                    'keyStatus' => $trip->getCar()->getKeystatus()
-                ],
-                'cc' => [
-                    'code' => is_object($trip->getCustomer()->getCard()) ? $trip->getCustomer()->getCard()->getCode() : ''
-
+                    'parking' => $trip->getCar()->getParking() ? $translator->translate('Si') : $translator->translate('No')
                 ],
                 'f' => [
                     'name' => $trip->getFleetName(),
                 ],
                 'duration' => $this->getDuration($trip->getTimestampBeginning(), $trip->getTimestampEnd()),
-                'payed' => $trip->getPayable() ? ($trip->isPaymentCompleted() ? $translator->translate('Si') : $translator->translate('No')) : '-'
+                'payed' => $this->getPayed($trip)
             ];
         }, $trips);
     }
 
+    private function calculateTripCost(Trips $trip) {
+        $result = '';
 
-    private function calculateTripCost(Trips $trip)
-    {
         if ($trip->isEnded()) {
             if ($trip->getPayable() && $trip->isAccountable()) {
-                $tripPayment = $trip->getTripPayment();
-                if ($tripPayment instanceof TripPayments) {
-                    return $tripPayment->getTotalCost();
+                if ($trip->isBusiness()) {
+                    $businessTripPayment = $this->businessAndPrivateTripService->searchBusinessTripPaymentByTrip($trip);
+                    if ($businessTripPayment instanceof BusinessTripPayment) {
+                        $result = $businessTripPayment->getAmount();
+                    } else {
+                        $result = 0;
+                    }
                 } else {
-                    return 0;
+                    $tripPayment = $trip->getTripPayment();
+                    if ($tripPayment instanceof TripPayments) {
+                        $result = $tripPayment->getTotalCost();
+                    } else {
+                        $result = 0;
+                    }
                 }
             } else {
-                return 'FREE';
+                $result = 'FREE';
             }
         }
-        return '';
+        return $result;
     }
 
-    public function getDuration($from, $to)
-    {
+    public function getDuration($from, $to) {
         $translator = $this->TranslatorPlugin();
         if (empty($from) || empty($to)) {
             return $translator->translate('n.d.');
         }
         return $from->diff($to)->format('%dg %H:%I:%S');
     }
+
+    public function getPayed(Trips $trips) {
+        $result = '-';
+
+        if ($trips->isBusiness()) {
+            $businessTripPayment = $this->businessAndPrivateTripService->searchBusinessTripPaymentByTrip($trips);
+            if ($businessTripPayment instanceof BusinessTripPayment) {
+                if ($businessTripPayment->getStatus() === BusinessTripPayment::STATUS_PENDING) {
+                    $result = 'No';
+                } else {
+                    $result = 'Si';
+                }
+            }
+        } else {
+            if ($trips->getPayable()) {
+                if ($trips->isPaymentCompleted()) {
+                    $result = 'Si';
+                } else {
+                    $result = 'No';
+                }
+            }
+        }
+
+        return $result;
+    }
+
 }

@@ -9,7 +9,7 @@ $(function() {
     var dataTableVars = {
         searchValue: searchValue,
         column: $("#js-column"),
-        iSortCol_0: 9,
+        iSortCol_0: 6,
         sSortDir_0: "desc",
         iDisplayLength: 100,
         from: $("#js-date-from"),
@@ -66,10 +66,7 @@ $(function() {
         "columns": [
             {data: "e.id"},
             {data: "cu.email"},
-            {data: "cu.surname"},
-            {data: "cu.name"},
-            {data: "cu.mobile"},
-            {data: "cc.code"},
+            {data: "cu.fullname"},
             {data: "c.plate"},
             {data: "e.kmBeginning"},
             {data: "e.kmEnd"},
@@ -77,7 +74,6 @@ $(function() {
             {data: "e.timestampEnd"},
             {data: "duration"},
             {data: "e.parkSeconds"},
-            {data: "c.keyStatus"},
             {data: "c.parking"},
             {data: "e.payable"},
             {data: "payed"},
@@ -88,49 +84,50 @@ $(function() {
         ],
         "columnDefs": [
             {
+                targets: 0,
+                "render": function ( data ) {
+                    return renderTripLink(data);
+                }
+            },
+            {
                 targets: 1,
                 visible: false
             },
             {
-                targets: [2, 3],
+                targets: 2,
                 "render": function (data, type, row) {
                     return '<a href="/customers/edit/' + row.cu.id + '" title="' +
-                        translate("showProfile") + " " + row.cu.name + " " +
-                        row.cu.surname + ' ">' + data + '</a>';
+                        translate("showProfile") + " " + row.cu.fullname + ' ">' + data + '</a>';
                 }
             },
             {
-                targets: 11,
+                targets: 8,
                 sortable: false
             },
             {
-                targets: 12,
+                targets: 9,
                 sortable: false,
                 "render": function ( data ) {
                     return renderParkingMinutes(data);
                 }
             },
             {
+                targets: 10,
+                sortable: false
+            },
+            {
+                targets: 12,
+                sortable: false
+            },
+            {
                 targets: 13,
-                sortable: false
-            },
-            {
-                targets: 14,
-                sortable: false
-            },
-            {
-                targets: 16,
-                sortable: false
-            },
-            {
-                targets: 17,
                 sortable: false,
                 "render": function ( data ) {
                     return renderCostButton(data);
                 }
             },
             {
-                targets: 20,
+                targets: 16,
                 sortable: false,
                 "render": function ( data ) {
                     return renderInfoButton(data);
@@ -226,6 +223,14 @@ $(function() {
     function renderAmount(amount)
     {
         return (Math.floor(amount / 100)) + "," + toStringKeepZero(amount % 100) + " \u20ac";
+    }
+
+    function renderTripLink(data) {
+        var tripId = data;
+        if(data.indexOf("<br>")!==-1) {
+            tripId = data.substring(0, data.indexOf("<br>"));
+        }
+        return '<a href="/trips/details/' + tripId + '">' + data + '</a>';
     }
 
     function toStringKeepZero(value)

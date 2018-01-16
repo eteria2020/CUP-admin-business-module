@@ -4,9 +4,10 @@ namespace CUPAdminBusinessModule\Service\Queries;
 
 use BusinessCore\Service\Helper\SearchCriteria;
 use Doctrine\ORM\EntityManager;
+use SharengoCore\Entity\Trips;
 
-class BusinessAndPrivateTripQueries
-{
+class BusinessAndPrivateTripQueries {
+
     /**
      * @var EntityManager
      */
@@ -16,19 +17,16 @@ class BusinessAndPrivateTripQueries
      * BusinessAndPrivateTripRepository constructor.
      * @param EntityManager $entityManager
      */
-    public function __construct(EntityManager $entityManager)
-    {
+    public function __construct(EntityManager $entityManager) {
         $this->entityManager = $entityManager;
     }
 
-    public function countAll()
-    {
+    public function countAll() {
         $query = $this->entityManager->createQuery('SELECT COUNT(t.id) FROM \SharengoCore\Entity\Trips t ');
         return $query->getSingleScalarResult();
     }
 
-    public function searchTrips(SearchCriteria $searchCriteria, $countFiltered = false)
-    {
+    public function searchTrips(SearchCriteria $searchCriteria, $countFiltered = false) {
         $select = $countFiltered ? 'COUNT(e.id)' : 'e';
         $dql = 'SELECT ' . $select . '
         FROM \SharengoCore\Entity\Trips e
@@ -51,11 +49,11 @@ class BusinessAndPrivateTripQueries
             $dql .= 'WHERE ' . $searchColumnNull . ' IS NULL ';
             $where = true;
         } else if (!empty($searchColumn) && !empty($searchValue)) {
-            switch($searchColumn) {
+            switch ($searchColumn) {
                 case 'bt.business':
                     //if I'm searching by business code i have to get the Identity of the property business of the entity BusinessTrip
-                    $searchColumn = 'IDENTITY('.$searchColumn.')';
-                    //intentional fall through
+                    $searchColumn = 'IDENTITY(' . $searchColumn . ')';
+                //intentional fall through
                 case 'e.id':
                 case 'cu.id':
                     $dql .= 'WHERE ' . $searchColumn . ' = :value ';
@@ -74,11 +72,11 @@ class BusinessAndPrivateTripQueries
         $columnFromDate = $searchCriteria->getColumnFromDate();
         $columnToDate = $searchCriteria->getColumnToDate();
         if (!empty($fromDate) &&
-            !empty($toDate) &&
-            !empty($columnFromDate) &&
-            !empty($columnToDate)
+                !empty($toDate) &&
+                !empty($columnFromDate) &&
+                !empty($columnToDate)
         ) {
-            $dql .= ($where?' AND ' : ' WHERE ') . $columnFromDate . ' >= :from ';
+            $dql .= ($where ? ' AND ' : ' WHERE ') . $columnFromDate . ' >= :from ';
             $dql .= ' AND ' . $columnToDate . ' <= :to ';
             $query->setParameter('from', $fromDate . ' 00:00:00');
             $query->setParameter('to', $toDate . ' 23:59:59');
@@ -113,4 +111,20 @@ class BusinessAndPrivateTripQueries
 
         return $query->getResult();
     }
+
+    /**
+     *
+     * @param \SharengoCore\Entity\Trips $trips
+     * @return \BusinessCore\Entity\BusinessTripPayment
+     */
+    public function searchBusinessTripPaymentByTrip(Trips $trips) {
+        $dql = 'SELECT btp FROM \BusinessCore\Entity\BusinessTripPayment btp ' .
+                'INNER JOIN btp.businessTrip bt ' .
+                'WHERE bt.trip = :trips';
+
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameter('trips', $trips);
+        return $query->getOneOrNullResult();
+    }
+
 }
