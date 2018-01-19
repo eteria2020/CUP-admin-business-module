@@ -204,12 +204,6 @@ $(function() {
         return amount;
     }
 
-    function renderInfoButton(data)
-    {
-        return '<div class="btn-group">' + '<a href="/trips/details/' + data +
-            '" class="btn btn-default">' + translate("details") + '</a> ' + '</div>';
-    }
-
     function renderAmount(amount)
     {
         return (Math.floor(amount / 100)) + "," + toStringKeepZero(amount % 100) + " \u20ac";
