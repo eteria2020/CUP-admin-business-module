@@ -117,8 +117,6 @@ class BusinessTripController extends AbstractActionController {
             return [
                 'e' => [
                     'id' => $trip->getId() . $parentId,
-                    'kmBeginning' => $trip->getKmBeginning(),
-                    'kmEnd' => $trip->getKmEnd(),
                     'timestampBeginning' => $trip->getTimestampBeginning()->format('d-m-Y H:i:s') . $parentStart,
                     'timestampEnd' => (is_null($trip->getTimestampEnd()) ? '' : $trip->getTimestampEnd()->format('d-m-Y H:i:s')),
                     'parkSeconds' => $trip->getParkSeconds() . ' sec',

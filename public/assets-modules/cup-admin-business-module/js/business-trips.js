@@ -9,7 +9,7 @@ $(function() {
     var dataTableVars = {
         searchValue: searchValue,
         column: $("#js-column"),
-        iSortCol_0: 6,
+        iSortCol_0: 4,
         sSortDir_0: "desc",
         iDisplayLength: 100,
         from: $("#js-date-from"),
@@ -68,8 +68,6 @@ $(function() {
             {data: "cu.email"},
             {data: "cu.fullname"},
             {data: "c.plate"},
-            {data: "e.kmBeginning"},
-            {data: "e.kmEnd"},
             {data: "e.timestampBeginning"},
             {data: "e.timestampEnd"},
             {data: "duration"},
@@ -84,7 +82,7 @@ $(function() {
         ],
         "columnDefs": [
             {
-                targets: 0,
+                targets: 0,     //id
                 "render": function ( data ) {
                     return renderTripLink(data);
                 }
@@ -94,40 +92,40 @@ $(function() {
                 visible: false
             },
             {
-                targets: 2,
+                targets: 2,     //Cognome/nome
                 "render": function (data, type, row) {
                     return '<a href="/customers/edit/' + row.cu.id + '" title="' +
                         translate("showProfile") + " " + row.cu.fullname + ' ">' + data + '</a>';
                 }
             },
             {
-                targets: 8,
+                targets: 6,     //Durata
                 sortable: false
             },
             {
-                targets: 9,
+                targets: 7,     //Sosta
                 sortable: false,
                 "render": function ( data ) {
                     return renderParkingMinutes(data);
                 }
             },
             {
-                targets: 10,
+                targets: 8,     //In Sosta
                 sortable: false
             },
             {
-                targets: 12,
+                targets: 10,    //Pagata
                 sortable: false
             },
             {
-                targets: 13,
+                targets: 11,    //Costo
                 sortable: false,
                 "render": function ( data ) {
                     return renderCostButton(data);
                 }
             },
             {
-                targets: 16,
+                targets: 14,    //Button
                 sortable: false,
                 "render": function ( data ) {
                     return renderInfoButton(data);
