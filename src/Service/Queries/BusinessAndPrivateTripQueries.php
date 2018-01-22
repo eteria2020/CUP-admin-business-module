@@ -35,8 +35,7 @@ class BusinessAndPrivateTripQueries {
         LEFT JOIN e.customer cu
         LEFT JOIN cu.card cc
         LEFT JOIN e.fleet f
-        LEFT JOIN e.car c
-        LEFT JOIN e.tripPayment tp ';
+        LEFT JOIN e.car c ';
 
         $query = $this->entityManager->createQuery();
 

@@ -117,8 +117,6 @@ class BusinessTripController extends AbstractActionController {
             return [
                 'e' => [
                     'id' => $trip->getId() . $parentId,
-                    'kmBeginning' => $trip->getKmBeginning(),
-                    'kmEnd' => $trip->getKmEnd(),
                     'timestampBeginning' => $trip->getTimestampBeginning()->format('d-m-Y H:i:s') . $parentStart,
                     'timestampEnd' => (is_null($trip->getTimestampEnd()) ? '' : $trip->getTimestampEnd()->format('d-m-Y H:i:s')),
                     'parkSeconds' => $trip->getParkSeconds() . ' sec',
@@ -130,12 +128,17 @@ class BusinessTripController extends AbstractActionController {
                 'cu' => [
                     'id' => $trip->getCustomer()->getId(),
                     'email' => $trip->getCustomer()->getEmail(),
-                    'fullname' => $trip->getCustomer()->getSurname() . ' ' . $trip->getCustomer()->getName()
+                    'fullname' => $trip->getCustomer()->getSurname() . ' ' . $trip->getCustomer()->getName(),
+                    'mobile' => $trip->getCustomer()->getMobile()
                 ],
                 'c' => [
                     'plate' => $plate,
                     'label' => $trip->getCar()->getLabel(),
-                    'parking' => $trip->getCar()->getParking() ? $translator->translate('Si') : $translator->translate('No')
+                    'parking' => $trip->getCar()->getParking() ? $translator->translate('Si') : $translator->translate('No'),
+                    'keyStatus' => $trip->getCar()->getKeystatus()
+                ],
+                'cc' => [
+                    'code' => is_null($trip->getCustomer()->getCard()) ? '' : $trip->getCustomer()->getCard()->getCode() 
                 ],
                 'f' => [
                     'name' => $trip->getFleetName(),
@@ -178,7 +181,7 @@ class BusinessTripController extends AbstractActionController {
         if (empty($from) || empty($to)) {
             return $translator->translate('n.d.');
         }
-        return $from->diff($to)->format('%dg %H:%I:%S');
+        return $from->diff($to)->format('%a g %H:%I:%S');
     }
 
     public function getPayed(Trips $trips) {
