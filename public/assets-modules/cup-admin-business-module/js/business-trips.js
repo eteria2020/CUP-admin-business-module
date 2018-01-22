@@ -9,7 +9,7 @@ $(function() {
     var dataTableVars = {
         searchValue: searchValue,
         column: $("#js-column"),
-        iSortCol_0: 4,
+        iSortCol_0: 7,
         sSortDir_0: "desc",
         iDisplayLength: 100,
         from: $("#js-date-from"),
@@ -68,6 +68,9 @@ $(function() {
             {data: "cu.email"},
             {data: "cu.fullname"},
             {data: "c.plate"},
+            {data: "cu.mobile"},
+            {data: "cc.code"},
+            {data: "c.keyStatus"},
             {data: "e.timestampBeginning"},
             {data: "e.timestampEnd"},
             {data: "duration"},
@@ -98,26 +101,34 @@ $(function() {
                 }
             },
             {
-                targets: 6,     //Durata
+                targets: 4,     //Tel.mobile
                 sortable: false
             },
             {
-                targets: 7,     //Sosta
+                targets: 5,     //RFID
+                sortable: false
+            },
+            {
+                targets: 9,     //Durata
+                sortable: false
+            },
+            {
+                targets: 10,     //Sosta
                 sortable: false,
                 "render": function ( data ) {
                     return renderParkingMinutes(data);
                 }
             },
             {
-                targets: 8,     //In Sosta
+                targets: 11,     //In Sosta
                 sortable: false
             },
             {
-                targets: 10,    //Pagata
+                targets: 13,    //Pagata
                 sortable: false
             },
             {
-                targets: 11,    //Costo
+                targets: 14,    //Costo
                 sortable: false,
                 "render": function ( data ) {
                     return renderCostButton(data);
