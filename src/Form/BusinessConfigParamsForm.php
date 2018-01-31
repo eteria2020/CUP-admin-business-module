@@ -8,14 +8,12 @@ use CUPAdminBusinessModule\Form\Helper\BusinessPaymentHelper;
 use Zend\Form\Form;
 use Zend\Mvc\I18n\Translator;
 
-class BusinessConfigParamsForm extends Form
-{
+class BusinessConfigParamsForm extends Form {
+
     public function __construct(
-        Translator $translator,
-        BusinessPaymentHelper $businessPaymentHelper,
-        BusinessFleetService $fleetService
+    Translator $translator, BusinessPaymentHelper $businessPaymentHelper, BusinessFleetService $fleetService
     ) {
-        $fleets = $fleetService->findAll();
+        $fleets = $fleetService->findAllNoDummy();
         $fleetsSelect = [];
 
         foreach ($fleets as $fleet) {
@@ -26,13 +24,13 @@ class BusinessConfigParamsForm extends Form
         $this->setAttribute('method', 'post');
 
         $this->add([
-            'name'       => 'paymentType',
-            'type'       => 'Zend\Form\Element\Select',
+            'name' => 'paymentType',
+            'type' => 'Zend\Form\Element\Select',
             'attributes' => [
-                'id'       => 'paymentType',
-                'class'    => 'form-control'
+                'id' => 'paymentType',
+                'class' => 'form-control'
             ],
-            'options'    => [
+            'options' => [
                 'value_options' => [
                     null => $translator->translate("Gold list"),
                     Business::TYPE_WIRE_TRANSFER => $businessPaymentHelper->getPrintableVersion(Business::TYPE_WIRE_TRANSFER),
@@ -42,30 +40,13 @@ class BusinessConfigParamsForm extends Form
         ]);
 
         $this->add([
-            'name'       => 'paymentFrequence',
-            'type'       => 'Zend\Form\Element\Select',
+            'name' => 'paymentFrequence',
+            'type' => 'Zend\Form\Element\Select',
             'attributes' => [
-                'id'       => 'paymentFrequence',
-                'class'    => 'form-control'
+                'id' => 'paymentFrequence',
+                'class' => 'form-control'
             ],
-            'options'    => [
-            'value_options' => [
-                null => '---',
-                Business::FREQUENCE_WEEKLY => $businessPaymentHelper->getPrintableVersion(Business::FREQUENCE_WEEKLY),
-                Business::FREQUENCE_FORTNIGHTLY => $businessPaymentHelper->getPrintableVersion(Business::FREQUENCE_FORTNIGHTLY),
-                Business::FREQUENCE_MONTHLY => $businessPaymentHelper->getPrintableVersion(Business::FREQUENCE_MONTHLY)
-            ]
-        ]
-        ]);
-
-        $this->add([
-            'name'       => 'invoiceFrequence',
-            'type'       => 'Zend\Form\Element\Select',
-            'attributes' => [
-                'id'       => 'invoiceFrequence',
-                'class'    => 'form-control'
-            ],
-            'options'    => [
+            'options' => [
                 'value_options' => [
                     null => '---',
                     Business::FREQUENCE_WEEKLY => $businessPaymentHelper->getPrintableVersion(Business::FREQUENCE_WEEKLY),
@@ -76,46 +57,62 @@ class BusinessConfigParamsForm extends Form
         ]);
 
         $this->add([
-            'name'       => 'businessEnabled',
-            'type'       => 'Zend\Form\Element\Select',
+            'name' => 'invoiceFrequence',
+            'type' => 'Zend\Form\Element\Select',
             'attributes' => [
-                'id'       => 'businessEnabled',
-                'class'    => 'form-control'
+                'id' => 'invoiceFrequence',
+                'class' => 'form-control'
             ],
-            'options'    => [
+            'options' => [
+                'value_options' => [
+                    null => '---',
+                    Business::FREQUENCE_WEEKLY => $businessPaymentHelper->getPrintableVersion(Business::FREQUENCE_WEEKLY),
+                    Business::FREQUENCE_FORTNIGHTLY => $businessPaymentHelper->getPrintableVersion(Business::FREQUENCE_FORTNIGHTLY),
+                    Business::FREQUENCE_MONTHLY => $businessPaymentHelper->getPrintableVersion(Business::FREQUENCE_MONTHLY)
+                ]
+            ]
+        ]);
+
+        $this->add([
+            'name' => 'businessEnabled',
+            'type' => 'Zend\Form\Element\Select',
+            'attributes' => [
+                'id' => 'businessEnabled',
+                'class' => 'form-control'
+            ],
+            'options' => [
                 'value_options' => [
                     'false' => $translator->translate("No"),
                     'true' => $translator->translate("Si")
-                    ]
                 ]
+            ]
         ]);
 
         $this->add([
-            'name'       => 'businessMailControl',
-            'type'       => 'Zend\Form\Element\Select',
+            'name' => 'businessMailControl',
+            'type' => 'Zend\Form\Element\Select',
             'attributes' => [
-                'id'       => 'businessMailControl',
-                'class'    => 'form-control'
+                'id' => 'businessMailControl',
+                'class' => 'form-control'
             ],
-            'options'    => [
+            'options' => [
                 'value_options' => [
                     0 => $translator->translate("No"),
                     1 => $translator->translate("Si")
-                    ]
                 ]
+            ]
         ]);
 
         $this->add([
-            'name'       => 'subscriptionFeeCents',
-            'type'       => 'Zend\Form\Element\Number',
+            'name' => 'subscriptionFeeCents',
+            'type' => 'Zend\Form\Element\Number',
             'attributes' => [
-                'id'       => 'subscriptionFeeCents',
-                'class'    => 'form-control',
+                'id' => 'subscriptionFeeCents',
+                'class' => 'form-control',
                 'min' => 1.00,
                 'step' => 0.01,
                 'required' => 'required',
             ],
-
         ]);
 
         $this->add([
@@ -123,7 +120,7 @@ class BusinessConfigParamsForm extends Form
             'type' => 'Zend\Form\Element\Select',
             'attributes' => [
                 'id' => 'fleet',
-                'class'    => 'form-control'
+                'class' => 'form-control'
             ],
             'options' => [
                 'value_options' => $fleetsSelect
@@ -131,11 +128,12 @@ class BusinessConfigParamsForm extends Form
         ]);
 
         $this->add([
-            'name'       => 'submit',
+            'name' => 'submit',
             'attributes' => [
-                'type'  => 'submit',
+                'type' => 'submit',
                 'value' => 'Submit'
             ]
         ]);
     }
+
 }
