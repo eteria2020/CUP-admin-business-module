@@ -11,24 +11,28 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\I18n\Translator;
 use Zend\View\Model\ViewModel;
 
-class PenaltyController extends AbstractActionController
-{
+class PenaltyController extends AbstractActionController {
+
     /**
      * @var ChargePenaltyOrExtraForm
      */
     private $chargePenaltyOrExtraForm;
+
     /**
      * @var BusinessPaymentService
      */
     private $businessPaymentService;
+
     /**
      * @var BusinessService
      */
     private $businessService;
+
     /**
      * @var BusinessFleetService
      */
     private $businessFleetService;
+
     /**
      * @var Translator
      */
@@ -42,13 +46,7 @@ class PenaltyController extends AbstractActionController
      * @param BusinessFleet $businessFleetService
      * @param Translator $translator
      */
-    public function __construct(
-        ChargePenaltyOrExtraForm $chargePenaltyOrExtraForm,
-        BusinessPaymentService $businessPaymentService,
-        BusinessService $businessService,
-        BusinessFleetService $businessFleetService,
-        Translator $translator
-    ) {
+    public function __construct(ChargePenaltyOrExtraForm $chargePenaltyOrExtraForm, BusinessPaymentService $businessPaymentService, BusinessService $businessService, BusinessFleetService $businessFleetService, Translator $translator) {
         $this->chargePenaltyOrExtraForm = $chargePenaltyOrExtraForm;
         $this->businessPaymentService = $businessPaymentService;
         $this->businessService = $businessService;
@@ -56,8 +54,7 @@ class PenaltyController extends AbstractActionController
         $this->translator = $translator;
     }
 
-    public function chargeAction()
-    {
+    public function chargeAction() {
         if ($this->getRequest()->isPost()) {
             try {
                 $data = $this->getRequest()->getPost();
@@ -69,14 +66,12 @@ class PenaltyController extends AbstractActionController
                 $this->flashMessenger()->addErrorMessage($e->getMessage());
             }
 
-            return $this->redirect()->toRoute(
-                'business/penalty'
-            );
-
+            return $this->redirect()->toRoute('business/penalty');
         }
         return new ViewModel([
             'form' => $this->chargePenaltyOrExtraForm,
-            'fleets' => $this->businessFleetService->findAll()
+            'fleets' => $this->businessFleetService->findAllNoDummy()
         ]);
     }
+
 }
