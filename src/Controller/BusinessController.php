@@ -83,6 +83,10 @@ class BusinessController extends AbstractActionController {
      */
     private $userServiceOptions;
 
+     /**
+     * @var array
+     */
+    private $roles;
     /**
      * BusinessController constructor.
      * @param Translator $translator
@@ -96,9 +100,10 @@ class BusinessController extends AbstractActionController {
      * @param BusinessFleetService $fleetService
      * @param BusinessPaymentService $businessPaymentService
      * @param UserServiceOptionsInterface $userServiceOptions
+     * @param array $roles
      */
     public function __construct(
-    Translator $translator, DatatableService $datatableService, BusinessService $businessService, BusinessTimePackageService $businessTimePackageService, BusinessDetailsForm $businessDetailsForm, BusinessConfigParamsForm $businessConfigParamsForm, BusinessFareForm $businessFareForm, BusinessUserForm $businessUserForm, BusinessFleetService $fleetService, BusinessPaymentService $businessPaymentService, UserServiceOptionsInterface $userServiceOptions
+    Translator $translator, DatatableService $datatableService, BusinessService $businessService, BusinessTimePackageService $businessTimePackageService, BusinessDetailsForm $businessDetailsForm, BusinessConfigParamsForm $businessConfigParamsForm, BusinessFareForm $businessFareForm, BusinessUserForm $businessUserForm, BusinessFleetService $fleetService, BusinessPaymentService $businessPaymentService, UserServiceOptionsInterface $userServiceOptions, $roles
     ) {
         $this->businessService = $businessService;
         $this->translator = $translator;
@@ -111,6 +116,7 @@ class BusinessController extends AbstractActionController {
         $this->businessPaymentService = $businessPaymentService;
         $this->businessUserForm = $businessUserForm;
         $this->userServiceOptions = $userServiceOptions;
+        $this->roles = $roles;
     }
 
     public function indexAction() {
@@ -122,6 +128,7 @@ class BusinessController extends AbstractActionController {
             $data = $this->getRequest()->getPost()->toArray();
 
             try {
+                $this->checkSuperAdminPaymentTypeGoldList($data);
                 $data['fleet'] = $this->fleetService->findFleetById(intval($data['fleet']));
 
                 $inputData = BusinessDataFactory::businessDetailsfromArray($data);
@@ -139,7 +146,8 @@ class BusinessController extends AbstractActionController {
         }
         return new ViewModel([
             'detailsForm' => $this->businessDetailsForm,
-            'paramsForm' => $this->businessConfigParamsForm
+            'paramsForm' => $this->businessConfigParamsForm,
+            'faresForm' => $this->businessFareForm
         ]);
     }
 
@@ -175,6 +183,8 @@ class BusinessController extends AbstractActionController {
         $business = $this->getBusiness();
         $data = $this->getRequest()->getPost()->toArray();
         try {
+            $this->checkSuperAdminPaymentTypeGoldList($data, $business);
+
             $data['fleet'] = $this->fleetService->findFleetById(intval($data['fleet']));
             //if subscription fee cents was disabled, because it has already been payed
             //"data" won't contain the value, so I set it manually as the current amount
@@ -262,6 +272,7 @@ class BusinessController extends AbstractActionController {
         /** @var Business $business */
         $business = $this->getBusiness();
         $subscriptionPayment = $this->businessPaymentService->getBusinessSubscriptionPayment($business);
+
         $view = new ViewModel([
             'subscriptionPayed' => $subscriptionPayment->isPayed() || $subscriptionPayment->isExpectedPayed(),
             'business' => $business,
@@ -298,6 +309,14 @@ class BusinessController extends AbstractActionController {
         /** @var Business $business */
         $business = $this->getBusiness();
         $fare = $business->getActiveBusinessFare();
+
+        if(in_array('superadmin', $this->roles)) {
+
+        } else{
+            $this->businessFareForm->getElements()['motion']->setAttribute('readonly', 'readonly');
+            $this->businessFareForm->getElements()['park']->setAttribute('readonly', 'readonly');
+        }
+
         $view = new ViewModel([
             'business' => $business,
             'fare' => $fare,
@@ -507,6 +526,36 @@ class BusinessController extends AbstractActionController {
     private function manageChangeInBusinessSubscriptionFee(Business $business, BusinessConfigParams $inputData) {
         $newAmount = $inputData->getSubscriptionFeeCents();
         $this->businessPaymentService->manageChangeInBusinessSubscriptionFee($business, $newAmount);
+    }
+
+    /**
+     * Check if the user is not a 'Sper Admin' and try to put payment type Gold List
+     * 
+     * @param array $data
+     * @param Business $business
+     * @return boolean
+     * @throws InvalidBusinessFormException
+     */
+    private function checkSuperAdminPaymentTypeGoldList($data, Business $business = null) {
+        $result = false;
+
+        if(!in_array('superadmin', $this->roles)) { // if no superadmin
+            if($data['paymentType']=='') {      // if new payment type is "gold list"
+                if (is_null($business)) {
+                    $result = true;
+                } else {
+                    if(!is_null($business->getPaymentType())){  // if old payment type is not "gold list"
+                        $result = true;
+                    }
+                }
+            }
+        }
+
+        if($result) {
+            throw new InvalidBusinessFormException($this->translator->translate("Solo un utente Super Admin puo' impostare il tipo di pagamento come 'Gold list'"));
+        }
+
+        return $result;
     }
 
 }

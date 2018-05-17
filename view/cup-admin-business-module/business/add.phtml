@@ -1,6 +1,7 @@
 <?php
 $detailsForm = $this->detailsForm->prepare();
 $paramsForm = $this->paramsForm->prepare();
+$faresForm = $this->faresForm->prepare();
 ?>
 <div class="page-content-wrapper">
     <div class="page-content">
@@ -22,106 +23,120 @@ $paramsForm = $this->paramsForm->prepare();
                 <?php echo $this->partial('partials/flash-messages.phtml', []); ?>
 
                 <?= $this->form()->openTag($detailsForm); ?>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <?php
-                            $field = $detailsForm->get('name');
-                            echo $this->businessFormElement($this->translate("Ragione Sociale (*)"), $field) ?>
-                        </div>
-                        <div class="col-lg-3">
-                            <?php
-                            $field = $detailsForm->get('domains');
-                            echo $this->businessFormElement($this->translate("Domini") . ' <small>'.$this->translate("separati da uno spazio").'</small>', $field) ?>
-                        </div>
-                        <div class="col-lg-3">
-                            <?php
-                            $field = $detailsForm->get('email');
-                            echo $this->businessFormElement($this->translate("Email"), $field) ?>
-                        </div>
-                        <div class="col-lg-3">
-                            <?php
-                            $field = $detailsForm->get('phone');
-                            echo $this->businessFormElement($this->translate("Telefono"), $field) ?>
-                        </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $detailsForm->get('name');
+                        echo $this->businessFormElement($this->translate("Ragione Sociale (*)"), $field) ?>
                     </div>
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $detailsForm->get('domains');
+                        echo $this->businessFormElement($this->translate("Domini") . ' <small>'.$this->translate("separati da uno spazio").'</small>', $field) ?>
+                    </div>
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $detailsForm->get('email');
+                        echo $this->businessFormElement($this->translate("Email"), $field) ?>
+                    </div>
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $detailsForm->get('phone');
+                        echo $this->businessFormElement($this->translate("Telefono"), $field) ?>
+                    </div>
+                </div>
 
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <?php
-                            $field = $detailsForm->get('address');
-                            echo $this->businessFormElement($this->translate("Indirizzo (*)"), $field) ?>
-                        </div>
-                        <div class="col-lg-3">
-                            <?php
-                            $field = $detailsForm->get('zipCode');
-                            echo $this->businessFormElement($this->translate("CAP (*)"), $field) ?>
-                        </div>
-                        <div class="col-lg-3">
-                            <?php
-                            $field = $detailsForm->get('province');
-                            echo $this->businessFormElement($this->translate("Provincia (*)"), $field) ?>
-                        </div>
-                        <div class="col-lg-3">
-                            <?php
-                            $field = $detailsForm->get('city');
-                            echo $this->businessFormElement($this->translate("Città (*)"), $field) ?>
-                        </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $detailsForm->get('address');
+                        echo $this->businessFormElement($this->translate("Indirizzo (*)"), $field) ?>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <?php
-                            $field = $detailsForm->get('fax');
-                            echo $this->businessFormElement($this->translate("Fax"), $field) ?>
-                        </div>
-                        <div class="col-lg-3">
-                            <?php
-                            $field = $detailsForm->get('vatNumber');
-                            echo $this->businessFormElement($this->translate("Partita IVA (*)"), $field) ?>
-                        </div>
-                        <div class="col-lg-3">
-                            <?php
-                            $field = $paramsForm->get('paymentType');
-                            echo $this->businessFormElement($this->translate("Tipo di pagamento"), $field) ?>
-                        </div>
-                        <div class="col-lg-3">
-                            <?php
-                            $field = $paramsForm->get('paymentFrequence');
-                            echo $this->businessFormElement($this->translate("Frequenza pagamento"), $field) ?>
-                        </div>
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $detailsForm->get('zipCode');
+                        echo $this->businessFormElement($this->translate("CAP (*)"), $field) ?>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <?php
-                            $field = $paramsForm->get('invoiceFrequence');
-                            echo $this->businessFormElement($this->translate("Frequenza fatturazione"), $field) ?>
-                        </div>
-                        <div class="col-lg-3">
-                            <?php
-                            $field = $paramsForm->get('businessMailControl');
-                            echo $this->businessFormElement($this->translate("Controllo email aziendale"), $field) ?>
-                        </div>
-                        <div class="col-lg-3">
-                            <?php
-                            $field = $paramsForm->get('subscriptionFeeCents');
-                            $field->setValue(500.00);
-                            echo $this->businessFormElement($this->translate("Quota di iscrizione (€)"), $field) ?>
-                        </div>
-                        <div class="col-lg-3">
-                            <?php
-                            $field = $paramsForm->get('fleet');
-                            echo $this->businessFormElement($this->translate("Flotta (*)"), $field) ?>
-                        </div>
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $detailsForm->get('province');
+                        echo $this->businessFormElement($this->translate("Provincia (*)"), $field) ?>
                     </div>
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $detailsForm->get('city');
+                        echo $this->businessFormElement($this->translate("Città (*)"), $field) ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $detailsForm->get('fax');
+                        echo $this->businessFormElement($this->translate("Fax"), $field) ?>
+                    </div>
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $detailsForm->get('vatNumber');
+                        echo $this->businessFormElement($this->translate("Partita IVA (*)"), $field) ?>
+                    </div>
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $paramsForm->get('paymentType');
+                        echo $this->businessFormElement($this->translate("Tipo di pagamento"), $field) ?>
+                    </div>
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $paramsForm->get('paymentFrequence');
+                        echo $this->businessFormElement($this->translate("Frequenza pagamento"), $field) ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $paramsForm->get('invoiceFrequence');
+                        echo $this->businessFormElement($this->translate("Frequenza fatturazione"), $field) ?>
+                    </div>
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $paramsForm->get('businessMailControl');
+                        echo $this->businessFormElement($this->translate("Controllo email aziendale"), $field) ?>
+                    </div>
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $paramsForm->get('subscriptionFeeCents');
+                        $field->setValue(500.00);
+                        echo $this->businessFormElement($this->translate("Quota di iscrizione (€)"), $field) ?>
+                    </div>
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $paramsForm->get('fleet');
+                        echo $this->businessFormElement($this->translate("Flotta (*)"), $field) ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $faresForm->get('motion');
+                        $field->setValue(13);
+                        echo $this->businessFormElement($this->translate("Percentuale di sconto tariffa corsa (*)"), $field) ?>
+                    </div>
+                    <div class="col-lg-3">
+                        <?php
+                        $field = $faresForm->get('park');
+                        $field->setValue(13);
+                        echo $this->businessFormElement($this->translate("Percentuale di sconto tariffa in sosta (*)"), $field) ?>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-sm-12">
                         <?= $this->translate("I campi contrassegnati con (*) sono obbligatori"); ?>
                     </div>
                 </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <button type="submit" class="btn btn-success"><?= $this->translate("Aggiungi Azienda"); ?></button>
-                        </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <button type="submit" class="btn btn-success"><?= $this->translate("Aggiungi Azienda"); ?></button>
                     </div>
+                </div>
                 <?= $this->form()->closeTag(); ?>
             </div>
         </div>

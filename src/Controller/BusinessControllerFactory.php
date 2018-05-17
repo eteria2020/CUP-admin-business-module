@@ -21,6 +21,8 @@ class BusinessControllerFactory implements FactoryInterface
         $fleetService = $sharedServiceLocator->get('BusinessCore\Service\BusinessFleetService');
         $translator = $sharedServiceLocator->get('translator');
         $userOptions = $sharedServiceLocator->get('zfcuser_module_options');
+        $authorize = $sharedServiceLocator->get('BjyAuthorize\Provider\Identity\ProviderInterface');
+        $roles = $authorize->getIdentityRoles();
 
         return new BusinessController(
             $translator,
@@ -33,7 +35,8 @@ class BusinessControllerFactory implements FactoryInterface
             $businessUserForm,
             $fleetService,
             $businessPaymentsService,
-            $userOptions
+            $userOptions,
+            $roles
         );
     }
 }
