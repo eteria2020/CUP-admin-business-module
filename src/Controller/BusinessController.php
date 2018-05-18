@@ -134,7 +134,7 @@ class BusinessController extends AbstractActionController {
                 $inputData = BusinessDataFactory::businessDetailsfromArray($data);
                 $inputParams = BusinessDataFactory::businessConfigParamsfromArray($data);
 
-                $this->businessService->addBusiness($inputData, $inputParams);
+                $this->businessService->addBusiness($inputData, $inputParams, $data['motion'], $data['park']);
 
                 $this->flashMessenger()->addSuccessMessage($this->translator->translate('Azienda aggiunta con successo'));
 
