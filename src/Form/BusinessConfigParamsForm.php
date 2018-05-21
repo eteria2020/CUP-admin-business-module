@@ -32,9 +32,9 @@ class BusinessConfigParamsForm extends Form {
             ],
             'options' => [
                 'value_options' => [
-                    null => $translator->translate("Gold list"),
-                    Business::TYPE_WIRE_TRANSFER => $businessPaymentHelper->getPrintableVersion(Business::TYPE_WIRE_TRANSFER),
                     Business::TYPE_CREDIT_CARD => $businessPaymentHelper->getPrintableVersion(Business::TYPE_CREDIT_CARD),
+                    Business::TYPE_WIRE_TRANSFER => $businessPaymentHelper->getPrintableVersion(Business::TYPE_WIRE_TRANSFER),
+                    null => $translator->translate("Gold list"),
                 ]
             ]
         ]);
