@@ -19,6 +19,7 @@ $(function() {
     };
 
     var filterWithNull = false;
+    var filterWithTime = false;
 
     dataTableVars.searchValue.val("");
     dataTableVars.column.val("select");
@@ -49,15 +50,31 @@ $(function() {
         },
         "fnServerParams": function ( aoData ) {
 
+            aoData.push({ "name": "fromDate", "value": $(dataTableVars.from).val().trim()});
             if (filterWithNull) {
                 aoData.push({ "name": "column", "value": ""});
                 aoData.push({ "name": "searchValue", "value": ""});
                 aoData.push({ "name": "columnNull", "value": "e.timestampEnd"});
-            } else {
-                aoData.push({ "name": "column", "value": $(dataTableVars.column).val()});
-                aoData.push({ "name": "searchValue", "value": dataTableVars.searchValue.val().trim()});
+            } else { 
+                if(filterWithTime){
+                    if($(dataTableVars.from).val().trim() == ""){
+                        var d = new Date();
+                        var month = d.getMonth() + 1;
+                        var day = d.getDate();
+                        var newHours = d.getHours()-($('#js-value').val());
+                        var output = d.getFullYear() + '-' +
+                                    (month<10 ? '0' : '') + month + '-' +
+                                    (day<10 ? '0' : '') + day + " " +
+                                    newHours + ":" + d.getMinutes() + ":" + d.getSeconds();
+                        aoData.push({ "name": "fromDate", "value": output.trim()});
+                    }else{
+                        aoData.push({ "name": "fromDate", "value": ""});
+                    }
+                } else {
+                    aoData.push({ "name": "column", "value": $(dataTableVars.column).val()});
+                    aoData.push({ "name": "searchValue", "value": dataTableVars.searchValue.val().trim()});
+                }
             }
-            aoData.push({ "name": "fromDate", "value": $(dataTableVars.from).val().trim()});
             aoData.push({ "name": "toDate", "value": $(dataTableVars.to).val().trim()});
             aoData.push({ "name": "columnFromDate", "value": dataTableVars.columnFromDate});
             aoData.push({ "name": "columnToDate", "value": dataTableVars.columnToDate});
@@ -177,6 +194,7 @@ $(function() {
         dataTableVars.column.val("select");
         dataTableVars.searchValue.prop("disabled", false);
         filterWithNull = false;
+        filterWithTime = false;
         dataTableVars.searchValue.show();
     });
 
@@ -185,7 +203,12 @@ $(function() {
         format: "yyyy-mm-dd",
         weekStart: 1
     });
-
+    $('.datetime-picker').datetimepicker({
+        //format: "YYYY-MM-DD HH:mm:ss",
+        format: "YYYY-MM-DD HH:00:00",
+        //format: "YYYY-MM-DD 00:00:00",
+    });
+    
     $(dataTableVars.column).change(function() {
         var value = $(this).val();
 
@@ -199,8 +222,13 @@ $(function() {
         } else if (value === 'b.name') {
             enableBusinessSearch();
         } else {
-            filterWithNull = false;
-            dataTableVars.searchValue.prop("disabled", false);
+            if(value === "e.timestampBeginning"){
+                filterWithTime = true;
+            } else{
+                filterWithNull = false;
+                filterWithTime = false;
+                dataTableVars.searchValue.prop("disabled", false);
+            }
         }
     });
 

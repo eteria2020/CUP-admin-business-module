@@ -2,11 +2,14 @@
 $this->headLink()
         ->appendStylesheet('/js/datatables/plugins/bootstrap/dataTables.bootstrap.css')
         ->appendStylesheet('/js/plugins/bootstrap-datepicker/css/datepicker3.css')
+        ->appendStylesheet('/js/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css')
         ->appendStylesheet('/css/trips.css');
 $this->headScript()
         ->appendFile('/js/datatables/media/js/jquery.dataTables.min.js')
         ->appendFile('/js/datatables/plugins/bootstrap/dataTables.bootstrap.js')
         ->appendFile('/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')
+        ->appendFile('/js/moment.min.js')
+        ->appendFile('/js/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js')
         ->appendFile($this->basePath() . '/js/datatable-session-data.js')
         ->appendFile($this->basePath() . '/js/trips.js');
 ?>
@@ -38,6 +41,7 @@ $this->headScript()
                                     <option value="c.label"><?= $this->translate("Numero"); ?></option>
                                     <option value="f.name"><?= $this->translate("Flotta"); ?></option>
                                     <option value="b.name"><?= $this->translate("Azienda"); ?></option>
+                                    <option value="e.timestampBeginning"><?= $this->translate("Corse aperte da (h)"); ?></option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -46,17 +50,17 @@ $this->headScript()
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-5">
                         <div class="form-inline">
                             <div class="form-group">
                                 <label> <?= $this->translate("da"); ?>: </label>
-                                <input class="form-control form-control-inline input-small date-picker" size="16"
+                                <input class="form-control form-control-inline input-small date-picker" size="20"
                                        type="text" id="js-date-from"
                                        placeholder="<?= $this->translate("Data inizio"); ?>">
                             </div>
                             <div class="form-group">
                                 <label> <?= $this->translate("a"); ?>: </label>
-                                <input class="form-control form-control-inline input-small date-picker" size="16"
+                                <input class="form-control form-control-inline input-small date-picker" size="20"
                                        type="text" id="js-date-to"
                                        placeholder="<?= $this->translate("Data fine"); ?>">
                             </div>

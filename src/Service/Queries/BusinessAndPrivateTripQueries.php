@@ -77,7 +77,8 @@ class BusinessAndPrivateTripQueries {
         ) {
             $dql .= ($where ? ' AND ' : ' WHERE ') . $columnFromDate . ' >= :from ';
             $dql .= ' AND ' . $columnToDate . ' <= :to ';
-            $query->setParameter('from', $fromDate . ' 00:00:00');
+            //$query->setParameter('from', $fromDate . ' 00:00:00');
+            $query->setParameter('from', $fromDate);
             $query->setParameter('to', $toDate . ' 23:59:59');
         }
 
