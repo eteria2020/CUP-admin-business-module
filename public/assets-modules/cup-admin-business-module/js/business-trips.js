@@ -49,33 +49,43 @@ $(function() {
             });
         },
         "fnServerParams": function ( aoData ) {
-
+/*
+            if($(dataTableVars.from).val().length > 10 && $(dataTableVars.from).val() == '' ){
+                aoData.push({ "name": "fromDate", "value": $(dataTableVars.from).val().trim()});
+            }else{
+                aoData.push({ "name": "fromDate", "value": $(dataTableVars.from).val().trim() + ' 00:00:000'});
+            }
+            if($(dataTableVars.to).val().trim() > 10 && $(dataTableVars.to).val() != ''){
+                aoData.push({ "name": "toDate", "value": $(dataTableVars.to).val().trim()});
+            }else{
+                aoData.push({ "name": "toDate", "value": $(dataTableVars.to).val().trim() + ' 23:59:59'});
+            }*/
             aoData.push({ "name": "fromDate", "value": $(dataTableVars.from).val().trim()});
+            aoData.push({ "name": "toDate", "value": $(dataTableVars.to).val().trim()});
             if (filterWithNull) {
                 aoData.push({ "name": "column", "value": ""});
                 aoData.push({ "name": "searchValue", "value": ""});
                 aoData.push({ "name": "columnNull", "value": "e.timestampEnd"});
             } else { 
                 if(filterWithTime){
+                    aoData.push({ "name": "columnNull", "value": "e.timestampEnd"});
+                    var d = new Date();
+                    var month = d.getMonth() + 1;
+                    var day = d.getDate();
+                    var output = d.getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day + " ";
                     if($(dataTableVars.from).val().trim() == ""){
-                        var d = new Date();
-                        var month = d.getMonth() + 1;
-                        var day = d.getDate();
                         var newHours = d.getHours()-($('#js-value').val());
-                        var output = d.getFullYear() + '-' +
-                                    (month<10 ? '0' : '') + month + '-' +
-                                    (day<10 ? '0' : '') + day + " " +
-                                    newHours + ":" + d.getMinutes() + ":" + d.getSeconds();
-                        aoData.push({ "name": "fromDate", "value": output.trim()});
+                        var from =  output + newHours + ":" + d.getMinutes() + ":" + d.getSeconds();
+                        aoData.push({ "name": "fromDate", "value": from.trim()});
                     }else{
                         aoData.push({ "name": "fromDate", "value": ""});
                     }
+                    aoData.push({ "name": "toDate", "value": output.trim()});
                 } else {
                     aoData.push({ "name": "column", "value": $(dataTableVars.column).val()});
                     aoData.push({ "name": "searchValue", "value": dataTableVars.searchValue.val().trim()});
                 }
             }
-            aoData.push({ "name": "toDate", "value": $(dataTableVars.to).val().trim()});
             aoData.push({ "name": "columnFromDate", "value": dataTableVars.columnFromDate});
             aoData.push({ "name": "columnToDate", "value": dataTableVars.columnToDate});
         },
@@ -203,11 +213,12 @@ $(function() {
         format: "yyyy-mm-dd",
         weekStart: 1
     });
+    /*
     $('.datetime-picker').datetimepicker({
         //format: "YYYY-MM-DD HH:mm:ss",
         format: "YYYY-MM-DD HH:00:00",
         //format: "YYYY-MM-DD 00:00:00",
-    });
+    });*/
     
     $(dataTableVars.column).change(function() {
         var value = $(this).val();
@@ -224,6 +235,8 @@ $(function() {
         } else {
             if(value === "e.timestampBeginning"){
                 filterWithTime = true;
+                $('#js-date-from').val("");
+                $('#js-date-to').val("");
             } else{
                 filterWithNull = false;
                 filterWithTime = false;

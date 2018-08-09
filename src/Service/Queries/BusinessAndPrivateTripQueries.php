@@ -80,6 +80,7 @@ class BusinessAndPrivateTripQueries {
             //$query->setParameter('from', $fromDate . ' 00:00:00');
             $query->setParameter('from', $fromDate);
             $query->setParameter('to', $toDate . ' 23:59:59');
+            //$query->setParameter('to', $toDate);
         }
 
         if (!$countFiltered) {
