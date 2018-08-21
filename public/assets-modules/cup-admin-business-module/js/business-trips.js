@@ -49,17 +49,6 @@ $(function() {
             });
         },
         "fnServerParams": function ( aoData ) {
-/*
-            if($(dataTableVars.from).val().length > 10 && $(dataTableVars.from).val() == '' ){
-                aoData.push({ "name": "fromDate", "value": $(dataTableVars.from).val().trim()});
-            }else{
-                aoData.push({ "name": "fromDate", "value": $(dataTableVars.from).val().trim() + ' 00:00:000'});
-            }
-            if($(dataTableVars.to).val().trim() > 10 && $(dataTableVars.to).val() != ''){
-                aoData.push({ "name": "toDate", "value": $(dataTableVars.to).val().trim()});
-            }else{
-                aoData.push({ "name": "toDate", "value": $(dataTableVars.to).val().trim() + ' 23:59:59'});
-            }*/
             aoData.push({ "name": "fromDate", "value": $(dataTableVars.from).val().trim()});
             aoData.push({ "name": "toDate", "value": $(dataTableVars.to).val().trim()});
             if (filterWithNull) {
