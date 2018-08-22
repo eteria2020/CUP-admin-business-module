@@ -129,7 +129,8 @@ class BusinessTripController extends AbstractActionController {
                     'id' => $trip->getCustomer()->getId(),
                     'email' => $trip->getCustomer()->getEmail(),
                     'fullname' => $trip->getCustomer()->getSurname() . ' ' . $trip->getCustomer()->getName(),
-                    'mobile' => $trip->getCustomer()->getMobile()
+                    'mobile' => $trip->getCustomer()->getMobile(),
+                    'type' => ($trip->getCustomer()->getMaintainer() ? 1 : ($trip->getCustomer()->getGoldList() ? 2 : 0))
                 ],
                 'c' => [
                     'plate' => $plate,

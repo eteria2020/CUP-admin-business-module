@@ -34,6 +34,16 @@ $(function() {
         "bStateSave": false,
         "bFilter": false,
         "sAjaxSource": "/trips/datatable",
+        "createdRow": function (row, data, dataIndex, cells) {
+            switch (data.cu.type) {
+                case 1:
+                    $('td', row).css('background', '#ffe6e6');
+                    break;
+                case 2:
+                    $('td', row).css('background', '#f2ffcc');
+                    break;
+            }
+        },
         "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
             oSettings.jqXHR = $.ajax( {
                 "dataType": "json",
