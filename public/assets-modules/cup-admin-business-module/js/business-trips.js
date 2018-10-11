@@ -178,7 +178,8 @@ $(function() {
 
     $("#js-search").click(function () {
         if($("#js-column option:selected").val() == 'cu.id' || $("#js-column option:selected").val() == 'e.id'){
-            if($("#js-value").val().indexOf('e') == -1 && $("#js-value").val().indexOf('0xFF') == -1 && $.isNumeric($("#js-value").val()) && Math.floor($("#js-value").val()) == $("#js-value").val()){
+            var reg = /^\d+$/;
+            if(reg.test($("#js-value").val())){
                 table.fnFilter();
             }else{
                 alert("Non hai inserito un numero intero");
