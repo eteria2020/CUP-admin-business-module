@@ -178,10 +178,10 @@ $(function() {
 
     $("#js-search").click(function () {
         if($("#js-column option:selected").val() == 'cu.id' || $("#js-column option:selected").val() == 'e.id'){
-            if($.isNumeric($("#js-value").val())){
+            if(Math.floor($("#js-value").val()) == $("#js-value").val() && $.isNumeric($("#js-value").val())){
                 table.fnFilter();
             }else{
-                alert("Non hai inserito un numero");
+                alert("Non hai inserito un numero intero");
             }
         }else{
             table.fnFilter();
