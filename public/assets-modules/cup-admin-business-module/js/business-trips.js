@@ -183,7 +183,7 @@ $(function() {
                 table.fnFilter();
             }else{
                 alert("Non hai inserito un numero intero valido");
-            } 
+            }
         }else{
             table.fnFilter();
         }
