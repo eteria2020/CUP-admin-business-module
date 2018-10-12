@@ -179,10 +179,10 @@ $(function() {
     $("#js-search").click(function () {
         if($("#js-column option:selected").val() == 'cu.id' || $("#js-column option:selected").val() == 'e.id'){
             var reg = /^\d+$/;
-            if(reg.test($("#js-value").val())){
+            if(reg.test($("#js-value").val()) && $("#js-value").val() < 2147483647 && $("#js-value").val() > 0){
                 table.fnFilter();
             }else{
-                alert("Non hai inserito un numero intero");
+                alert("Non hai inserito un numero intero valido");
             }
         }else{
             table.fnFilter();
