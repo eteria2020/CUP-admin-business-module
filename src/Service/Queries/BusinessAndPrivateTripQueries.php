@@ -81,7 +81,7 @@ class BusinessAndPrivateTripQueries {
                 $query->setParameter('to', $toDate . ' 23:59:59');
                 $query->setParameter('from', $fromDate . ' 00:00:00');
             }else{
-                if ($searchColumnNull != "e.timestampEnd") {
+                if ($searchColumnNull != "e.timestampEnd"){
                     $dql .= ($where ? ' AND ' : ' WHERE ') . $columnFromDate . ' <= :from ';
                     $dql .= ' AND ' . $columnToDate . ' <= :to ';
                     $query->setParameter('to', $toDate . ' 23:59:59');
