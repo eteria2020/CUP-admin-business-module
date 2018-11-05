@@ -76,7 +76,7 @@ $(function () {
                     var month = d.getMonth() + 1;
                     var day = d.getDate();
                     var output = d.getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day + " ";
-                    if ($(dataTableVars.from).val().trim() == "") { 
+                    if ($(dataTableVars.from).val().trim() == "") {
                         d.setHours(d.getHours() - ($('#js-value').val()));
                         var from = d.getFullYear() + '-' + (d.getMonth()+1) + "-" + ((d.getDate() < 10 ? '0' : '') + d.getDate()) +" " + ((d.getHours() < 10 ? '0' : '') + d.getHours()) + ":" + ((d.getMinutes() < 10 ? '0' : '') + d.getMinutes()) + ":" + ((d.getSeconds() < 10 ? '0' : '') + d.getSeconds());
                         aoData.push({"name": "fromDate", "value": from.trim()});
