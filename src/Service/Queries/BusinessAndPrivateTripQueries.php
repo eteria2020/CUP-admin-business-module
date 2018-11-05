@@ -75,10 +75,14 @@ class BusinessAndPrivateTripQueries {
                 !empty($columnFromDate) &&
                 !empty($columnToDate)
         ) {
-            $dql .= ($where ? ' AND ' : ' WHERE ') . $columnFromDate . ' >= :from ';
-            $dql .= ' AND ' . $columnToDate . ' <= :to ';
-            $query->setParameter('from', $fromDate . ' 00:00:00');
-            $query->setParameter('to', $toDate . ' 23:59:59');
+            if ($searchColumnNull != "e.timestampEnd") {
+                $dql .= ($where ? ' AND ' : ' WHERE ') . $columnFromDate . ' <= :from ';
+                $dql .= ' AND ' . $columnToDate . ' <= :to ';
+                $query->setParameter('to', $toDate . ' 23:59:59');
+            } else {
+                $dql .= ($where ? ' AND ' : ' WHERE ') . $columnFromDate . ' <= :from ';
+            }
+            $query->setParameter('from', $fromDate);
         }
 
         if (!$countFiltered) {
