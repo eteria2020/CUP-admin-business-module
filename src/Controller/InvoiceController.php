@@ -128,7 +128,7 @@ class InvoiceController extends AbstractActionController
         } else {
             $url = $this->url()->fromRoute('invoices-download/private', ['id' => $invoiceId]);
         }
-        return "<a href=" . $url . "><i class='fa fa-download'></i></a>";
+        return "<a href='" . $url . "' download='".$invoiceId.".pdf'><i class='fa fa-download'></i></a>";
     }
 
     private function formatType($type)
