@@ -78,6 +78,14 @@ $form = $this->form->prepare();
                 $field->setValue($this->business->getVatNumber());
                 echo $this->businessFormElement($this->translate("Partita IVA"), $field, true) ?>
             </div>
+            <div class="col-lg-3">
+                <label> <?php echo $this->translate("Codice destinatario");?></label>
+                <input type="text" class="form-control" disabled="disabled" value="<?= $this->business->getRecipientCode() ?>">
+            </div>
+            <div class="col-lg-3">
+                <label> <?php echo $this->translate("PEC");?></label>
+                <input type="text" class="form-control" disabled="disabled" value="<?= $this->business->getCem() ?>">
+            </div>
         </div>
         <div class="row">
             <div class="col-lg-3">
