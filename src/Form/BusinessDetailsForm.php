@@ -16,7 +16,7 @@ class BusinessDetailsForm extends Form
             'type'       => 'Zend\Form\Element\Text',
             'attributes' => [
                 'id'       => 'name',
-                'maxlength' => 64,
+                'maxlength' => 60,
                 'class'    => 'form-control',
                 'required' => 'required'
             ]
@@ -36,7 +36,7 @@ class BusinessDetailsForm extends Form
             'type'       => 'Zend\Form\Element\Text',
             'attributes' => [
                 'id'       => 'address',
-                'maxlength' => 64,
+                'maxlength' => 60,
                 'class'    => 'form-control',
                 'required' => 'required'
             ]
@@ -47,7 +47,7 @@ class BusinessDetailsForm extends Form
             'type'       => 'Zend\Form\Element\Text',
             'attributes' => [
                 'id'       => 'zipCode',
-                'maxlength' => 12,
+                'maxlength' => 5,
                 'class'    => 'form-control',
                 'required' => 'required'
             ]
@@ -69,7 +69,7 @@ class BusinessDetailsForm extends Form
             'type'       => 'Zend\Form\Element\Text',
             'attributes' => [
                 'id'       => 'city',
-                'maxlength' => 64,
+                'maxlength' => 60,
                 'class'    => 'form-control',
                 'required' => 'required'
             ]
